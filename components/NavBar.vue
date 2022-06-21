@@ -176,10 +176,9 @@
         @click="isOpen = false"
         class="flex items-center p-4 px-8 py-2 pt-4">
         <button
-          class="flex justify-center items-center text-white bg-red-700 hover:bg-red-600 w-full
-           rounded-lg py-2"
+          class="flex justify-center items-center text-white bg-red-700 hover:bg-red-600 w-full rounded-lg py-2"
           @click="logout">
-           Logout
+          Logout
         </button>
       </span>
     </aside>

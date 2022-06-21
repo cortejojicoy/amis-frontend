@@ -1,0 +1,15 @@
+.slider {
+  transition: 1s;
+  right: -100%;
+}
+
+.slider-open {
+  transition: 1s;
+  right: 0;
+}
+
+.slider-main {
+  display: none;
+  opacity: 0;
+  transition: opacity 1s ease-out;
+}
