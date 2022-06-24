@@ -1,6 +1,7 @@
 <template>
   <nav
     class="flex fixed w-full items-center justify-between px-6 h-16 bg-white text-gray-700 border-b border-gray-200 z-10">
+    <!-- START HEADER -->
     <div class="flex items-center">
       <button class="mr-2" aria-label="Open Menu" @click="drawer">
         <svg
@@ -21,7 +22,7 @@
         UPLB AMIS
       </h1>
     </div>
-
+    <!-- END HEADER -->
     <transition
       enter-class="opacity-0"
       enter-active-class="ease-out transition-medium"
@@ -42,6 +43,7 @@
     <aside
       class="transform top-16 left-0 w-64 bg-white fixed h-full shadow-md overflow-auto ease-in-out transition-all duration-300 z-10"
       :class="isOpen ? 'translate-x-0' : '-translate-x-full'">
+      <!-- DASHBOARD -->
       <span
         @click="isOpen = false"
         class="flex w-full items-center p-4 border-b">
@@ -75,12 +77,13 @@
               d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
         </span>
-        <span>Dashboard</span></span
-      >
+        <span>Dashboard</span></span>
+        <!-- END DASHBOARD -->
+      <!-- FUTURE PROOFING -->
       <span
         @click="isOpen = false"
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
-        ><span class="mr-2">
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700">
+        <span class="mr-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-6 w-6"
@@ -119,6 +122,8 @@
           </li>
         </ul>
       </span>
+      <!-- END FUTURE PROOFING -->
+      <!-- PERSONAL INFORMATION -->
       <span
         @click="isOpen = false"
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
@@ -138,9 +143,10 @@
         </span>
         <span>Personal Information</span>
       </span>
+      <!-- END PERSONAL INFORMATION -->
+      <!-- FACULTY -->
       <span
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
-        >
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700">
         <span class="mr-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -185,6 +191,8 @@
           </li>
         </ul>
       </span>
+      <!-- END FACULTY -->
+      <!-- STUDENT PORTAL -->
       <span
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
         >
@@ -235,7 +243,8 @@
           </li>
         </ul>
       </span>
-
+      <!-- END STUDENT PORTAL -->
+      <!-- LOGOUT -->
       <span
         @click="isOpen = false"
         class="flex items-center p-4 px-8 py-2 pt-4">
