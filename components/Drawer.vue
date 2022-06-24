@@ -45,6 +45,9 @@ export default {
         },
     },
     data() {
+        return {
+
+        }
     },
     methods: {
         drawer() {
