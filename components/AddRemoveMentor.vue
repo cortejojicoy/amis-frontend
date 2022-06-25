@@ -20,7 +20,7 @@
           </tr>
         </th>
         <tbody>
-          <!-- {{ mentorForms }} -->
+          
           <div v-for="(mentorForm, index) in mentorForms">
             <tr>  
             <td  class="px-2 py-3">
