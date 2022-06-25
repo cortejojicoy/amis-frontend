@@ -21,7 +21,6 @@
         UPLB AMIS
       </h1>
     </div>
-
     <transition
       enter-class="opacity-0"
       enter-active-class="ease-out transition-medium"
@@ -96,6 +95,7 @@
         </span>
         <span>Future Proofing</span>
         <ul id="dropdown-example" class="hidden py-2 space-y-2">
+
           <li>
             <a
               href="#"

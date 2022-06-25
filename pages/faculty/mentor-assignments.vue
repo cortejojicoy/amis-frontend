@@ -148,7 +148,18 @@
         </div>
       </div>
     </div>
+    <Drawer :isOpen="openStudentView" @close="openStudentView = false" />
   </div>
 </template>
 
-<script></script>
+<script>
+import Drawer from "../../components/Drawer.vue";
+export default {
+  components: { Drawer },
+  data() {
+    return {
+      openStudentView: false,
+    };
+  },
+};
+</script>

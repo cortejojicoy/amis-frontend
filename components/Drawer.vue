@@ -66,6 +66,6 @@ export default {
     //   if (e.keyCode == 27 && this.isOpen) this.isOpen = false;
     // });
   },
-  components: { StudentInfo, MentorAssignmentRequest },
+  components: { StudentInfo, MentorAssignmentRequest }
 };
 </script>
