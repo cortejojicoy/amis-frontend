@@ -63,6 +63,7 @@
               </button>
             </td>
           </tr>
+          </div>
         </tbody>
       </table>
     </div>
@@ -105,6 +106,7 @@ export default {
     }
   },
   
+
   methods: {
     addMentor() {
       this.mentorForms.push(Vue.util.extend({}, this.mentorForm, this.actions))

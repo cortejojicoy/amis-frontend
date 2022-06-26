@@ -137,23 +137,20 @@
         </div>
       </div>
     </div>
-    <Drawer 
-        :isOpen="openStudentView"
-        @close="openStudentView= false"
-    />
+    <Drawer :isOpen="openStudentView" @close="openStudentView = false" />
   </div>
 </template>
 
 <script>
 import Drawer from "../../components/Drawer.vue";
-export default { 
-     components:{
-      Drawer
-     },
-    data () {
+export default {
+  components: {
+    Drawer,
+  },
+  data() {
     return {
       openStudentView: false,
-    }
+    };
   },
 };
 </script>
