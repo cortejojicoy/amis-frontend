@@ -63,10 +63,6 @@
               </button>
             </td>
           </tr>
-<<<<<<< HEAD
-=======
-          </div>
->>>>>>> 0029d0c8449fa01f5e7a60a4ec425edca9cdbada
         </tbody>
       </table>
     </div>
@@ -109,10 +105,6 @@ export default {
     }
   },
   
-<<<<<<< HEAD
-=======
-
->>>>>>> 0029d0c8449fa01f5e7a60a4ec425edca9cdbada
   methods: {
     addMentor() {
       this.mentorForms.push(Vue.util.extend({}, this.mentorForm, this.actions))
