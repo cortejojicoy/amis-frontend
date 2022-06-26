@@ -21,7 +21,7 @@
             </tr>
           </th>
         </thead>
-          <!-- {{ mentorForms }} -->
+          {{ mentorForms }}
         <tbody v-for="(mentorForm, index) in mentorForms">
           <tr>  
             <td class="px-2 py-3">
