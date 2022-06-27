@@ -1,6 +1,17 @@
 <template>
   <div
     class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
+    <!-- <div class="bg-gray-200 absolute overflow-y-scroll w-full h-full p-8 slider z-10">
+        <div>
+            <button @click="openStudentView = false" class="p-2 bg-red-400 text-white">
+                Close
+            </button>
+        </div>
+        
+        <div>
+            //Student-view (student_data, submitted_mentors, transaction_history)
+        </div>
+    </div> -->
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div>
