@@ -2,7 +2,7 @@
   <div class="my-6">
     <div class="flex justify-between mb-6">
       <div>
-        <button class="p-2 bg-gray-300">Add/Remove a Mentor</button>
+        <button @click="addRemoveMentor" class="p-2 bg-gray-300">Add/Remove a Mentor</button>
       </div>
     </div>
     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
     computed: {
     ...mapState({
@@ -81,8 +81,14 @@ export default {
     ...mapActions({
       getNominatedMentors: 'student/mentorAssignment/nominatedMentor/getData',
     }),
+    ...mapMutations({
+      addRow: 'student/mentorAssignment/nominatedMentor/ADD_ROW'
+    }),
     deleteRecords(mentor_id){
       console.log(mentor_id)
+    },
+    addRemoveMentor(){
+      this.addRow()
     }
   }
 };
