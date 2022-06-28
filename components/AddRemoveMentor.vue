@@ -6,8 +6,13 @@
       </div>
     </div>
     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
+      <div class="div" v-show="nominatedMentors">
+      
+      
       <table class="table-auto w-full items-center text-center">
-        <th>
+
+        <thead>
+          
           <tr class="font-bold">
             <td class="px-2 py-3">Action</td>
             <td class="px-2 py-3">Mentor</td>
@@ -17,16 +22,20 @@
             <td class="px-2 py-3">Effectivity End</td>
             <td class="px-2 py-3"></td>
           </tr>
-        </th>
+        </thead>
         <tbody>
-          <tr>
-            <td class="px-2 py-3"></td>
-            <td class="px-2 py-3"></td>
-            <td class="px-2 py-3"></td>
-            <td class="px-2 py-3"></td>
-            <td class="px-2 py-3"></td>
-            <td class="px-2 py-3">
-              <button>
+      <tr
+        v-for="(record, recordIndex) in nominatedMentors"
+        :key="recordIndex"
+      >
+      <td>{{record.actions}}</td>
+      <td>{{record.mentor_name}}</td>
+      <td>{{record.mentor_role}}</td>
+      <td>{{record.field_represented}}</td>
+      <td>{{record.effectivity_start}}</td>
+      <td>{{record.effectivity_end}}</td>
+             <td class="px-2 py-3">
+              <button @click="deleteRecords(record.mentor_id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6"
@@ -41,9 +50,10 @@
                 </svg>
               </button>
             </td>
-          </tr>
+      </tr>
         </tbody>
       </table>
+      </div>
     </div>
     <div class="flex justify-end">
       <div>
@@ -57,5 +67,23 @@
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions } from 'vuex'
+export default {
+    computed: {
+    ...mapState({
+      nominatedMentors: state => state.student.mentorAssignment.nominatedMentor.data.save_mentors,
+    })
+  },
+  async fetch () {
+    this.getNominatedMentors(this.$auth.user.saisid)
+  },
+  methods: {
+    ...mapActions({
+      getNominatedMentors: 'student/mentorAssignment/nominatedMentor/getData',
+    }),
+    deleteRecords(mentor_id){
+      console.log(mentor_id)
+    }
+  }
+};
 </script>

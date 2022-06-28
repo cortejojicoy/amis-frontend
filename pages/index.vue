@@ -4,7 +4,7 @@
     <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
       <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg p-6">
         <h2 class="text-2xl leading-7 font-semibold">
-          Good afternoon, {{ this.$auth.user.name }}!
+          Good afternoon, {{ this.$auth.user.first_name }} {{ this.$auth.user.last_name }}!
         </h2>
         <p class="mt-3 text-gray-600">
           Welcome to the new Academic Management Information System of UPLB! To
