@@ -56,7 +56,11 @@
           </div>
 
           <div class="inline-block w-2/3">
+<<<<<<< HEAD
             <p class="font-bold text-xl">{{ this.$auth.user.name }}</p>
+=======
+            <p class="font-bold text-xl">{{ this.$auth.user.first_name }} {{ this.$auth.user.middle_name }} {{ this.$auth.user.last_name }}</p>
+>>>>>>> fix: merge update codes
             <p class="break-words text-sm">{{ this.$auth.user.email }}</p>
           </div>
         </div>
@@ -147,6 +151,7 @@
       <!-- FACULTY -->
       <span
         @click="isFacultyOpen = !isFacultyOpen"
+        v-show="isFaculty"
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700">
         <span class="mr-2">
           <svg
@@ -168,7 +173,7 @@
           focusable="false"
           data-prefix="fas"
           class="w-3 h-3 ml-auto transform"
-          :class="isFacultyOpen ? 'rotate-10' : '-rotate-90'"
+          :class="isFacultyOpen ? 'rotate-0' : '-rotate-90'"
           role="img"
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 448 512">
@@ -200,6 +205,7 @@
       <!-- STUDENT PORTAL -->
       <span
         @click="isStudentOpen = !isStudentOpen"
+        v-show="isStudent"
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
         >
         <span class="mr-2">
@@ -236,12 +242,10 @@
        
       </span>
        <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isStudentOpen">
-          <li>
-            <a
-              href="{route('student')}"
-              class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >Mentor Assignment</a
-            >
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/student/mentor-assignment'
+              >Mentor Assignment</NuxtLink>
           </li>
           <li>
             <a
@@ -272,7 +276,7 @@ export default {
     return {
       isOpen: false,
       isFacultyOpen: false,
-      isStudentOpen: false
+      isStudentOpen: false,
     }
   },
   methods: {
@@ -280,7 +284,7 @@ export default {
       this.isOpen = !this.isOpen;
     },
     async logout() {
-      let res = await this.$auth.logout();
+      await this.$auth.logout();
       await this.$router.push("/auth/login");
     },
   },
@@ -293,6 +297,16 @@ export default {
           else document.body.style.removeProperty("overflow");
         }
       },
+    },
+  },
+  computed:{
+    isFaculty (){
+      const roles = this.$auth.user.roles
+      return  roles.find(el => el.name === "faculty") ? true : false
+    },
+    isStudent (){
+      const roles = this.$auth.user.roles
+      return roles.find(el => el.name === "student") ? true : false
     },
   },
   mounted() {
