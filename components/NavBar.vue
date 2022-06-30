@@ -56,11 +56,7 @@
           </div>
 
           <div class="inline-block w-2/3">
-<<<<<<< HEAD
-            <p class="font-bold text-xl">{{ this.$auth.user.name }}</p>
-=======
             <p class="font-bold text-xl">{{ this.$auth.user.first_name }} {{ this.$auth.user.middle_name }} {{ this.$auth.user.last_name }}</p>
->>>>>>> fix: merge update codes
             <p class="break-words text-sm">{{ this.$auth.user.email }}</p>
           </div>
         </div>

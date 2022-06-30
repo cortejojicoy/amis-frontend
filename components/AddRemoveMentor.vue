@@ -2,7 +2,7 @@
   <div class="my-6">
     <div class="flex justify-between mb-6">
       <div>
-        <button class="p-2 bg-gray-300" v-on:click="addMentor" @click="saveSubmit=true">
+        <button class="p-2 bg-gray-300" @click="addRemoveMentor">
           Add/Remove a Mentor
         </button>
       </div>
@@ -29,14 +29,31 @@
         v-for="(record, recordIndex) in nominatedMentors"
         :key="recordIndex"
       >
-      <td>{{record.actions}}</td>
-      <td>{{record.mentor_name}}</td>
+      <td>
+        <!-- {{record.actions}} -->
+        <select v-model="record.actions" v-on:input="onChangeAddRemove($event, record.id)">
+          <!-- <option value="Add"></option> -->
+          <option v-for="action in actionSelected" :value="action">{{ action }}</option>
+        </select>
+      </td>
+      <td v-if="record.actions == 'Add'">
+        <!-- {{record.mentor_name}} -->
+        <select name="" id="">
+          <option value="">This is Add</option>
+        </select>
+      </td>
+      <td v-else-if="record.actions == 'Remove'">
+        <!-- {{record.mentor_name}} -->
+        <select name="" id="">
+          <option value="">This is Remove</option>
+        </select>
+      </td>
       <td>{{record.mentor_role}}</td>
       <td>{{record.field_represented}}</td>
       <td>{{record.effectivity_start}}</td>
       <td>{{record.effectivity_end}}</td>
              <td class="px-2 py-3">
-              <button @click="deleteRecords(record.mentor_id)">
+              <button @click="deleteRecords(record.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6"
@@ -60,23 +77,18 @@
         <button class="p-2 bg-gray-200 mr-2">Save</button>
       </div>
       <div>
-        <div v-if="showModal" class="modal">
-          <div class="modal-content">
-            <ConfirmAddRemoveMentorVue />
-          </div>
-          <button @click="showModal=false" class="p-2 bg-gray-200">Close</button>
-        </div>
-        <button  @click="showModal=true" class="p-2 bg-gray-200">Submit</button>
+          <button class="p-2 bg-gray-200">Submit</button>
       </div>
   </div>
 </template>
 
 <script>
-import ConfirmAddRemoveMentorVue from './ConfirmAddRemoveMentor.vue';
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
-  components: {
-    ConfirmAddRemoveMentorVue
+  data() {
+    return {
+      actionSelected: ['Add', 'Remove']
+    }
   },
   computed: {
     ...mapState({
@@ -91,14 +103,19 @@ export default {
       getNominatedMentors: 'student/mentorAssignment/nominatedMentor/getData',
     }),
     ...mapMutations({
-      addRow: 'student/mentorAssignment/nominatedMentor/ADD_ROW'
+      addRow: 'student/mentorAssignment/nominatedMentor/ADD_ROW',
+      updateActions: 'student/mentorAssignment/nominatedMentor/CHANGE_ACTION_STATE'
     }),
     deleteRecords(mentor_id){
       console.log(mentor_id)
     },
     addRemoveMentor(){
       this.addRow()
-    }
+    },
+    onChangeAddRemove(event, id) {
+      // console.log(event.target.value, id)
+      this.updateActions(event.target.value, id)
+    },
   }
 };
 </script>
