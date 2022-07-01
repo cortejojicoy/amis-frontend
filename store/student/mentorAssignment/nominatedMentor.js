@@ -26,8 +26,20 @@ export const state = () => ({
     GET_DATA_FAILED (state, error) {
       state.data = error
     },
+
+    CHANGE_ACTION_STATE(state, payload) {
+      state.data.save_mentors[payload.id]['actions'] = payload.action
+    },
+
+
     ADD_ROW (state) {
-      state.data.save_mentors.push({actions:'', mentor_name:'', mentor_role:'', field_represented:'', effectivity_start:'',
-      effectivity_end:''})
+      state.data.save_mentors.push({
+        actions:'', 
+        mentor_name:'', 
+        mentor_role:'', 
+        field_represented:'', 
+        effectivity_start:'',
+        effectivity_end:''
+      })
     }
   }

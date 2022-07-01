@@ -12,7 +12,6 @@
       <table class="table-auto w-full items-center text-center">
 
         <thead>
-          
           <tr class="font-bold">
             <td class="px-2 py-3">Action</td>
             <td class="px-2 py-3">Mentor</td>
@@ -28,14 +27,31 @@
         v-for="(record, recordIndex) in nominatedMentors"
         :key="recordIndex"
       >
-      <td>{{record.actions}}</td>
-      <td>{{record.mentor_name}}</td>
+      <td>
+        <!-- {{record.actions}} -->
+        <select v-model="record.actions" v-on:input="onChangeAddRemove($event, recordIndex)">
+          <!-- <option value="Add"></option> -->
+          <option v-bind:key="action + '-' + recordIndex" v-for="action in actionSelected" :value="action">{{ action }}</option>
+        </select>
+      </td>
+      <td v-if="record.actions == 'Add'">
+        <!-- {{record.mentor_name}} -->
+        <select name="" id="">
+          <option value="">This is Add</option>
+        </select>
+      </td>
+      <td v-else-if="record.actions == 'Remove'">
+        <!-- {{record.mentor_name}} -->
+        <select name="" id="">
+          <option value="">This is Remove</option>
+        </select>
+      </td>
       <td>{{record.mentor_role}}</td>
       <td>{{record.field_represented}}</td>
       <td>{{record.effectivity_start}}</td>
       <td>{{record.effectivity_end}}</td>
              <td class="px-2 py-3">
-              <button @click="deleteRecords(record.mentor_id)">
+              <button @click="deleteRecords(record.id)">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   class="h-6 w-6"
@@ -55,21 +71,24 @@
       </table>
       </div>
     </div>
-    <div class="flex justify-end">
       <div>
         <button class="p-2 bg-gray-200 mr-2">Save</button>
       </div>
       <div>
-        <button class="p-2 bg-gray-200">Submit</button>
+          <button class="p-2 bg-gray-200">Submit</button>
       </div>
-    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex'
 export default {
-    computed: {
+  data() {
+    return {
+      actionSelected: ['Add', 'Remove']
+    }
+  },
+  computed: {
     ...mapState({
       nominatedMentors: state => state.student.mentorAssignment.nominatedMentor.data.save_mentors,
     })
@@ -82,14 +101,42 @@ export default {
       getNominatedMentors: 'student/mentorAssignment/nominatedMentor/getData',
     }),
     ...mapMutations({
-      addRow: 'student/mentorAssignment/nominatedMentor/ADD_ROW'
+      addRow: 'student/mentorAssignment/nominatedMentor/ADD_ROW',
+      updateActions: 'student/mentorAssignment/nominatedMentor/CHANGE_ACTION_STATE'
     }),
     deleteRecords(mentor_id){
       console.log(mentor_id)
     },
     addRemoveMentor(){
       this.addRow()
-    }
+    },
+    onChangeAddRemove(event, id) {
+      var payload = {'action': event.target.value, 'id': id}
+      this.updateActions(payload)
+    },
   }
 };
 </script>
+
+<style scoped>
+.modal {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  padding-top: 100px;
+  width: 100%;
+  height: 100%;
+  background-color: gray;
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+.modal-content {
+  background-color: #fefefe;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+</style>

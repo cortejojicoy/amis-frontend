@@ -10,13 +10,13 @@
     </div>
     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg">
       <table class="table-auto w-full items-center text-center">
-        <th>
+        <thead>
           <tr class="font-bold">
             <td class="p-4">Mentor</td>
             <td class="p-4">Roles</td>
             <td class="p-4">Field Represented</td>
           </tr>
-        </th>
+        </thead>
         <tbody>
           <tr>
             <td class="px-4 py-3"></td>
