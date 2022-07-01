@@ -27,8 +27,8 @@ export const state = () => ({
       state.data = error
     },
 
-    CHANGE_ACTION_STATE(state, id, action) {
-      state.data.saved_mentors[id]['actions'] = action
+    CHANGE_ACTION_STATE(state, payload) {
+      state.data.save_mentors[payload.id]['actions'] = payload.action
     },
 
 

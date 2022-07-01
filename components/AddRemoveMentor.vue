@@ -31,9 +31,9 @@
       >
       <td>
         <!-- {{record.actions}} -->
-        <select v-model="record.actions" v-on:input="onChangeAddRemove($event, record.id)">
+        <select v-model="record.actions" v-on:input="onChangeAddRemove($event, recordIndex)">
           <!-- <option value="Add"></option> -->
-          <option v-for="action in actionSelected" :value="action">{{ action }}</option>
+          <option v-bind:key="action + '-' + recordIndex" v-for="action in actionSelected" :value="action">{{ action }}</option>
         </select>
       </td>
       <td v-if="record.actions == 'Add'">
@@ -113,8 +113,8 @@ export default {
       this.addRow()
     },
     onChangeAddRemove(event, id) {
-      // console.log(event.target.value, id)
-      this.updateActions(event.target.value, id)
+      var payload = {'action': event.target.value, 'id': id}
+      this.updateActions(payload)
     },
   }
 };
