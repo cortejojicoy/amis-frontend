@@ -2,9 +2,7 @@
   <div class="my-6">
     <div class="flex justify-between mb-6">
       <div>
-        <button class="p-2 bg-gray-300" @click="addRemoveMentor">
-          Add/Remove a Mentor
-        </button>
+        <button @click="addRemoveMentor" class="p-2 bg-gray-300">Add/Remove a Mentor</button>
       </div>
     </div>
     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">

@@ -1,4 +1,3 @@
-
 <template>
   <div class="grid place-items-center h-screen">
       <div class="">
