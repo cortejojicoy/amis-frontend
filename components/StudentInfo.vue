@@ -34,7 +34,7 @@ export default {
     })
   },
   async fetch () {
-    this.getStudentProgramData()
+    this.getStudentProgramData(this.$auth.user.saisid)
   },
   methods: {
     ...mapActions({

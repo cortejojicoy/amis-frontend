@@ -1,4 +1,5 @@
 <template>
+<div>
   <nav
     class="flex fixed w-full items-center justify-between px-6 h-16 bg-white text-gray-700 border-b border-gray-200 z-10">
     <!-- START HEADER -->
@@ -263,52 +264,60 @@
         </button>
       </span>
     </aside>
+      <Alert/>
   </nav>
+</div>
+
 </template>
 
 <script>
+import Alert from './Alert.vue';
 export default {
-  data() {
-    return {
-      isOpen: false,
-      isFacultyOpen: false,
-      isStudentOpen: false,
-    }
-  },
-  methods: {
-    drawer() {
-      this.isOpen = !this.isOpen;
+    data() {
+        return {
+            isOpen: false,
+            isFacultyOpen: false,
+            isStudentOpen: false,
+        };
     },
-    async logout() {
-      await this.$auth.logout();
-      await this.$router.push("/auth/login");
+    methods: {
+        drawer() {
+            this.isOpen = !this.isOpen;
+        },
+        async logout() {
+            await this.$auth.logout();
+            await this.$router.push("/auth/login");
+        },
     },
-  },
-  watch: {
-    isOpen: {
-      immediate: true,
-      handler(isOpen) {
-        if (process.client) {
-          if (isOpen) document.body.style.setProperty("overflow", "hidden");
-          else document.body.style.removeProperty("overflow");
-        }
-      },
+    watch: {
+        isOpen: {
+            immediate: true,
+            handler(isOpen) {
+                if (process.client) {
+                    if (isOpen)
+                        document.body.style.setProperty("overflow", "hidden");
+                    else
+                        document.body.style.removeProperty("overflow");
+                }
+            },
+        },
     },
-  },
-  computed:{
-    isFaculty (){
-      const roles = this.$auth.user.roles
-      return  roles.find(el => el.name === "faculty") ? true : false
+    computed: {
+        isFaculty() {
+            const roles = this.$auth.user.roles;
+            return roles.find(el => el.name === "faculty") ? true : false;
+        },
+        isStudent() {
+            const roles = this.$auth.user.roles;
+            return roles.find(el => el.name === "student") ? true : false;
+        },
     },
-    isStudent (){
-      const roles = this.$auth.user.roles
-      return roles.find(el => el.name === "student") ? true : false
+    mounted() {
+        document.addEventListener("keydown", (e) => {
+            if (e.keyCode == 27 && this.isOpen)
+                this.isOpen = false;
+        });
     },
-  },
-  mounted() {
-    document.addEventListener("keydown", (e) => {
-      if (e.keyCode == 27 && this.isOpen) this.isOpen = false;
-    });
-  },
+    components: { Alert }
 };
 </script>

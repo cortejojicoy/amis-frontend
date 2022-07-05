@@ -9,6 +9,8 @@
       leave-active-class="ease-out transition-medium"
       leave-to-class="opacity-0">
     </transition>
+    
+ 
     <aside
       class="transform top-16 right-0 w-full bg-gray-100 fixed h-full shadow-md overflow-auto ease-in-out transition-all duration-300 z-10 p-10"
       :class="isOpen ? '-translate-x-0' : 'translate-x-full'">
@@ -30,6 +32,7 @@
     </div>
     </div>
     </aside>
+
   </nav>
 </template>
 
