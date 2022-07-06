@@ -155,7 +155,7 @@ export default {
             this.deleteRow(id);
         },
         addRemoveMentor() {
-            this.addRow();
+            this.addRow(this.$auth.user.saisid);
         },
         updateMentorRecord(field, id, event) {
             this.updateMentor({

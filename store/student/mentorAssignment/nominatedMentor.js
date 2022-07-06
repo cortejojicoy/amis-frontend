@@ -21,7 +21,7 @@ export const state = () => ({
         await commit('alert/SUCCESS', 'Successfully created', { root: true })
         await commit('UPDATE_DATA_SUCCESS', data)
       } catch (error) {
-        if(error.response.status===422){
+        if(error.response.status===422){  
           let errList = ``;
           let fields = Object.keys(error.response.data.errors)
           fields.forEach((field) => {
@@ -66,7 +66,7 @@ export const state = () => ({
       let mentor = state.data.save_mentors.find(x => x.id === payload.id)
       mentor[payload.field] = payload.newValue
     },
-    ADD_ROW (state) {
+    ADD_ROW (state,saisid) {
       state.data.save_mentors.push({
         actions:'', 
         actions_status: 'saved',
@@ -75,7 +75,7 @@ export const state = () => ({
         field_represented:'', 
         effectivity_start:'',
         effectivity_end:'',
-        saisid: '12345687',
+        saisid: saisid,
         id: '_'+Date.now() + Math.random()
       })
     },
