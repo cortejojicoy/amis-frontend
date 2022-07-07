@@ -1,5 +1,5 @@
 <template>
-  <div class="my-6 opacity-40">
+  <div class="my-6">
     <div class="flex justify-between mb-6">
       <div class="text-2xl font-bold">Transaction History</div>
     </div>
