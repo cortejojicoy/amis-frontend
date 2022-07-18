@@ -17,9 +17,9 @@
               <td class="px-2 py-3">Action</td>
               <td class="px-2 py-3">Mentor</td>
               <td class="px-2 py-3">Role</td>
-              <td class="px-2 py-3">Field Represented</td>
+              <!-- <td class="px-2 py-3">Field Represented</td>
               <td class="px-2 py-3">Effectivity Start</td>
-              <td class="px-2 py-3">Effectivity End</td>
+              <td class="px-2 py-3">Effectivity End</td> -->
               <td class="px-2 py-3"></td>
             </tr>
           </thead>
@@ -27,37 +27,38 @@
             <tr v-for="(record, recordIndex) in nominatedMentors" :key="recordIndex">
               <td>
                 <!-- {{record.actions}} -->
-                <select :value="record.actions" @change="updateMentorRecord('actions', record.id, $event)">
+                <select :value="record.actions" @change="updateMentorRecord('actions', record.id, $event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                   <option v-for="(action, actionIndex) in actionList" :key="actionIndex">
                     {{ action }}
                   </option>
                 </select>
               </td>
               <td v-if="record.actions === 'Add'">
-                <select :value="record.mentor_id" @change="updateMentorRecord('mentor_id', record.id, $event)">
+                <!-- <select :value="record.mentor_id" @change="updateMentorRecord('mentor_id', record.id, $event)"> -->
+                <select :value="record.mentor_id" @change="updateMentorRecord('mentor_id', record.id, $event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                   <option></option>
-                  <option v-for="(mentor, mentorIndex) in facultyNames" :value="mentor.saisid" :key="mentorIndex">
+                  <option v-for="(mentor, mentorIndex) in facultyNames" :value="mentor.sais_id" :key="mentorIndex">
                     {{ mentor.mentor_name }}
                   </option>
                 </select>
               </td>
               <td v-else>
-                <select :value="record.mentor_id" @change="updateMentorRecord('mentor_id', record.id, $event)">
-                  <option v-for="(mentor, mentorIndex) in facultyNames" :key="mentorIndex + 1" :value="mentor.saisid">
+                <select :value="record.mentor_id" @change="updateMentorRecord('mentor_id', record.id, $event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+                  <option v-for="(mentor, mentorIndex) in activeMentor" :key="mentorIndex + 1" :value="mentor.sais_id">
                     {{ mentor.mentor_name }}
                   </option>
                 </select>
               </td>
               <td>
-                <select :value="record.mentor_role" @change="updateMentorRecord('mentor_role', record.id, $event)">
+                <select :value="record.mentor_role" @change="updateMentorRecord('mentor_role', record.id, $event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                   <option v-for="(mentorRole, mentorRoleIndex) in roleList" :key="mentorRoleIndex">
                     {{ mentorRole }}
                   </option>
                 </select>
               </td>
-              <td>{{ record.field_represented }}</td>
+              <!-- <td>{{ record.field_represented }}</td>
               <td>{{ record.effectivity_start }}</td>
-              <td>{{ record.effectivity_end }}</td>
+              <td>{{ record.effectivity_end }}</td> -->
               <td class="px-2 py-3">
                 <button @click="deleteRecord(record.id)" :disabled="isNominatedMentorsLoading">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
@@ -78,7 +79,10 @@
           :disabled="isNominatedMentorsLoading">Save</button>
       </div>
       <div>
-        <button class="p-2 bg-gray-200" :disabled="isNominatedMentorsLoading">Submit</button>
+        <div class="modal" v-show="isModalOpen">
+          <ConfirmAddRemoveMentor class="modal-content" @close-modal="isModalOpen = false"/>
+        </div>
+        <button class="p-2 bg-gray-200" :disabled="isNominatedMentorsLoading" @click="isModalOpen = true">Submit</button>
       </div>
     </div>
   </div>
@@ -86,12 +90,14 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import ConfirmAddRemoveMentor from './ConfirmAddRemoveMentor.vue';
 import CircSpinner from './CircSpinner.vue';
 export default {
   data() {
     return {
       actionList: ["Add", "Remove"],
       roleList: ["Adviser", "Member"],
+      isModalOpen: false
     };
   },
   computed: {
@@ -99,21 +105,26 @@ export default {
       nominatedMentors: state => state.student.mentorAssignment.nominatedMentor.data.save_mentors,
       isNominatedMentorsLoading: state => state.student.mentorAssignment.nominatedMentor.loading,
       faculties: state => state.faculty.faculty.data,
+      // activeMentors: state => state.student.mentorAssignment.activeMentorAssignment.data.active_mentors,
     }),
     ...mapGetters({
       facultyNames: "faculty/faculty/getNameId",
       withoutTempID: "student/mentorAssignment/nominatedMentor/withoutTempID",
+      activeMentor: "student/mentorAssignment/activeMentorAssignment/getMentors"
+
     })
   },
   async fetch() {
     this.getFaculties();
-    this.getNominatedMentors(this.$auth.user.saisid);
+    this.getActiveMentors();
+    this.getNominatedMentors(this.$auth.user.sais_id);
   },
   methods: {
     ...mapActions({
       getNominatedMentors: "student/mentorAssignment/nominatedMentor/getData",
       saveMentors: "student/mentorAssignment/nominatedMentor/updateData",
       getFaculties: "faculty/faculty/getData",
+      getActiveMentors: "student/mentorAssignment/activeMentorAssignment/getData",
     }),
     ...mapMutations({
       addRow: "student/mentorAssignment/nominatedMentor/ADD_ROW",
@@ -124,8 +135,9 @@ export default {
       this.deleteRow(id);
     },
     addRemoveMentor() {
-      this.addRow(this.$auth.user.saisid);
+      this.addRow(this.$auth.user.sais_id);
     },
+
     updateMentorRecord(field, id, event) {
       this.updateMentor({
         "field": field,
@@ -140,14 +152,15 @@ export default {
         });
       }
     },
+
     clickSaveMentor() {
       this.saveMentors({
         data: this.withoutTempID,
-        saisid: this.$auth.user.saisid
+        sais_id: this.$auth.user.sais_id
       });
     },
   },
-  components: { CircSpinner }
+  components: { CircSpinner, ConfirmAddRemoveMentor }
 };
 </script>
 
@@ -174,6 +187,6 @@ export default {
   margin: auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 80%;
+  width: 50%;
 }
 </style>
