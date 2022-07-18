@@ -244,12 +244,10 @@
               to='/student/mentor-assignment'
               >Mentor Assignment</NuxtLink>
           </li>
-          <li>
-            <a
-              href="#"
-              class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-              >Consent of Instructor</a
-            >
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/student/consent-of-instructor'
+              >Consent of Instructor</NuxtLink>
           </li>
         </ul>
       <!-- END STUDENT PORTAL -->
@@ -304,12 +302,20 @@ export default {
     },
     computed: {
         isFaculty() {
+          if(this.$auth.user.roles) {
             const roles = this.$auth.user.roles;
             return roles.find(el => el.name === "faculty") ? true : false;
+          } else {
+            return false
+          }
         },
         isStudent() {
+          if(this.$auth.user.roles) {
             const roles = this.$auth.user.roles;
             return roles.find(el => el.name === "student") ? true : false;
+          } else {
+            return false
+          }
         },
     },
     mounted() {

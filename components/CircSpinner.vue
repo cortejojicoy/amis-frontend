@@ -1,6 +1,7 @@
 <template>
 	<div v-show="isLoading">
-        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 m-4"></div>
+		<div v-if="size == 'large'" class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 m-4"></div>
+		<div v-else class="loader ease-linear rounded-full border-4 border-t-4 border-gray-400 h-6 w-6 m-4"></div>
     </div>
 </template>
 <script>
@@ -10,6 +11,10 @@ export default {
             type: Boolean,
             default: false
         },
+		size: {
+			type: String,
+			default: 'small'
+		}
     },
     data() {
         return {
