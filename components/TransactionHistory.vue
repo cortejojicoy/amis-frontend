@@ -1,41 +1,79 @@
 <template>
   <div class="my-6">
     <div class="flex justify-between mb-6">
-      <div class="text-2xl font-bold">Transaction History</div>
+      <div class="w-full">
+        <div class="text-2xl font-bold">Transaction History</div>
+        <div v-if="!initialLoad" class="w-full flex justify-center">
+          <CircSpinner :isLoading="transactionLoading" :size="'large'"/>
+        </div>
+        <Loader v-else :loaderType="'table'" :columnNum="6"/>
+      </div>
     </div>
-    <div class="bg-white overflow-auto shadow-xl sm:rounded-lg">
-      <table class="table-auto w-full items-center text-center">
-        <th>
+    <div v-if="!transactionLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg">
+      <table v-show="transaction" class="table-auto w-full items-center text-center">
+        <thead>
           <tr class="font-bold">
-            <td class="p-4">TRX ID</td>
-            <td class="p-4">TRX Date</td>
-            <td class="p-4">TRX Status</td>
-            <td class="p-4">TRX Resolution Date</td>
-            <td class="p-4">Last Committed by</td>
-            <td class="p-4">TRX Action</td>
-            <td class="p-4">Mentor</td>
-            <td class="p-4">Role</td>
-            <td class="p-4">Field Represented</td>
+            <td v-for="(txnHeader, txnHeaderIndex) in transactionHeaders" :key="txnHeaderIndex" class="p-4">{{txnHeader}}</td>
           </tr>
-        </th>
+        </thead>
         <tbody>
-          <tr>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
+          <tr v-for="(txn, txnIndex) in transaction" :key="txnIndex">
+            <td v-for="(tValue, tValueIndex) in transactionKeys" :key="tValueIndex" class="px-4 py-3">{{txn[tValue]}}</td>
           </tr>
         </tbody>
       </table>
+      <div v-show="transaction.length < 1" class="w-full text-center">
+        <p>No transaction history available.</p>
+      </div>
+      <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+import { mapState, mapActions, mapGetters } from 'vuex'
+import Loader from "./Loader.vue";
+import CircSpinner from "./CircSpinner.vue";
+
+export default {
+  props: {
+    txnType: {
+        type: String,
+    }
+  },
+  components: {
+    Loader,
+    CircSpinner
+  },
+  computed: {
+    ...mapState({
+      currentPage: state => state.transactionHistory.data.txns.current_page,
+      totalPages: state => state.transactionHistory.data.txns.last_page,
+      transaction: state => state.transactionHistory.data.txns.data,
+      transactionKeys: state => state.transactionHistory.data.keys,
+      transactionLoading: state => state.transactionHistory.loading,
+      initialLoad: state => state.transactionHistory.initialLoad
+    }),
+    ...mapGetters({
+      transactionHeaders: "transactionHistory/getTableHeaders",
+    })
+  },
+  async fetch () {
+    this.getTransactionData({
+      link: this.txnType,
+      page: 1
+    })
+  },
+  methods: {
+    ...mapActions({
+      getTransactionData: 'transactionHistory/getData',
+    }),
+    changePage(page) {
+      this.getTransactionData({
+        link: this.txnType, 
+        page: page
+      })
+    }
+  }
+};
 </script>
