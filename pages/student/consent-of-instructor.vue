@@ -34,7 +34,6 @@
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
         <ManageCOI @onUpdateTxn="updateTxn" />
-        <button></button>
         <hr class="border-2 border-solid border-black mb-6" />
         <TransactionHistory :txnType="'coitxn'" :update="updateTxnIndicator"/>
       </div>
