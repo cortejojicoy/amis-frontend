@@ -33,9 +33,9 @@
             </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
-        <ManageCOI />
+        <ManageCOI @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxn'" />
+        <TransactionHistory :txnType="'coitxn'" :update="updateTxnIndicator"/>
       </div>
     </div>
   </div>
@@ -50,7 +50,16 @@ export default {
     TransactionHistory,
     ManageCOI,
   },
-
+  data () {
+    return {
+      updateTxnIndicator: 0,
+    };
+  },
+  methods:{
+    updateTxn(){
+      this.updateTxnIndicator++
+    }
+  }
 };
 </script>
 
