@@ -39,6 +39,9 @@ export default {
   props: {
     txnType: {
         type: String,
+    },
+    update: {
+      type: Number
     }
   },
   components: {
@@ -73,6 +76,11 @@ export default {
         link: this.txnType, 
         page: page
       })
+    }
+  },
+  watch: {
+    update(newVal, oldVal) {
+      this.changePage(1)
     }
   }
 };

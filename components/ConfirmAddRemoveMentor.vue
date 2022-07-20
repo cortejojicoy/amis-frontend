@@ -31,7 +31,7 @@
                 Type <b>CONFIRM</b> to confirm your action:
             </div>
             <div>
-                <input v-model="submitForms" type="text" class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" required>
+                <input v-model="confirm" type="text" class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" required>
             </div>
         </div>
         <div class="grid grid-flow-row-dense grid-cols-3">
@@ -64,34 +64,50 @@ export default {
     computed: {
         ...mapState({
             getSaveMentors: state => state.student.mentorAssignment.nominatedMentor.data.save_mentors,
+            updateTxnIndicator: state => state.student.mentorAssignment.activeMentorAssignment.updateTxnIndicator,
+            isModalOpen: state => state.student.mentorAssignment.activeMentorAssignment.isModalOpen,
         }),
         ...mapGetters({
             getMentors: "student/mentorAssignment/nominatedMentor/withoutTempID",
+            getConfirmForms: "student/mentorAssignment/activeMentorAssignment/getConfirmForms",
         }),
+        confirm: {
+            get() {
+                return this.getConfirmForms
+            },
+            set(value) {
+                this.updateConfirmation(value)
+            }
+        }
     },
     methods: {
         ...mapActions({
-            updateMentor: "student/mentorAssignment/activeMentorAssignment/submitMentors",
+            updateStatus: "student/mentorAssignment/activeMentorAssignment/updateActionStatus",
+            updateMentorAssignment: "student/mentorAssignment/activeMentorAssignment/submitRequestMentors",
         }),
         ...mapMutations({
-            error: "alert/ERROR",
-            success: "alert/SUCCESS",
+            updateConfirmation: "student/mentorAssignment/activeMentorAssignment/UPDATE_CONFIRMATION"
         }),
 
         clickSubmitConfirm() {
-            if(this.submitForms == 'CONFIRM') {
-                this.updateMentor({
-                    data: this.getMentors,
-                    sais_id: this.$auth.user.sais_id,
-                    status: this.actionsStatus
-                }),
-                this.success('Successfully submitted', {root: true})
-                this.$emit('close-modal')
-            } else {
-                this.error('Please type CONFIRM', {root: true})
-                this.$emit('close-modal')
-            }
+            this.updateStatus({
+                data: this.getMentors,
+                sais_id: this.$auth.user.sais_id,
+                status: this.actionsStatus
+            }),
+            this.updateMentorAssignment({
+                data: this.getMentors,
+                sais_id: this.$auth.user.sais_id
+            })
         },
+    },
+    watch: {
+        updateTxnIndicator(newVal, oldVal) {
+            this.$emit('onUpdateTxn')
+        },
+        isModalOpen() {
+            this.$emit('close-modal')
+        }
     }
 
 }

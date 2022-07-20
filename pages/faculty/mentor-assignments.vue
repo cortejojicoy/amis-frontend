@@ -9,93 +9,49 @@
           </div>
         </div>
         <div class="relative mb-4">
-          <input
-            type="text"
-            id="filter-search"
-            class="bg-gray-50 border text-gray-900 text-small p-1"
-            placeholder="Search keyword..." />
-          <button
-            type="submit"
-            class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">
+          <input type="text" id="filter-search" class="bg-gray-50 border text-gray-900 text-small p-1" placeholder="Search keyword..." />
+          <button type="submit" class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">
             Search
           </button>
-          <button
-            type="submit"
-            class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">
+          <button type="submit" @click="viewAll" class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">
             View All
           </button>
         </div>
         <div class="mb-4">
           <div class="flex lg:nowrap flex-wrap w-full justify-between">
             <div>
-              <label
-                for="filter-name"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by name</label
-              >
-              <select
-                id="filter-name"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-name" class="block text-xs text-gray-900 dark:text-gray-400">filter by name</label>
+              <select id="filter-name" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Name</option>
               </select>
             </div>
             <div>
-              <label
-                for="filter-program"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by program</label
-              >
-              <select
-                id="filter-program"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-program" class="block text-xs text-gray-900 dark:text-gray-400">filter by program</label>
+              <select id="filter-program" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Program</option>
               </select>
             </div>
             <div>
-              <label
-                for="filter-ss"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by student status</label
-              >
-              <select
-                id="filter-ss"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-ss" class="block text-xs text-gray-900 dark:text-gray-400">filter by student status</label>
+              <select id="filter-ss" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Student Status</option>
               </select>
             </div>
             <div>
-              <label
-                for="filter-mentor"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by mentor</label
-              >
-              <select
-                id="filter-mentor"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-mentor" class="block text-xs text-gray-900 dark:text-gray-400">filter by mentor</label>
+              <select id="filter-mentor" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Mentor</option>
               </select>
             </div>
             <div>
-              <label
-                for="filter-role"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by role</label
-              >
-              <select
-                id="filter-role"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-role" class="block text-xs text-gray-900 dark:text-gray-400">filter by role</label>
+              <select id="filter-role" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Role</option>
               </select>
             </div>
             <div>
-              <label
-                for="filter-ms"
-                class="block text-xs text-gray-900 dark:text-gray-400"
-                >filter by mentor status</label
-              >
-              <select
-                id="filter-ms"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
+              <label for="filter-ms" class="block text-xs text-gray-900 dark:text-gray-400">filter by mentor status</label>
+              <select id="filter-ms" class="bg-gray-50 border border-gray-300 text-gray-900 text-small p-1">
                 <option selected>Mentor Status</option>
               </select>
             </div>
@@ -107,10 +63,8 @@
           </div>
         </div>
         <div class="relative overflow-x-auto">
-          <table
-            class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-            <thead
-              class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+          <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr class="font-bold">
                 <td class="p-4">Name</td>
                 <td class="p-4">Program</td>
@@ -121,11 +75,8 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                <td class="px-4 py-3" @click="openStudentView = true">
-                  Sample
-                </td>
+              <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                <td class="px-4 py-3" @click="openStudentView = true"></td>
                 <td class="px-4 py-3"></td>
                 <td class="px-4 py-3"></td>
                 <td class="px-4 py-3"></td>
@@ -142,6 +93,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import Drawer from "../../components/Drawer.vue";
 export default {
   components: { Drawer },
@@ -150,5 +102,14 @@ export default {
       openStudentView: false,
     };
   },
+  computed: {
+      ...mapGetters({
+          getMentors: "student/mentorAssignment/nominatedMentor/withoutTempID",
+      }),
+  }, 
+
+  methods: {
+
+  }
 };
 </script>

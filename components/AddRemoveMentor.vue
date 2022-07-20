@@ -110,7 +110,7 @@ export default {
     ...mapGetters({
       facultyNames: "faculty/faculty/getNameId",
       withoutTempID: "student/mentorAssignment/nominatedMentor/withoutTempID",
-      activeMentor: "student/mentorAssignment/activeMentorAssignment/getMentors"
+      activeMentor: "student/mentorAssignment/activeMentorAssignment/getActiveMentors"
 
     })
   },

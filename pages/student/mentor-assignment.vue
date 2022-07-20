@@ -6,11 +6,11 @@
         <div>
           <StudentInfo />
           <hr class="border-2 border-solid border-black mb-6" />
-          <ActiveMentorSection />
+          <ActiveMentorSection @onUpdateTxn="updateTxn" />
           <hr class="border-2 border-solid border-black mb-6" />
           <AddRemoveMentor />
           <hr class="border-2 border-solid border-black mb-6" />
-          <TransactionHistory />
+          <TransactionHistory :txnType="'mastxn'" :update="updateTxnIndicator"/>
         </div>
       </div>
     </div>
@@ -30,6 +30,17 @@ export default {
     TransactionHistory,
     AddRemoveMentor,
   },
+
+  data() {
+    return {
+      updateTxnIndicator: 0,
+    }
+  }, 
+  methods:{
+    updateTxn(){
+      this.updateTxnIndicator++
+    }
+  }
 
 };
 </script>
