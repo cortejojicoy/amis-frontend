@@ -1,3 +1,5 @@
+<template>
+
 <!-- This example requires Tailwind CSS v2.0+ -->
 <div class="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
   <!--
@@ -49,3 +51,5 @@
     </div>
   </div>
 </div>
+
+</template>
