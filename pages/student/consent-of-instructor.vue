@@ -33,9 +33,9 @@
             </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
-        <ManageCOI @onUpdateTxn="updateTxn" />
+        <ManageStudentCOI @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxn'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'coitxn'" :userRole="'students'" :update="updateTxnIndicator"/>
       </div>
     </div>
   </div>
@@ -43,12 +43,12 @@
 
 <script>
 import TransactionHistory from "../../components/TransactionHistory.vue";
-import ManageCOI from "../../components/ManageCOI.vue";
+import ManageStudentCOI from "../../components/ManageStudentCOI.vue";
 
 export default {
   components: {
     TransactionHistory,
-    ManageCOI,
+    ManageStudentCOI,
   },
   data () {
     return {

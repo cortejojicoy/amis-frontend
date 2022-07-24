@@ -111,7 +111,7 @@ export default {
         }),
         chooseCourse(value) {
             this.getSectionsData({
-                course: value
+                course: value.course
             })
         },
         chooseSection(value) {

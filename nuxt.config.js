@@ -47,6 +47,7 @@ export default {
     '~/plugins/auth',
     '~/plugins/vs-pagination',
     '~/plugins/vue-select',
+    '~/plugins/vue-final-modal.js'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

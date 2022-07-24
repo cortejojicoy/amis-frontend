@@ -13,7 +13,7 @@ export const actions = {
     async getCourses ({ dispatch, commit }) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/course-offerings`)
+            const data = await this.$axios.$get(`/course-offerings`, {params: {fields:['course'], distinct: 'true'}})
             await commit('GET_COURSES_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -37,7 +37,15 @@ export const actions = {
     async getSections ({ dispatch, commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$post(`/course-offerings/get-sections`, payload.course)
+            const data = await this.$axios.$get(`/course-offerings`, {params: {fields:[
+                'class_nbr',
+                'section', 
+                'days', 
+                'times', 
+                'id', 
+                'name', 
+                'descr'
+            ], course: payload.course}})
             await commit('GET_SECTIONS_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -66,8 +74,10 @@ export const actions = {
         } else {
             commit('GET_DATA_REQUEST')
             try {
-                const data = await this.$axios.$post(`/consent-of-instructor`, state.toStore)
-                await dispatch('checkStatus', data)
+                const data = await this.$axios.$post(`students/consent-of-instructor`, state.toStore)
+                commit('alert/SUCCESS', data.message, { root: true })
+                commit('UPDATE_TXN_INDICATOR')
+                commit('APPLY_COI')
             } catch (error) {
                 if(error.response.status===422){  
                     let errList = ``;
@@ -80,8 +90,9 @@ export const actions = {
                 })
                     let errMessage = `Validation Error: ${errList}`
                     await commit('alert/ERROR', errMessage, { root: true })
-                } else if(error.response.status===500) {
+                } else if(error.response.status===400) {
                     await commit('alert/ERROR', error.response.data.message, { root: true })
+                    commit('APPLY_COI')
                 } else {
                     let errMessage = `Something went wrong while performing your request. Please contact administrator`
                     await commit('alert/ERROR', errMessage, { root: true })
@@ -89,15 +100,6 @@ export const actions = {
                 commit('GET_DATA_FAILED', error)
             }
         }
-    },
-    checkStatus({commit}, data) {
-        if (data.status == 'Error') {
-            commit('alert/ERROR', data.message, { root: true })
-        } else {
-            commit('alert/SUCCESS', data.message, { root: true })
-            commit('UPDATE_TXN_INDICATOR')
-        }
-        commit('APPLY_COI')
     },
     async setDetails ({dispatch, commit}, payload) {
         commit('GET_DATA_REQUEST')
@@ -114,7 +116,7 @@ export const mutations = {
         state.loading = false
     },
     GET_SECTIONS_SUCCESS (state, data) {
-        state.sections = data.sections
+        state.sections = data.courses
         state.loading = false
     },
     GET_DATA_FAILED (state, error) {
@@ -136,7 +138,6 @@ export const mutations = {
     UPDATE_TXN_INDICATOR (state) {
         state.updateTxnIndicator++
     }
-
 }
 
 export const getters = {

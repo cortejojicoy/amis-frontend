@@ -20,7 +20,17 @@ export default ({ app, store, redirect }) => {
             name: 'student-mentor-assignment',
             permissionType: 'role',
             permission: 'student'
-        }
+        },
+        {
+            name: 'student-consent-of-instructor',
+            permissionType: 'role',
+            permission: 'student'
+        },
+        {
+            name: 'faculty-consent-of-instructor',
+            permissionType: 'role',
+            permission: 'faculty'
+        },
     ]
 
     const URLwithoutPermission = [
