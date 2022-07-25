@@ -1,15 +1,28 @@
 export const state = () => ({
-    initialLoad: true,
     loading: false,
-    tableHeaders: [],
     data: []
 })
   
 export const actions = {
-    async getData ({ dispatch, commit }, payload) {
+    async getClasses ({ dispatch, commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: payload.data})
+            const data = await this.$axios.$get(`/course-offerings`, {params: 
+                {
+                    id: payload.faculty_sais_id, 
+                    fields:[
+                        'class_nbr', 
+                        'section', 
+                        'course', 
+                        'days', 
+                        'times'
+                    ], 
+                    order_type:'asc', 
+                    order_field: 'class_nbr',
+                    with_cois: 'true',
+                    coi_status: 'Requested',
+                    coi_txn_status: 'Requested'
+                }})
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -39,7 +52,6 @@ export const mutations = {
     GET_DATA_SUCCESS (state, data) {
         state.data = data
         state.loading = false
-        state.initialLoad = false
     },
     GET_DATA_FAILED (state, error) {
         state.data = error
@@ -47,11 +59,17 @@ export const mutations = {
 }
 
 export const getters = {
-    getTableHeaders(state) {
-        if(state.data.keys) {
-            return state.data.keys.map((th)=>{
-                return th.toUpperCase().replaceAll('_', ' ')
-            })
+    classDetails(state) {
+        if(state.data.courses){
+          return state.data.courses.map((item)=>{
+            var name = item.course + ' ' + item.section + ' ' + item.days + ' ' + item.times
+            var temp = {
+                name: name, 
+                id: item.class_nbr,
+                cois: item.cois
+            };
+            return temp
+          })
         }
     }
 }

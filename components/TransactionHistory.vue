@@ -38,10 +38,13 @@ import CircSpinner from "./CircSpinner.vue";
 export default {
   props: {
     txnType: {
-      type: String,
+      type: String
     },
     update: {
       type: Number
+    },
+    userRole: {
+      type: String
     }
   },
   components: {
@@ -64,7 +67,14 @@ export default {
   async fetch () {
     this.getTransactionData({
       link: this.txnType,
-      page: 1
+      role: this.userRole,
+      data: {
+        page: 1,
+        items: 5,
+        order_type: 'desc',
+        order_field: 'coitxns.created_at',
+        sais_id: this.$auth.user.sais_id
+      }
     })
   },
   methods: {
@@ -73,8 +83,15 @@ export default {
     }),
     changePage(page) {
       this.getTransactionData({
-        link: this.txnType, 
-        page: page
+        link: this.txnType,
+        role: this.userRole,
+        data: {
+          page: page,
+          items: 5,
+          order_type: 'desc',
+          order_field: 'coitxns.created_at',
+          sais_id: this.$auth.user.sais_id
+        }
       })
     }
   },
