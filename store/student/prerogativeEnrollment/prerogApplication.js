@@ -48,9 +48,8 @@ export const actions = {
                     'descr'
                 ], course: payload.course.course}})
                 await commit('GET_SECTIONS_SUCCESS', data)
-
             } else {
-                let data = []
+                let data = [];
                 await commit('GET_SECTIONS_SUCCESS', data)
             }
         } catch (error) {
@@ -80,10 +79,10 @@ export const actions = {
         } else {
             commit('GET_DATA_REQUEST')
             try {
-                const data = await this.$axios.$post(`students/consent-of-instructors`, state.toStore)
+                const data = await this.$axios.$post(`students/prerogative-enrollments`, state.toStore)
                 commit('alert/SUCCESS', data.message, { root: true })
                 commit('UPDATE_TXN_INDICATOR')
-                commit('APPLY_COI')
+                commit('APPLY_PREROG')
             } catch (error) {
                 if(error.response.status===422){  
                     let errList = ``;
@@ -98,7 +97,7 @@ export const actions = {
                     await commit('alert/ERROR', errMessage, { root: true })
                 } else if(error.response.status===400) {
                     await commit('alert/ERROR', error.response.data.message, { root: true })
-                    commit('APPLY_COI')
+                    commit('APPLY_PREROG')
                 } else {
                     let errMessage = `Something went wrong while performing your request. Please contact administrator`
                     await commit('alert/ERROR', errMessage, { root: true })
@@ -135,7 +134,7 @@ export const mutations = {
     UPDATE_JUSTIFICATION (state, justification) {
         state.toStore.justification = justification
     },
-    APPLY_COI (state) {
+    APPLY_PREROG (state) {
         state.loading = false
         state.toStore.class_id = ''
         state.toStore.justification = ''

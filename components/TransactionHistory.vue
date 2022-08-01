@@ -72,8 +72,9 @@ export default {
         page: 1,
         items: 5,
         order_type: 'desc',
-        order_field: 'coitxns.created_at',
-        sais_id: this.$auth.user.sais_id
+        order_field: this.txnType + '.created_at',
+        sais_id: this.$auth.user.sais_id,
+        txn_history: 'true'
       }
     })
   },
@@ -89,8 +90,9 @@ export default {
           page: page,
           items: 5,
           order_type: 'desc',
-          order_field: 'coitxns.created_at',
-          sais_id: this.$auth.user.sais_id
+          order_field: this.txnType + '.created_at',
+          sais_id: this.$auth.user.sais_id,
+          txn_history: 'true'
         }
       })
     }

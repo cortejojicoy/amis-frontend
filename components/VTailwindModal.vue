@@ -3,10 +3,10 @@
         v-slot="{close}"
         v-bind="$attrs"
         classes="flex justify-center items-center"
-        content-class="relative flex flex-col max-h-full mx-4 p-4 border dark:border-gray-800 rounded bg-white dark:bg-gray-900"
+        content-class="relative flex flex-col max-h-full mx-4 rounded-md bg-white dark:bg-gray-900"
         v-on="$listeners"
     >
-    <div class="bg-white font-bold p-4 sm:px-6 sm:py-4 border-b border-gray-150">
+    <div class="bg-blue-500 font-bold p-4 sm:px-6 sm:py-4 rounded-t-md text-white">
       <slot name="title">
 
       </slot>
@@ -20,9 +20,8 @@
   
     <div class="bg-white px-4 pb-5 sm:px-4 flex justify-center">
       <slot name="buttons">
-        
+        <button class="bg-blue-500 text-white p-2 rounded mr-2" @click="close">Close</button>
       </slot>
-      <button class="bg-blue-500 text-white p-2 rounded mr-2" @click="close">Close</button>
     </div>
   </vue-final-modal>
 </template>

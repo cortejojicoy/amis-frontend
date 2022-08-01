@@ -196,6 +196,11 @@
           >
             <NuxtLink to='/faculty/consent-of-instructor'>Consent of Instructor</NuxtLink>
           </li>
+          <li
+            class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+          >
+            <NuxtLink to='/faculty/prerogative-enrollment'>Prerogative Enrollment</NuxtLink>
+          </li>
         </ul>
       <!-- END FACULTY -->
       <!-- STUDENT PORTAL -->
@@ -248,8 +253,59 @@
               to='/student/consent-of-instructor'
               >Consent of Instructor</NuxtLink>
           </li>
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/student/prerogative-enrollment'
+              >Prerogative Enrollment</NuxtLink>
+          </li>
         </ul>
-      <!-- END STUDENT PORTAL -->
+      <!-- END STUDENT -->
+      <!-- ADMIN PORTAL -->
+      <span
+        @click="isAdminOpen = !isAdminOpen"
+        v-show="isAdmin"
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
+        >
+        <span class="mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+          </svg>
+        </span>
+        <span>Admin Portal</span>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          class="w-3 h-3 ml-auto transform"
+          :class="isAdminOpen ? 'rotate-0' : '-rotate-90'"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512">
+          <path
+            fill="currentColor"
+            d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
+        </svg>
+      </span>
+       <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isAdminOpen">
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/admin/prerogative-enrollment'
+              >Prerogative Enrollment</NuxtLink>
+          </li>
+        </ul>
+      <!-- END ADMIN PORTAL -->
       <!-- LOGOUT -->
       <span
         @click="isOpen = false"
@@ -275,6 +331,7 @@ export default {
             isOpen: false,
             isFacultyOpen: false,
             isStudentOpen: false,
+            isAdminOpen: false,
         };
     },
     methods: {
@@ -312,6 +369,14 @@ export default {
           if(this.$auth.user.roles) {
             const roles = this.$auth.user.roles;
             return roles.find(el => el.name === "student") ? true : false;
+          } else {
+            return false
+          }
+        },
+        isAdmin() {
+          if(this.$auth.user.roles) {
+            const roles = this.$auth.user.roles;
+            return roles.find(el => el.name === "admin") ? true : false;
           } else {
             return false
           }

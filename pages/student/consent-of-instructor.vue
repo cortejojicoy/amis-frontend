@@ -35,7 +35,7 @@
         <hr class="border-2 border-solid border-black mb-6" />
         <ManageStudentCOI @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxn'" :userRole="'students'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'coitxns'" :userRole="'students'" :update="updateTxnIndicator"/>
       </div>
     </div>
   </div>

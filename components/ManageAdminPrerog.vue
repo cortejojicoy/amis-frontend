@@ -1,43 +1,52 @@
 <template>
     <div class="my-8">
         <div class="flex items-center">
-            <div class="my-4 text-lg font-bold">
-                {{classDetails.name}}
+            <div class="my-4 text-2xl font-bold">
+                Applications
             </div>
-            <CircSpinner :isLoading="isUpdating"/>
+            <CircSpinner :isLoading="isLoading && !isInitialLoading"/>
         </div>
-        <div v-if="!isLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
-            <table v-show="application" class="table-auto w-full items-center text-center">
+        <div v-if="!isInitialLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
+            <table v-show="getPrerogApplications" class="table-auto w-full items-center text-center">
                 <thead>
                     <tr class="font-bold">
                         <td class="px-2 py-3">Name</td>
                         <td class="px-2 py-3">Student Number</td>
+                        <td class="px-2 py-3">Course</td>
                         <td class="px-2 py-3">UPmail</td>
                         <td class="px-2 py-3">Remarks/Appeal</td>
-                        <td class="px-2 py-3">Action</td>
+                        <td class="px-2 py-3">Action/Status</td>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(app, applicationIndex) in application" :key="applicationIndex">
+                    <tr v-for="(prg, prgIndex) in getPrerogApplications" :key="prgIndex">
                         <td class="px-2 py-3">
-                            {{app.user.full_name}} 
+                            {{prg.user.full_name}}
                         </td>
                         <td class="px-2 py-3">
-                            {{app.student.campus_id}}
+                            {{prg.student.campus_id}}
+                        </td>
+                        <td class="px-2 py-3">
+                            {{prg.course_offering.course}}
                         </td>
                         <td class="px-2 py-3">  
-                            {{app.user.email}}
+                            {{prg.user.email}}
                         </td>
                         <td class="px-2 py-3">
-                            {{app.coitxns[0].note}}
+                            {{prg.prerog_txns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <button @click="openModal('approve', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
-                                Approve
-                            </button>
-                            <button @click="openModal('disapprove', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
-                                Disapprove
-                            </button>
+                            <div v-if="prg.status == 'Accepted'">
+                                <button disabled @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                                    Approve
+                                </button>
+                                <button disabled @click="openModal('disapprove', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                                    Disapprove
+                                </button>
+                            </div>
+                            <div class="italic" v-else>
+                                {{prg.status}}
+                            </div>
                         </td>
                     </tr>    
                 </tbody>
@@ -49,8 +58,7 @@
             <template v-slot:title>Confirm Action</template>
             <template v-slot:content>
                 <div>
-                    Are you sure you want to {{for_action.action}} the following student's COI application?
-
+                    Are you sure you want to {{for_action.action}} the following student's Prerog application in <b>{{for_action.course}}</b>?
                     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
                         <table class="table-auto w-full items-center text-center">
                             <thead>
@@ -102,14 +110,6 @@ export default {
     data: () => ({
         show: false
     }),
-    props: {
-        classDetails: {
-            type: Object
-        },
-        index: {
-            type: Number
-        }
-    },
     components: {
         Loader,
         CircSpinner,
@@ -117,24 +117,15 @@ export default {
     },
     computed: {
         ...mapState({
-            for_action: state => state.faculty.consentOfInstructor.coiAction.for_action,
-            updateTxnIndicator: state => state.faculty.consentOfInstructor.coiAction.updateTxnIndicator
+            for_action: state => state.admin.prerogativeEnrollment.prerogAction.for_action,
+            isLoading: state => state.admin.prerogativeEnrollment.prerogAction.loading,
+            isInitialLoading: state => state.admin.prerogativeEnrollment.prerogAction.initialLoading,
+            updateTxnIndicator: state => state.admin.prerogativeEnrollment.prerogAction.updateTxnIndicator
         }),
         ...mapGetters({
-            getApplicationById: "faculty/consentOfInstructor/coiAction/getApplicationById",
-            getLoadingById: "faculty/consentOfInstructor/coiAction/getLoadingById",
-            getUpdateDataLoadingById: "faculty/consentOfInstructor/coiAction/getUpdateDataLoadingById",
-            getJustification: "faculty/consentOfInstructor/coiAction/getJustification"
+            getJustification: "admin/prerogativeEnrollment/prerogAction/getJustification",
+            getPrerogApplications: "admin/prerogativeEnrollment/prerogAction/getPrerogApplications"
         }),
-        application() {
-            return this.getApplicationById(this.index)
-        },
-        isLoading() {
-            return this.getLoadingById(this.index)
-        },
-        isUpdating() {
-            return this.getUpdateDataLoadingById(this.index)
-        },
         justification: {
             get() {
                 return this.getJustification
@@ -145,27 +136,24 @@ export default {
         }
     },
     async fetch () {
-        this.setInitialApplications({
-            cois: this.classDetails.cois,
-            index: this.index 
+        this.getPrerogs({
+            admin_sais_id: this.$auth.user.sais_id
         })
     },
     methods: {
         ...mapActions({
-            updateApplication: 'faculty/consentOfInstructor/coiAction/updateApplication',
-            setInitialApplications: 'faculty/consentOfInstructor/coiAction/setInitialApplications'
+            updateApplication: 'admin/prerogativeEnrollment/prerogAction/updateApplication',
+            getPrerogs: 'admin/prerogativeEnrollment/prerogAction/getPrerogs'
         }),
         ...mapMutations({
-            openModal: 'faculty/consentOfInstructor/coiAction/OPEN_MODAL',
-            setForAction: 'faculty/consentOfInstructor/coiAction/SET_FOR_ACTION',
-            unsetForAction: 'faculty/consentOfInstructor/coiAction/UNSET_FOR_ACTION',
-            updateJustification: 'faculty/consentOfInstructor/coiAction/UPDATE_JUSTIFICATION'
+            openModal: 'admin/prerogativeEnrollment/prerogAction/OPEN_MODAL',
+            setForAction: 'admin/prerogativeEnrollment/prerogAction/SET_FOR_ACTION',
+            unsetForAction: 'admin/prerogativeEnrollment/prerogAction/UNSET_FOR_ACTION',
+            updateJustification: 'admin/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION'
         }),
         confirm() {
             this.updateApplication({
-                class_nbr: this.classDetails.id,
                 sais_id: this.$auth.user.sais_id, 
-                index: this.index
             });
             this.show = false
         },
@@ -173,13 +161,15 @@ export default {
             this.unsetForAction()
             this.show = false
         },
-        openModal($action, $student_number, $email, $student_remarks, $coi_id) {
+        openModal($action, $full_name, $student_number, $course, $email, $student_remarks, $prg_id) {
             this.setForAction({
                 action: $action,
+                full_name: $full_name,
                 student_number: $student_number,
+                course: $course,
                 email: $email,
                 student_remarks: $student_remarks,
-                coi_id: $coi_id
+                prg_id: $prg_id
             })
             this.show = true;
         }

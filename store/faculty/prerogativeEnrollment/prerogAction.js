@@ -6,11 +6,13 @@ export const state = () => ({
     data: {},
     for_action: {
         action: '',
+        full_name: '',
         student_number: '',
         email: '',
         student_remarks: '',
         justification: '',
-        coi_id: ''
+        prg_id: '',
+        course: ''
     },
     updateTxnIndicator: 0,
 })
@@ -19,13 +21,13 @@ export const actions = {
     async getApplications ({ dispatch, commit }, payload) {
         commit('GET_DATA_REQUEST', {key: payload.index})
         try {
-            const data = await this.$axios.$get(`/faculties/consent-of-instructors`, {params: {
+            const data = await this.$axios.$get(`/faculties/prerogative-enrollments`, {params: {
                 class_nbr: payload.class_nbr,
-                status: 'Requested',
+                status: ['Requested', 'Accepted', 'Approved'],
                 with_students: 'true',
-                coi_txn_status: 'Requested'
+                prg_txn_status: 'Requested'
             }})
-            await commit('GET_DATA_SUCCESS', {results: data.cois, key: payload.index})
+            await commit('GET_DATA_SUCCESS', {results: data.prgs, key: payload.index})
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -49,7 +51,7 @@ export const actions = {
     async updateApplication({state, dispatch, commit}, payload) {
         commit('UPDATE_DATA_REQUEST', {key: payload.index})
         try {
-            const data = await this.$axios.$put(`/faculties/consent-of-instructors/${state.for_action.coi_id}`, {
+            const data = await this.$axios.$put(`/faculties/prerogative-enrollments/${state.for_action.prg_id}`, {
                 class_nbr: payload.class_nbr,
                 sais_id: payload.sais_id,
                 status: state.for_action.action,
@@ -82,14 +84,8 @@ export const actions = {
 
     setInitialApplications({commit}, payload) {
         commit('GET_DATA_REQUEST', {key: payload.index})
-        commit('SET_INITIAL_DATA', {key: payload.index, cois: payload.cois})
+        commit('SET_INITIAL_DATA', {key: payload.index, prerog_txns: payload.prerog_txns})
     },
-
-    async approveCOI() {
-        //api call
-        // state loading[index] => true
-        // state data[index] => new data na wala na yung coi na inapprove
-    }
 }
   
 export const mutations = {
@@ -105,7 +101,7 @@ export const mutations = {
     },
     SET_INITIAL_DATA (state, data) {
         Vue.set(state.loading, data.key, false)
-        Vue.set(state.data, data.key, data.cois)
+        Vue.set(state.data, data.key, data.prerog_txns)
     },
     UPDATE_DATA_REQUEST (state, data) {
         Vue.set(state.update_data_loading, data.key, true)
@@ -115,20 +111,22 @@ export const mutations = {
     },
     SET_FOR_ACTION (state, data) {
         state.for_action.action = data.action
+        state.for_action.full_name = data.full_name
         state.for_action.student_number = data.student_number
         state.for_action.email = data.email
         state.for_action.student_remarks = data.student_remarks
-        state.for_action.coi_id = data.coi_id
+        state.for_action.prg_id = data.prg_id
     },
     UPDATE_JUSTIFICATION (state, justification) {
         state.for_action.justification = justification
     },
     UNSET_FOR_ACTION (state) {
         state.for_action.action = ''
+        state.for_action.full_name = ''
         state.for_action.student_number = ''
         state.for_action.email = ''
         state.for_action.student_remarks = ''
-        state.for_action.coi_id = ''
+        state.for_action.prg_id = ''
         state.for_action.justification = ''
     },
     UPDATE_TXN_INDICATOR (state) {
@@ -139,8 +137,8 @@ export const mutations = {
 export const getters = {
     getApplicationById: (state) => (id) => {
         if(state.data[id]) {
-            state.data[id].forEach(coi => {
-                coi.user.full_name = coi.user.first_name + ' '  + coi.user.middle_name + ' ' + coi.user.last_name
+            state.data[id].forEach(prerog => {
+                prerog.user.full_name = prerog.user.first_name + ' '  + prerog.user.middle_name + ' ' + prerog.user.last_name
             });
         }
         return state.data[id]
