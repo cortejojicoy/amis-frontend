@@ -37,10 +37,10 @@
                         </td>
                         <td class="px-2 py-3">
                             <div v-if="prg.status == 'Accepted'">
-                                <button disabled @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                                <button @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
                                     Approve
                                 </button>
-                                <button disabled @click="openModal('disapprove', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                                <button @click="openModal('disapprove', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
                                     Disapprove
                                 </button>
                             </div>
@@ -153,7 +153,7 @@ export default {
         }),
         confirm() {
             this.updateApplication({
-                sais_id: this.$auth.user.sais_id, 
+                admin_sais_id: this.$auth.user.sais_id, 
             });
             this.show = false
         },

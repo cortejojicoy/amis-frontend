@@ -13,7 +13,7 @@
             </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
-        <ManageAdminPrerog />
+        <ManageAdminPrerog @onUpdateTxn="updateTxn"/>
         <hr class="border-2 border-solid border-black mb-6" />
         <TransactionHistory :txnType="'prerog_txns'" :userRole="'admins'" :update="updateTxnIndicator"/>
       </div>
