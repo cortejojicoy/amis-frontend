@@ -52,7 +52,7 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             const data = await this.$axios.$put(`/admins/prerogative-enrollments/${state.for_action.prg_id}`, {
-                sais_id: payload.sais_id,
+                sais_id: payload.admin_sais_id,
                 status: state.for_action.action,
                 justification: state.for_action.justification
             })
