@@ -31,6 +31,21 @@ export default ({ app, store, redirect }) => {
             permissionType: 'role',
             permission: 'faculty'
         },
+        {
+          name: 'student-prerogative-enrollment',
+          permissionType: 'role',
+          permission: 'student'
+        },
+        {
+          name: 'faculty-prerogative-enrollment',
+          permissionType: 'role',
+          permission: 'faculty'
+        },
+        {
+          name: 'admin-prerogative-enrollment',
+          permissionType: 'role',
+          permission: 'admin'
+        },
     ]
 
     const URLwithoutPermission = [

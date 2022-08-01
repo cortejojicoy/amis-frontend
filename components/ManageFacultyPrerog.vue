@@ -14,13 +14,13 @@
                         <td class="px-2 py-3">Student Number</td>
                         <td class="px-2 py-3">UPmail</td>
                         <td class="px-2 py-3">Remarks/Appeal</td>
-                        <td class="px-2 py-3">Action</td>
+                        <td class="px-2 py-3">Action/Status</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(app, applicationIndex) in application" :key="applicationIndex">
                         <td class="px-2 py-3">
-                            {{app.user.full_name}} 
+                            {{app.user.full_name}}
                         </td>
                         <td class="px-2 py-3">
                             {{app.student.campus_id}}
@@ -29,15 +29,20 @@
                             {{app.user.email}}
                         </td>
                         <td class="px-2 py-3">
-                            {{app.coitxns[0].note}}
+                            {{app.prerog_txns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <button @click="openModal('approve', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
-                                Approve
-                            </button>
-                            <button @click="openModal('disapprove', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
-                                Disapprove
-                            </button>
+                            <div v-if="app.status == 'Requested'">
+                                <button @click="openModal('accept', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                                    Accept
+                                </button>
+                                <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                                    Disapprove
+                                </button>
+                            </div>
+                            <div class="italic" v-else>
+                                {{app.status}}
+                            </div>
                         </td>
                     </tr>    
                 </tbody>
@@ -49,7 +54,7 @@
             <template v-slot:title>Confirm Action</template>
             <template v-slot:content>
                 <div>
-                    Are you sure you want to {{for_action.action}} the following student's COI application?
+                    Are you sure you want to {{for_action.action}} the following student's Prerog application in your <b>{{classDetails.name}}</b> class?
 
                     <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
                         <table class="table-auto w-full items-center text-center">
@@ -77,8 +82,8 @@
             </template>
             <template v-slot:buttons>
                 <div>
-                    <button v-if="for_action.action == 'approve'" @click="confirm" class="bg-green-500 text-white p-2 rounded mr-2">
-                        Approve
+                    <button v-if="for_action.action == 'accept'" @click="confirm" class="bg-green-500 text-white p-2 rounded mr-2">
+                        Accept
                     </button>
                     <button v-else @click="confirm" class="bg-red-500 text-white p-2 rounded mr-2">
                         Disapprove
@@ -117,14 +122,14 @@ export default {
     },
     computed: {
         ...mapState({
-            for_action: state => state.faculty.consentOfInstructor.coiAction.for_action,
-            updateTxnIndicator: state => state.faculty.consentOfInstructor.coiAction.updateTxnIndicator
+            for_action: state => state.faculty.prerogativeEnrollment.prerogAction.for_action,
+            updateTxnIndicator: state => state.faculty.prerogativeEnrollment.prerogAction.updateTxnIndicator
         }),
         ...mapGetters({
-            getApplicationById: "faculty/consentOfInstructor/coiAction/getApplicationById",
-            getLoadingById: "faculty/consentOfInstructor/coiAction/getLoadingById",
-            getUpdateDataLoadingById: "faculty/consentOfInstructor/coiAction/getUpdateDataLoadingById",
-            getJustification: "faculty/consentOfInstructor/coiAction/getJustification"
+            getApplicationById: "faculty/prerogativeEnrollment/prerogAction/getApplicationById",
+            getLoadingById: "faculty/prerogativeEnrollment/prerogAction/getLoadingById",
+            getUpdateDataLoadingById: "faculty/prerogativeEnrollment/prerogAction/getUpdateDataLoadingById",
+            getJustification: "faculty/prerogativeEnrollment/prerogAction/getJustification"
         }),
         application() {
             return this.getApplicationById(this.index)
@@ -146,20 +151,20 @@ export default {
     },
     async fetch () {
         this.setInitialApplications({
-            cois: this.classDetails.cois,
+            prerog_txns: this.classDetails.prerogs,
             index: this.index 
         })
     },
     methods: {
         ...mapActions({
-            updateApplication: 'faculty/consentOfInstructor/coiAction/updateApplication',
-            setInitialApplications: 'faculty/consentOfInstructor/coiAction/setInitialApplications'
+            updateApplication: 'faculty/prerogativeEnrollment/prerogAction/updateApplication',
+            setInitialApplications: 'faculty/prerogativeEnrollment/prerogAction/setInitialApplications'
         }),
         ...mapMutations({
-            openModal: 'faculty/consentOfInstructor/coiAction/OPEN_MODAL',
-            setForAction: 'faculty/consentOfInstructor/coiAction/SET_FOR_ACTION',
-            unsetForAction: 'faculty/consentOfInstructor/coiAction/UNSET_FOR_ACTION',
-            updateJustification: 'faculty/consentOfInstructor/coiAction/UPDATE_JUSTIFICATION'
+            openModal: 'faculty/prerogativeEnrollment/prerogAction/OPEN_MODAL',
+            setForAction: 'faculty/prerogativeEnrollment/prerogAction/SET_FOR_ACTION',
+            unsetForAction: 'faculty/prerogativeEnrollment/prerogAction/UNSET_FOR_ACTION',
+            updateJustification: 'faculty/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION'
         }),
         confirm() {
             this.updateApplication({
@@ -173,13 +178,14 @@ export default {
             this.unsetForAction()
             this.show = false
         },
-        openModal($action, $student_number, $email, $student_remarks, $coi_id) {
+        openModal($action, $full_name, $student_number, $email, $student_remarks, $prg_id) {
             this.setForAction({
                 action: $action,
+                full_name: $full_name,
                 student_number: $student_number,
                 email: $email,
                 student_remarks: $student_remarks,
-                coi_id: $coi_id
+                prg_id: $prg_id
             })
             this.show = true;
         }

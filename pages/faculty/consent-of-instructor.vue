@@ -25,7 +25,7 @@
         </div>
         <Loader v-else :loaderType="'table'" :columnNum="4"/>
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxn'" :userRole="'faculties'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'coitxns'" :userRole="'faculties'" :update="updateTxnIndicator"/>
       </div>
     </div>
   </div>

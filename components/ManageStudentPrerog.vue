@@ -6,9 +6,6 @@
             </div>
             <CircSpinner :isLoading="coursesLoading"/>
         </div>
-        <div class="text-red-500 mb-2">
-            Only courses/classes with COI restriction are available in this module. Courses with no restriction, unit/department consent, courses with course pre-requisite only, and other restrictions excluding COI will not appear here. You may enroll courses with no restriction in SAIS directly.
-        </div>
         <div class="bg-white shadow-xl sm:rounded-lg mb-4 flex flex-wrap lg:flex-nowrap flex-col md:flex-row md:justify-around">
             <div class="">
                 <div class="px-2 py-3 font-bold text-left md:text-center">
@@ -78,14 +75,14 @@ export default {
     },
     computed: {
         ...mapState({
-            updateTxnIndicator: state => state.student.consentOfInstructor.coiApplication.updateTxnIndicator,
-            courses: state => state.student.consentOfInstructor.coiApplication.courses,
-            sections: state => state.student.consentOfInstructor.coiApplication.sections,
-            coursesLoading: state => state.student.consentOfInstructor.coiApplication.loading,
+            updateTxnIndicator: state => state.student.prerogativeEnrollment.prerogApplication.updateTxnIndicator,
+            courses: state => state.student.prerogativeEnrollment.prerogApplication.courses,
+            sections: state => state.student.prerogativeEnrollment.prerogApplication.sections,
+            coursesLoading: state => state.student.prerogativeEnrollment.prerogApplication.loading,
         }),
         ...mapGetters({
-            classDetails: "student/consentOfInstructor/coiApplication/getClassDetails",
-            getJustification: "student/consentOfInstructor/coiApplication/getJustification"
+            classDetails: "student/prerogativeEnrollment/prerogApplication/getClassDetails",
+            getJustification: "student/prerogativeEnrollment/prerogApplication/getJustification"
         }),
         justification: {
             get() {
@@ -101,13 +98,13 @@ export default {
     },
     methods: {
         ...mapActions({
-            getCoursesData: 'student/consentOfInstructor/coiApplication/getCourses',
-            getSectionsData: 'student/consentOfInstructor/coiApplication/getSections',
-            apply: 'student/consentOfInstructor/coiApplication/apply',
-            setDetails: 'student/consentOfInstructor/coiApplication/setDetails'
+            getCoursesData: 'student/prerogativeEnrollment/prerogApplication/getCourses',
+            getSectionsData: 'student/prerogativeEnrollment/prerogApplication/getSections',
+            apply: 'student/prerogativeEnrollment/prerogApplication/apply',
+            setDetails: 'student/prerogativeEnrollment/prerogApplication/setDetails'
         }),
         ...mapMutations({
-            updateJustification: 'student/consentOfInstructor/coiApplication/UPDATE_JUSTIFICATION'
+            updateJustification: 'student/prerogativeEnrollment/prerogApplication/UPDATE_JUSTIFICATION'
         }),
         chooseCourse(value) {
             this.getSectionsData({
