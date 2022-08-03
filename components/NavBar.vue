@@ -3,25 +3,51 @@
   <nav
     class="flex fixed w-full items-center justify-between px-6 h-16 bg-white text-gray-700 border-b border-gray-200 z-10">
     <!-- START HEADER -->
-    <div class="flex items-center">
-      <button class="mr-2" aria-label="Open Menu" @click="drawer">
-        <svg
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          viewBox="0 0 24 24"
-          class="w-8 h-8">
-          <path d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-      <div class="m-auto md:mx-4">
-        <img src="/logos/uplb-logo.png" class="h-12 w-auto" alt="UPLB Logo" />
+    <div class="flex items-center justify-between w-full">
+      <div class="flex items-center">
+        <button class="mr-2" aria-label="Open Menu" @click="drawer">
+          <svg
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+            class="w-8 h-8">
+            <path d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+        <div class="m-auto md:mx-4">
+          <img src="/logos/uplb-logo.png" class="h-12 w-auto" alt="UPLB Logo" />
+        </div>
+        <h1 class="font-semibold text-xl hidden md:flex items-center">
+          UPLB AMIS
+        </h1>
       </div>
-      <h1 class="font-semibold text-xl hidden md:flex items-center">
-        UPLB AMIS
-      </h1>
+      <div class="flex items-center">
+        <NuxtLink to='/personal-information' class="md:mr-4">
+          <div class="flex items-center">
+            <div class="m-auto px-3">
+              <img
+                src="/logos/no-picture.png"
+                class="h-8 w-auto"
+                alt="User Picture" />
+            </div>
+            <h1 class="font-semibold text-lg hidden md:flex items-center">
+              {{ this.$auth.user.first_name }}
+            </h1>
+          </div>
+        </NuxtLink>
+        <div class="relative inline-block">
+          <svg @click="isSettingOpen =  !isSettingOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block cursor-pointer" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+          </svg>
+          <ul v-if="isSettingOpen" class="absolute z-10 right-1 bg-white pt-4 border">
+            <li class="block py-2 px-10 hover:bg-blue-200 cursor-pointer">Settings</li>
+            <li @click="logout" class="block py-2 px-10 hover:bg-red-500 hover:text-white cursor-pointer">Logout</li>
+          </ul>
+        </div>
+      </div>
     </div>
     <!-- END HEADER -->
     <transition
@@ -36,7 +62,7 @@
         v-show="isOpen"
         class="z-10 fixed inset-0 transition-opacity">
         <div
-          @click="isOpen = false"
+          @click="isOpen = false;"
           class="absolute inset-0 bg-black opacity-0"
           tabindex="0"></div>
       </div>
@@ -45,7 +71,7 @@
       class="transform top-16 left-0 w-64 bg-white fixed h-full shadow-md overflow-auto ease-in-out transition-all duration-300 z-10"
       :class="isOpen ? 'translate-x-0' : '-translate-x-full'">
       <!-- DASHBOARD -->
-      <span
+      <!-- <span
         @click="isOpen = false"
         class="flex w-full items-center p-4 border-b">
         <div class="flex text-black">
@@ -61,7 +87,7 @@
             <p class="break-words text-sm">{{ this.$auth.user.email }}</p>
           </div>
         </div>
-      </span>
+      </span> -->
       <span
         @click="isOpen = false"
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
@@ -78,7 +104,8 @@
               d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path>
           </svg>
         </span>
-        <span>Dashboard</span></span>
+        <NuxtLink to='/'>Dashboard</NuxtLink>
+      </span>
         <!-- END DASHBOARD -->
       <!-- FUTURE PROOFING -->
       <span
@@ -124,27 +151,6 @@
         </ul>
       </span>
       <!-- END FUTURE PROOFING -->
-      <!-- PERSONAL INFORMATION -->
-      <span
-        @click="isOpen = false"
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
-        ><span class="mr-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M10 6H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V8a2 2 0 00-2-2h-5m-4 0V5a2 2 0 114 0v1m-4 0a2 2 0 104 0m-5 8a2 2 0 100-4 2 2 0 000 4zm0 0c1.306 0 2.417.835 2.83 2M9 14a3.001 3.001 0 00-2.83 2M15 11h3m-3 4h2" />
-          </svg>
-        </span>
-        <NuxtLink to='/personal-information'>Personal Information</NuxtLink>
-      </span>
-      <!-- END PERSONAL INFORMATION -->
       <!-- FACULTY -->
       <span
         @click="isFacultyOpen = !isFacultyOpen"
@@ -307,7 +313,7 @@
         </ul>
       <!-- END ADMIN PORTAL -->
       <!-- LOGOUT -->
-      <span
+      <!-- <span
         @click="isOpen = false"
         class="flex items-center p-4 px-8 py-2 pt-4">
         <button
@@ -315,7 +321,7 @@
           @click="logout">
           Logout
         </button>
-      </span>
+      </span> -->
     </aside>
       <Alert/>
   </nav>
@@ -329,6 +335,7 @@ export default {
     data() {
         return {
             isOpen: false,
+            isSettingOpen: false,
             isFacultyOpen: false,
             isStudentOpen: false,
             isAdminOpen: false,

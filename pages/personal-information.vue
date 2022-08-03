@@ -5,7 +5,7 @@
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div v-if="!isLoading" class="bg-white overflow-hidden sm:rounded-lg p-4 flex flex-wrap">
             <div class="md:w-1/4 w-full items-center justify-center flex md:m-0 my-8">
-                <img src="../assets/images/no-picture.png" class="h-70 w-auto" alt="User Picture">
+                <img src="/logos/no-picture.png" class="h-70 w-auto" alt="User Picture">
             </div>
             <div class="md:w-3/4 w-full text-md">
                 <div class="my-4 text-xl font-bold">
