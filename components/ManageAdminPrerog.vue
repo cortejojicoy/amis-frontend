@@ -12,6 +12,7 @@
                     <tr class="font-bold">
                         <td class="px-2 py-3">Name</td>
                         <td class="px-2 py-3">Student Number</td>
+                        <td class="px-2 py-3">Degree</td>
                         <td class="px-2 py-3">Course</td>
                         <td class="px-2 py-3">UPmail</td>
                         <td class="px-2 py-3">Remarks/Appeal</td>
@@ -25,6 +26,9 @@
                         </td>
                         <td class="px-2 py-3">
                             {{prg.student.campus_id}}
+                        </td>
+                        <td class="px-2 py-3">
+                            {{prg.student.program_records[0].academic_program_id}}
                         </td>
                         <td class="px-2 py-3">
                             {{prg.course_offering.course}}
