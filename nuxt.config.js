@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "vue-ui",
+    title: "UPLB AMIS",
     htmlAttrs: {
       lang: "en",
     },
