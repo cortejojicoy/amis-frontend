@@ -68,6 +68,10 @@ export default {
     baseURL: process.env.API_BASE_URL,
   },
 
+  env: {
+    apiBaseUrl: process.env.API_BASE_URL
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,
