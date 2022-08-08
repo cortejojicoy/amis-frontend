@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: "vue-ui",
+    title: "UPLB AMIS",
     htmlAttrs: {
       lang: "en",
     },
@@ -66,6 +66,10 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.API_BASE_URL,
+  },
+
+  env: {
+    apiBaseUrl: process.env.API_BASE_URL
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

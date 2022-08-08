@@ -29,7 +29,7 @@ export default {
   layout: "auth",
   methods: {
     login(message) {
-      window.location.href = `${process.env.API_BASE_URL}/auth/google`;
+      window.location.href = `${process.env.apiBaseUrl}/auth/google`;
     },
   },
 };
