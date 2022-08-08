@@ -18,7 +18,7 @@
         <hr class="border-2 border-solid border-black mb-6" />
         <ManageStudentPrerog @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'prerog_txns'" :userRole="'students'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'prerog_txns'" :userRole="'students'" :update="updateTxnIndicator" :txnFilters="filters"/>
       </div>
     </div>
   </div>
@@ -36,6 +36,7 @@ export default {
   data () {
     return {
       updateTxnIndicator: 0,
+      filters: []
     };
   },
   methods:{

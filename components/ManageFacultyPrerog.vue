@@ -1,35 +1,49 @@
 <template>
     <div class="my-8">
-        <div class="flex items-center">
-            <div class="my-4 text-lg font-bold">
-                {{classDetails.name}}
+        <div @click="showRequests = !showRequests" class="flex items-center justify-between bg-white px-4 cursor-pointer">
+            <div class="flex items-center">
+                <div class="my-4 text-lg font-bold">
+                    {{classDetails.name}} 
+                    <span v-if="pendingCount != 0" class="bg-red-500 text-white text-xs font-normal py-1 px-2 rounded-full mx-2">
+                        {{ pendingCount }}
+                    </span>
+                    <div class="text-sm text-gray-400 italic">(Click here to show/hide student requests)</div>
+                </div>
+                
+                <CircSpinner :isLoading="isUpdating"/>
             </div>
-            <CircSpinner :isLoading="isUpdating"/>
+            <div>
+                <svg
+                    aria-hidden="true"
+                    focusable="false"
+                    data-prefix="fas"
+                    class="w-3 h-3 ml-auto transform"
+                    :class="showRequests ? 'rotate-0' : '-rotate-90'"
+                    role="img"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 448 512">
+                    <path
+                        fill="currentColor"
+                        d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
+                </svg>
+            </div>
         </div>
-        <div v-if="!isLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
-            <table v-show="application" class="table-auto w-full items-center text-center">
+        <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
+            <table v-if="!isLoading" v-show="application && showRequests" class="table-auto w-full items-center text-center border-t-2 transform ease-in-out transition-all duration-300" :class="showRequests ? 'translate-y-0' : 'translate-y-full'">
                 <thead>
                     <tr class="font-bold">
-                        <td class="px-2 py-3">Name</td>
-                        <td class="px-2 py-3">Student Number</td>
-                        <td class="px-2 py-3">UPmail</td>
-                        <td class="px-2 py-3">Remarks/Appeal</td>
+                        <td class="px-2 py-3"></td>
+                        <td class="px-2 py-3 text-left">Request Details</td>
                         <td class="px-2 py-3">Action/Status</td>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="(app, applicationIndex) in application" :key="applicationIndex">
-                        <td class="px-2 py-3">
-                            {{app.user.full_name}}
+                        <td class="px-2 py-3 text-left">
+                            {{applicationIndex + 1}}
                         </td>
-                        <td class="px-2 py-3">
-                            {{app.student.campus_id}}
-                        </td>
-                        <td class="px-2 py-3">  
-                            {{app.user.email}}
-                        </td>
-                        <td class="px-2 py-3">
-                            {{app.prerog_txns[0].note}}
+                        <td class="px-2 py-3 text-left">
+                            <b>{{app.user.full_name}}</b>, <b>{{app.student.campus_id}}</b>, {{app.user.request_details}}
                         </td>
                         <td class="px-2 py-3">
                             <div v-if="app.status == 'Requested'">
@@ -47,10 +61,10 @@
                     </tr>    
                 </tbody>
             </table>
+            <Loader v-else :loaderType="'table'" :columnNum="2"/>
         </div>
-        <Loader v-else :loaderType="'table'" :columnNum="4"/>
 
-        <VTailwindModal v-model="show">
+        <VTailwindModal v-model="showModal">
             <template v-slot:title>Confirm Action</template>
             <template v-slot:content>
                 <div>
@@ -105,7 +119,8 @@ import VTailwindModal from "./VTailwindModal.vue";
 
 export default {
     data: () => ({
-        show: false
+        showModal: false,
+        showRequests: false
     }),
     props: {
         classDetails: {
@@ -129,7 +144,8 @@ export default {
             getApplicationById: "faculty/prerogativeEnrollment/prerogAction/getApplicationById",
             getLoadingById: "faculty/prerogativeEnrollment/prerogAction/getLoadingById",
             getUpdateDataLoadingById: "faculty/prerogativeEnrollment/prerogAction/getUpdateDataLoadingById",
-            getJustification: "faculty/prerogativeEnrollment/prerogAction/getJustification"
+            getJustification: "faculty/prerogativeEnrollment/prerogAction/getJustification",
+            getPendingActionCount: "faculty/prerogativeEnrollment/prerogAction/getPendingActionCount"
         }),
         application() {
             return this.getApplicationById(this.index)
@@ -139,6 +155,9 @@ export default {
         },
         isUpdating() {
             return this.getUpdateDataLoadingById(this.index)
+        },
+        pendingCount() {
+            return this.getPendingActionCount(this.index)
         },
         justification: {
             get() {
@@ -172,11 +191,11 @@ export default {
                 sais_id: this.$auth.user.sais_id, 
                 index: this.index
             });
-            this.show = false
+            this.showModal = false
         },
         cancel() {
             this.unsetForAction()
-            this.show = false
+            this.showModal = false
         },
         openModal($action, $full_name, $student_number, $email, $student_remarks, $prg_id) {
             this.setForAction({
@@ -187,7 +206,7 @@ export default {
                 student_remarks: $student_remarks,
                 prg_id: $prg_id
             })
-            this.show = true;
+            this.showModal = true;
         }
     },
     watch: {

@@ -139,6 +139,8 @@ export const getters = {
         if(state.data[id]) {
             state.data[id].forEach(prerog => {
                 prerog.user.full_name = prerog.user.first_name + ' '  + prerog.user.middle_name + ' ' + prerog.user.last_name
+
+                prerog.user.request_details = prerog.user.email + ', ' + prerog.student.program_records[0].academic_program_id + ': "' + prerog.prerog_txns[0].note + '"'
             });
         }
         return state.data[id]
@@ -151,5 +153,18 @@ export const getters = {
     },
     getJustification(state) {
         return state.for_action.justification
+    },
+    getPendingActionCount: (state) => (id) => {
+        if(state.data[id]) {
+            let count = 0
+
+            state.data[id].forEach(prerog => {
+                if(prerog.status == 'Requested') {
+                    count += 1
+                }
+            });
+
+            return count
+        }
     }
 }
