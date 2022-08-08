@@ -1,37 +1,60 @@
 <template>
   <div class="my-6">
     <div class="flex justify-between mb-6">
-      <div class="w-full">
+      <div class="w-full flex justify-between items-center">
         <div class="text-2xl font-bold">Transaction History</div>
-        <div v-if="!initialLoad" class="w-full flex justify-center">
-          <CircSpinner :isLoading="transactionLoading" :size="'large'"/>
+        <div>
+          <label for="num-of-items" class="block text-xs text-gray-500">Number of items</label>
+          <select v-model="numOfItems" name="num-of-items" id="num-of-items" class="p-2 w-full">
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="15">15</option>
+            <option value="20">20</option>
+          </select>
         </div>
-        <Loader v-else :loaderType="'table'" :columnNum="6"/>
       </div>
     </div>
-    <div v-if="!transactionLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg">
-      <table v-show="transaction" class="table-auto w-full items-center text-center">
-        <thead>
-          <tr class="font-bold">
-            <td v-for="(txnHeader, txnHeaderIndex) in transactionHeaders" :key="txnHeaderIndex" class="p-4">{{txnHeader}}</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(txn, txnIndex) in transaction" :key="txnIndex">
-            <td v-for="(tValue, tValueIndex) in transactionKeys" :key="tValueIndex" class="px-4 py-3">{{txn[tValue]}}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div v-show="transaction.length < 1" class="w-full text-center">
-        <p>No transaction history available.</p>
-      </div>
-      <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
+    <div v-if="!initialLoad" class="w-full flex justify-center">
+      <CircSpinner :isLoading="transactionLoading" :size="'large'"/>
     </div>
+    <div v-if="!transactionLoading">
+      <div v-if="txnFilters.length > 0" class="mb-4 flex items-end">
+        <div v-for="(filter, filterKey) in filters" :key="filterKey" class="mr-2">
+          <label :for=filterKey class="block text-xs text-gray-500">{{filterKey}}</label>
+          <select :name=filterKey :id=filterKey class="p-2">
+            <option value="--" selected>--</option>
+            <option v-for="(fValue, fKey) in filter" :key="fKey">{{fValue[filterKey]}}</option>
+          </select>
+        </div>
+        <div>
+          <button class="p-2 bg-blue-500 text-white">Apply Filter</button>
+        </div>
+      </div>
+      <div class="bg-white overflow-auto shadow-xl sm:rounded-lg">
+        <table v-show="transaction" class="table-auto w-full items-center text-center">
+          <thead>
+            <tr class="font-bold">
+              <td v-for="(txnHeader, txnHeaderIndex) in transactionHeaders" :key="txnHeaderIndex" class="p-4">{{txnHeader}}</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(txn, txnIndex) in transaction" :key="txnIndex">
+              <td v-for="(tValue, tValueIndex) in transactionKeys" :key="tValueIndex" class="px-4 py-3">{{txn[tValue]}}</td>
+            </tr>
+          </tbody>
+        </table>
+        <div v-show="transaction.length < 1" class="w-full text-center">
+          <p>No transaction history available.</p>
+        </div>
+        <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
+      </div>
+    </div>
+    <Loader v-if="transactionLoading && initialLoad" :loaderType="'table'" :columnNum="6"/>
   </div>
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from 'vuex'
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Loader from "./Loader.vue";
 import CircSpinner from "./CircSpinner.vue";
 
@@ -45,6 +68,12 @@ export default {
     },
     userRole: {
       type: String
+    },
+    txnFilters: {
+      type: Array,
+      default() {
+        return []
+      }
     }
   },
   components: {
@@ -53,6 +82,7 @@ export default {
   },
   computed: {
     ...mapState({
+      filters: state => state.transactionHistory.filters,
       currentPage: state => state.transactionHistory.data.txns.current_page,
       totalPages: state => state.transactionHistory.data.txns.last_page,
       transaction: state => state.transactionHistory.data.txns.data,
@@ -62,33 +92,51 @@ export default {
     }),
     ...mapGetters({
       transactionHeaders: "transactionHistory/getTableHeaders",
-    })
+      getNumOfItems: "transactionHistory/getNumOfItems",
+    }),
+    numOfItems: {
+            get() {
+                return this.getNumOfItems
+            },
+            set(value) {
+                this.updateNumOfItems(value)
+                this.getTransactionData(1)
+            }
+        }
   },
   async fetch () {
-    this.getTransactionData({
-      link: this.txnType,
-      role: this.userRole,
-      data: {
-        page: 1,
-        items: 5,
-        order_type: 'desc',
-        order_field: this.txnType + '.created_at',
-        sais_id: this.$auth.user.sais_id,
-        txn_history: 'true'
-      }
-    })
+    this.getTransactionData(1)
+    this.txnFilters.forEach(txnFilter => {
+      this.getFilters({
+        link: this.txnType,
+        role: this.userRole,
+        data: {
+          column_name: txnFilter,
+          distinct: 'true',
+          sais_id: this.$auth.user.sais_id,
+          txn_history: 'true'
+        }
+      })
+    });
   },
   methods: {
     ...mapActions({
-      getTransactionData: 'transactionHistory/getData',
+      getData: 'transactionHistory/getData',
+      getFilters: 'transactionHistory/getFilters'
+    }),
+    ...mapMutations({
+      updateNumOfItems: 'transactionHistory/UPDATE_NUM_OF_ITEMS',
     }),
     changePage(page) {
-      this.getTransactionData({
+      this.getTransactionData(page)
+    },
+    getTransactionData(page) {
+      this.getData({
         link: this.txnType,
         role: this.userRole,
         data: {
           page: page,
-          items: 5,
+          items: this.numOfItems,
           order_type: 'desc',
           order_field: this.txnType + '.created_at',
           sais_id: this.$auth.user.sais_id,
