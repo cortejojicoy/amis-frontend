@@ -36,7 +36,10 @@ export default {
   data () {
     return {
       updateTxnIndicator: 0,
-      filters: []
+      filters: [
+        {field: 'action', name: 'action', type: 'select', label: 'action'},
+        {field: 'course', name: 'course', type: 'select', label: 'course'},
+      ]
     };
   },
   methods:{
