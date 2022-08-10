@@ -32,6 +32,11 @@ export default ({ app, store, redirect }) => {
             permission: 'faculty'
         },
         {
+          name: 'admin-consent-of-instructor',
+          permissionType: 'role',
+          permission: 'admin'
+        },
+        {
           name: 'student-prerogative-enrollment',
           permissionType: 'role',
           permission: 'student'
