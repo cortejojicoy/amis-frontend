@@ -6,14 +6,16 @@ export const state = () => ({
     numOfItems: 5,
     tableHeaders: [],
     data: [],
-    filters: {}
+    filters: {},
+    filterValues: {}
 })
   
 export const actions = {
-    async getData ({ commit }, payload) {
+    async getData ({ state, commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: payload.data})
+            let txnParams = Object.assign(payload.data, state.filterValues)
+            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: txnParams})
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -79,6 +81,9 @@ export const mutations = {
     },
     UPDATE_NUM_OF_ITEMS(state, data) {
         state.numOfItems = data
+    },
+    UPDATE_FILTER_VALUES(state, data) {
+        state.filterValues = data
     }
 }
 

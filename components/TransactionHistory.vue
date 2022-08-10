@@ -14,22 +14,11 @@
         </div>
       </div>
     </div>
+    <Filters :isLoading="initialLoad" :filter_headers="txnFilters" :filters="filters" @applyFilter="applyFilter"/>
     <div v-if="!initialLoad" class="w-full flex justify-center">
       <CircSpinner :isLoading="transactionLoading" :size="'large'"/>
     </div>
     <div v-if="!transactionLoading">
-      <div v-if="txnFilters.length > 0" class="mb-4 flex items-end">
-        <div v-for="(filter, filterKey) in filters" :key="filterKey" class="mr-2">
-          <label :for=filterKey class="block text-xs text-gray-500">{{filterKey}}</label>
-          <select :name=filterKey :id=filterKey class="p-2">
-            <option value="--" selected>--</option>
-            <option v-for="(fValue, fKey) in filter" :key="fKey">{{fValue[filterKey]}}</option>
-          </select>
-        </div>
-        <div>
-          <button class="p-2 bg-blue-500 text-white">Apply Filter</button>
-        </div>
-      </div>
       <div class="bg-white overflow-auto shadow-xl sm:rounded-lg">
         <table v-show="transaction" class="table-auto w-full items-center text-center">
           <thead>
@@ -56,6 +45,7 @@
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Loader from "./Loader.vue";
+import Filters from "./Filters.vue";
 import CircSpinner from "./CircSpinner.vue";
 
 export default {
@@ -78,7 +68,8 @@ export default {
   },
   components: {
     Loader,
-    CircSpinner
+    CircSpinner,
+    Filters
   },
   computed: {
     ...mapState({
@@ -105,13 +96,14 @@ export default {
         }
   },
   async fetch () {
-    this.getTransactionData(1)
-    this.txnFilters.forEach(txnFilter => {
-      this.getFilters({
+    this.updateFilterValues({}) // set the filter values to nothing every time a txn history is rendered
+    this.getTransactionData(1) // get the initial data
+    this.txnFilters.forEach(txnFilter => { // create the filter values that will be used for this txn history instance
+      this.getFilters({ 
         link: this.txnType,
         role: this.userRole,
         data: {
-          column_name: txnFilter,
+          column_name: txnFilter.field,
           distinct: 'true',
           sais_id: this.$auth.user.sais_id,
           txn_history: 'true'
@@ -126,11 +118,16 @@ export default {
     }),
     ...mapMutations({
       updateNumOfItems: 'transactionHistory/UPDATE_NUM_OF_ITEMS',
+      updateFilterValues: 'transactionHistory/UPDATE_FILTER_VALUES'
     }),
-    changePage(page) {
+    changePage(page) { // change the page of the txn history
       this.getTransactionData(page)
     },
-    getTransactionData(page) {
+    applyFilter(data) { // apply the filter from the filters component
+      this.updateFilterValues(data)
+      this.getTransactionData(1)
+    },
+    getTransactionData(page) { // reusable function for getting the data to be displayed in txn history
       this.getData({
         link: this.txnType,
         role: this.userRole,
@@ -145,7 +142,7 @@ export default {
       })
     }
   },
-  watch: {
+  watch: { // watch changes from other components. If there is something that triggers this, reload the txn history data
     update(newVal, oldVal) {
       this.changePage(1)
     }

@@ -25,7 +25,7 @@
         </div>
         <Loader v-else :loaderType="'table'" :columnNum="4"/>
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxns'" :userRole="'faculties'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'coitxns'" :userRole="'faculties'" :update="updateTxnIndicator" :txnFilters="filters"/>
       </div>
     </div>
   </div>
@@ -45,6 +45,12 @@ export default {
   data () {
     return {
       updateTxnIndicator: 0,
+      filters: [
+        {field: 'c.coi_id', name: 'coi_id', type: 'combobox', label: 'reference_id'},
+        {field: 'action', name: 'action', type: 'select', label: 'action'},
+        {field: 'course', name: 'course', type: 'select', label: 'course'},
+        {field: 'campus_id', name: 'campus_id', type: 'combobox', label: 'campus_id'}
+      ]
     };
   },
   computed: {

@@ -41,6 +41,16 @@
                 </table>
             </div>
         </div>
+        <div v-else-if="loaderType == 'filters'" class="border border-gray-300 shadow rounded-md p-4 w-full mx-auto">
+            <div class="flex animate-pulse">
+                <div v-for="cn in columnNum" v-bind:key="cn" class="h-6 bg-blue-500 rounded mx-2 p-2 w-32 flex items-center justify-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                </div>
+                <div class="h-6 bg-blue-500 rounded mx-2 w-28"></div>
+            </div>
+        </div>
     </div>
 </template>
 <script>

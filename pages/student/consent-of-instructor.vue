@@ -35,7 +35,7 @@
         <hr class="border-2 border-solid border-black mb-6" />
         <ManageStudentCOI @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
-        <TransactionHistory :txnType="'coitxns'" :userRole="'students'" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'coitxns'" :userRole="'students'" :update="updateTxnIndicator" :txnFilters="filters"/>
       </div>
     </div>
   </div>
@@ -53,6 +53,11 @@ export default {
   data () {
     return {
       updateTxnIndicator: 0,
+      filters: [
+        {field: 'c.coi_id', name: 'coi_id', type: 'combobox', label: 'reference_id'},
+        {field: 'action', name: 'action', type: 'select', label: 'action'},
+        {field: 'course', name: 'course', type: 'select', label: 'course'},
+      ]
     };
   },
   methods:{
