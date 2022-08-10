@@ -155,7 +155,7 @@
       <span
         @click="isFacultyOpen = !isFacultyOpen"
         v-show="isFaculty"
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700">
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700 cursor-pointer">
         <span class="mr-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -213,7 +213,7 @@
       <span
         @click="isStudentOpen = !isStudentOpen"
         v-show="isStudent"
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700 cursor-pointer"
         >
         <span class="mr-2">
           <svg
@@ -270,7 +270,7 @@
       <span
         @click="isAdminOpen = !isAdminOpen"
         v-show="isAdmin"
-        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700"
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700 cursor-pointer"
         >
         <span class="mr-2">
           <svg
@@ -309,6 +309,11 @@
             <NuxtLink
               to='/admin/prerogative-enrollment'
               >Prerogative Enrollment</NuxtLink>
+          </li>
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/admin/consent-of-instructor'
+              >Consent of Instructor</NuxtLink>
           </li>
         </ul>
       <!-- END ADMIN PORTAL -->
