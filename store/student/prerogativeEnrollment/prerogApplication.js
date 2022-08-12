@@ -50,6 +50,7 @@ export const actions = {
                 await commit('GET_SECTIONS_SUCCESS', data)
             } else {
                 let data = [];
+                await commit('SET_CLASS_ID', '')
                 await commit('GET_SECTIONS_SUCCESS', data)
             }
         } catch (error) {
@@ -150,7 +151,7 @@ export const getters = {
         let faculty = '';
         let descr = '';
 
-        if(state.toStore.class_id != '') {
+        if(state.toStore.class_id != '' && state.toStore.class_id != '--') {
             state.sections.forEach(section => {
                 if(section.class_nbr == state.toStore.class_id) {
                     faculty = section.name.toUpperCase()
