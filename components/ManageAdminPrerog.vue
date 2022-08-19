@@ -1,10 +1,23 @@
 <template>
     <div class="my-8">
         <div class="flex items-center">
-            <div class="my-4 text-2xl font-bold">
-                Applications
+            <div class="w-full flex justify-between items-center mb-2">
+                <div class="flex items-center">
+                    <div class="my-4 text-2xl font-bold">
+                        Applications
+                    </div>
+                    <CircSpinner :isLoading="isLoading && !isInitialLoading"/>
+                </div>
+                <div>
+                    <label for="num-of-items" class="block text-xs text-gray-500">Number of items</label>
+                    <select v-model="numOfItems" name="num-of-items" id="num-of-items" class="p-2 w-full">
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                        <option value="15">15</option>
+                        <option value="20">20</option>
+                    </select>
+                </div>
             </div>
-            <CircSpinner :isLoading="isLoading && !isInitialLoading"/>
         </div>
         <div v-if="!isInitialLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
             <table v-show="getPrerogApplications" class="table-auto w-full items-center text-center">
@@ -40,7 +53,7 @@
                             {{prg.prerog_txns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <div v-if="prg.status == 'Accepted'">
+                            <div v-if="prg.status == 'Requested'">
                                 <button @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
                                     Approve
                                 </button>
@@ -55,6 +68,10 @@
                     </tr>    
                 </tbody>
             </table>
+            <div v-show="getPrerogApplications.length < 1" class="w-full text-center">
+                <p>No Prerog Applications available under your college.</p>
+            </div>
+            <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
         </div>
         <Loader v-else :loaderType="'table'" :columnNum="4"/>
 
@@ -123,12 +140,15 @@ export default {
         ...mapState({
             for_action: state => state.admin.prerogativeEnrollment.prerogAction.for_action,
             isLoading: state => state.admin.prerogativeEnrollment.prerogAction.loading,
+            currentPage: state => state.admin.prerogativeEnrollment.prerogAction.data.prgs.current_page,
+            totalPages: state => state.admin.prerogativeEnrollment.prerogAction.data.prgs.last_page,
             isInitialLoading: state => state.admin.prerogativeEnrollment.prerogAction.initialLoading,
             updateTxnIndicator: state => state.admin.prerogativeEnrollment.prerogAction.updateTxnIndicator
         }),
         ...mapGetters({
             getJustification: "admin/prerogativeEnrollment/prerogAction/getJustification",
-            getPrerogApplications: "admin/prerogativeEnrollment/prerogAction/getPrerogApplications"
+            getPrerogApplications: "admin/prerogativeEnrollment/prerogAction/getPrerogApplications",
+            getNumOfItems: "admin/prerogativeEnrollment/prerogAction/getNumOfItems"
         }),
         justification: {
             get() {
@@ -137,27 +157,42 @@ export default {
             set(value) {
                 this.updateJustification(value)
             },
+        },
+        numOfItems: {
+            get() {
+                return this.getNumOfItems
+            },
+            set(value) {
+                this.updateNumOfItems(value)
+                this.getPrerogs(1)
+            }
         }
     },
     async fetch () {
-        this.getPrerogs({
-            admin_sais_id: this.$auth.user.sais_id
-        })
+        this.getPrerogs(1);
     },
     methods: {
         ...mapActions({
             updateApplication: 'admin/prerogativeEnrollment/prerogAction/updateApplication',
-            getPrerogs: 'admin/prerogativeEnrollment/prerogAction/getPrerogs'
+            getData: 'admin/prerogativeEnrollment/prerogAction/getPrerogs'
         }),
         ...mapMutations({
             openModal: 'admin/prerogativeEnrollment/prerogAction/OPEN_MODAL',
             setForAction: 'admin/prerogativeEnrollment/prerogAction/SET_FOR_ACTION',
             unsetForAction: 'admin/prerogativeEnrollment/prerogAction/UNSET_FOR_ACTION',
-            updateJustification: 'admin/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION'
+            updateJustification: 'admin/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION',
+            updateNumOfItems: 'admin/prerogativeEnrollment/prerogAction/UPDATE_NUM_OF_ITEMS',
         }),
+        changePage(page) { // change the page of the txn history
+            this.getPrerogs(page)
+        },
         confirm() {
             this.updateApplication({
-                admin_sais_id: this.$auth.user.sais_id, 
+                data: {
+                    page: 1,
+                    items: this.numOfItems,
+                    sais_id: this.$auth.user.sais_id,
+                } 
             });
             this.show = false
         },
@@ -176,6 +211,15 @@ export default {
                 prg_id: $prg_id
             })
             this.show = true;
+        },
+        getPrerogs(page) { // reusable function for getting the data to be displayed in txn history
+            this.getData({
+                data: {
+                    page: page,
+                    items: this.numOfItems,
+                    sais_id: this.$auth.user.sais_id,
+                }
+            })
         }
     },
     watch: {
