@@ -86,14 +86,14 @@ export default {
       getNumOfItems: "transactionHistory/getNumOfItems",
     }),
     numOfItems: {
-            get() {
-                return this.getNumOfItems
-            },
-            set(value) {
-                this.updateNumOfItems(value)
-                this.getTransactionData(1)
-            }
-        }
+      get() {
+          return this.getNumOfItems
+      },
+      set(value) {
+          this.updateNumOfItems(value)
+          this.getTransactionData(1)
+      }
+    }
   },
   async fetch () {
     this.updateFilterValues({}) // set the filter values to nothing every time a txn history is rendered

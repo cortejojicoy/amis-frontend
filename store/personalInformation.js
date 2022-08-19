@@ -44,10 +44,37 @@ export const mutations = {
 }
 
 export const getters = {
-    getUserData(state) {
+    getUserData(state, getters) {
         if(state.data) {
             state.data.user.full_name = state.data.user.first_name + ' '  + state.data.user.middle_name + ' ' + state.data.user.last_name
+
+            state.data.user.gwa = getters.calculateStudentGWA(state.data.user.student.student_grades)
+            state.data.user.totalUnits = getters.calculateTotalUnits(state.data.user.student.student_grades)
         }
         return state.data
     },
+    calculateStudentGWA: () => (courses_taken) => {
+        let totalGWA = 0
+        let numOfSubjects = 0
+
+        courses_taken.forEach(course => {
+            if(course.grade != 'INC' && course.grade != 'S' && course.grade != 'U') {
+                totalGWA += Number(course.grade)
+                numOfSubjects += 1
+            }
+        });
+     
+        totalGWA = totalGWA / numOfSubjects
+
+        return totalGWA
+    },
+    calculateTotalUnits: () => (courses_taken) => {
+        let totalUnits = 0;
+
+        courses_taken.forEach(course => {
+            totalUnits += course.unit_taken
+        });
+
+        return totalUnits;
+    }
 }

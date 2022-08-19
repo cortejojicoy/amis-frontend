@@ -23,7 +23,8 @@ export const actions = {
                 class_nbr: payload.class_nbr,
                 status: 'Requested',
                 with_students: 'true',
-                coi_txn_status: 'Requested'
+                coi_txn_status: 'Requested',
+                consent: 'I'
             }})
             await commit('GET_DATA_SUCCESS', {results: data.cois, key: payload.index})
         } catch (error) {
