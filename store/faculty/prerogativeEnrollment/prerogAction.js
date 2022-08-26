@@ -25,6 +25,7 @@ export const actions = {
                 class_nbr: payload.class_nbr,
                 status: ['Pre-Approved', 'Approved by FIC', 'Approved by OCS'],
                 with_students: 'true',
+                prg_term: 1221,
                 prg_txn_status: 'Requested'
             }})
             await commit('GET_DATA_SUCCESS', {results: data.prgs, key: payload.index})

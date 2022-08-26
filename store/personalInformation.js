@@ -48,8 +48,10 @@ export const getters = {
         if(state.data) {
             state.data.user.full_name = state.data.user.first_name + ' '  + state.data.user.middle_name + ' ' + state.data.user.last_name
 
-            state.data.user.gwa = getters.calculateStudentGWA(state.data.user.student.student_grades)
-            state.data.user.totalUnits = getters.calculateTotalUnits(state.data.user.student.student_grades)
+            if(state.data.user.student) {
+                state.data.user.gwa = getters.calculateStudentGWA(state.data.user.student.student_grades)
+                state.data.user.totalUnits = getters.calculateTotalUnits(state.data.user.student.student_grades)
+            }
         }
         return state.data
     },
