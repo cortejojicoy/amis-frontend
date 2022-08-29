@@ -19,7 +19,6 @@ export const mutations = {
     },
     UPDATE_FILTER_VALUE(state, data) {
         Vue.set(state.filterValues, data.key, data.value)
-        console.log(state.filterValues)
     }
 }
 

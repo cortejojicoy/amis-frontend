@@ -9,6 +9,12 @@
 
         <div class="text-md">
             <p class="mb-4">
+                <b>Please check first in SAIS if the class is closed.</b> If the class you are applying for a prerog to is open, you may enlist that class direcly in SAIS and save yourself some time from the prerog application process.
+            </p>
+            <p class="mb-4">
+                Please be advised that <b>only classes tagged by the FIC are open</b> for prerog applications. A queueing system will also be implemented such that, if there are <b>15 pending applications</b> on a class, applications on the said class will be <b>temporarily closed</b> to prevent an overwhelming number of student requests. 
+            </p>
+            <p class="mb-4">
                 Use the Remarks/Appeal field to give the faculty in charge the correct and complete information that may be necessary for her/his decision in granting your prerog application. The usual information needed by the FIC are your degree program, standing, units earned or remaining units and background information related to the course you are applying for. Your Remarks/Appeals are recorded which may be reviewed later. Kindly limit your remarks/appeal to <b>280 characters</b>. 
             </p>
             <p class="mb-4">

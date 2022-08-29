@@ -15,7 +15,8 @@ export const actions = {
                         'section', 
                         'course', 
                         'days', 
-                        'times'
+                        'times',
+                        'prerog'
                     ], 
                     order_type:'asc', 
                     order_field: 'class_nbr',
@@ -67,6 +68,7 @@ export const getters = {
             var temp = {
                 name: name, 
                 id: item.class_nbr,
+                prg_open: item.prerog,
                 prerogs: item.prerogs
             };
             return temp

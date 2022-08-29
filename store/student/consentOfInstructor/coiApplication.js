@@ -46,7 +46,7 @@ export const actions = {
                     'id', 
                     'name', 
                     'descr'
-                ], course: payload.course.course}})
+                ], course: payload.course.course, consent: 'I'}})
                 await commit('GET_SECTIONS_SUCCESS', data)
 
             } else {
