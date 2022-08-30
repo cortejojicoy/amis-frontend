@@ -2,6 +2,7 @@ import Vue from "vue"
 
 export const state = () => ({
     update_data_loading: {},
+    update_course_loading: {},
     loading: {},
     data: {},
     for_action: {
@@ -25,6 +26,7 @@ export const actions = {
                 class_nbr: payload.class_nbr,
                 status: ['Pre-Approved', 'Approved by FIC', 'Approved by OCS'],
                 with_students: 'true',
+                prg_term: 1221,
                 prg_txn_status: 'Requested'
             }})
             await commit('GET_DATA_SUCCESS', {results: data.prgs, key: payload.index})
@@ -82,6 +84,34 @@ export const actions = {
         }
     },
 
+    async toggleClassPrerog({commit}, payload) {
+        commit('UPDATE_COURSE_REQUEST', {key: payload.index})
+        try {
+            const data = await this.$axios.$put(`/course-offerings/${payload.class_nbr}`, {
+                prerog: payload.prerog,
+            })
+            await commit('alert/SUCCESS', data.message, { root: true })
+            await commit('UPDATE_COURSE_SUCCESS', {key: payload.index})           
+        } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', {error: error, key: payload.index})
+        }
+    },
+
     setInitialApplications({commit}, payload) {
         commit('GET_DATA_REQUEST', {key: payload.index})
         commit('SET_INITIAL_DATA', {key: payload.index, prerog_txns: payload.prerog_txns})
@@ -108,6 +138,12 @@ export const mutations = {
     },
     UPDATE_DATA_SUCCESS (state, data) {
         Vue.set(state.update_data_loading, data.key, false)
+    },
+    UPDATE_COURSE_REQUEST (state, data) {
+        Vue.set(state.update_course_loading, data.key, true)
+    },
+    UPDATE_COURSE_SUCCESS (state, data) {
+        Vue.set(state.update_course_loading, data.key, false)
     },
     SET_FOR_ACTION (state, data) {
         state.for_action.action = data.action
@@ -150,6 +186,9 @@ export const getters = {
     },
     getUpdateDataLoadingById: (state) => (id) => {
         return state.update_data_loading[id]
+    },
+    getUpdateCourseLoadingById: (state) => (id) => {
+        return state.update_course_loading[id]
     },
     getJustification(state) {
         return state.for_action.justification

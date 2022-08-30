@@ -15,11 +15,13 @@ export const actions = {
                         'section', 
                         'course', 
                         'days', 
-                        'times'
+                        'times',
+                        'prerog'
                     ], 
                     order_type:'asc', 
                     order_field: 'class_nbr',
                     with_prg: 'true',
+                    prg_term: 1221,
                     prg_status: ['Pre-Approved', 'Approved by FIC', 'Approved by OCS'],
                     prg_txn_status: 'Requested'
                 }})
@@ -66,6 +68,7 @@ export const getters = {
             var temp = {
                 name: name, 
                 id: item.class_nbr,
+                prg_open: item.prerog,
                 prerogs: item.prerogs
             };
             return temp

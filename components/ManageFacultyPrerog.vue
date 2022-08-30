@@ -1,5 +1,9 @@
 <template>
     <div class="my-8">
+        <div class="flex justify-start items-center">
+            <ToggleButton :pk="classDetails.id" :value="classPrgOpen" @onToggle="updateClassPrerog"/>
+            <CircSpinner :isLoading="isCourseUpdating"/>
+        </div>
         <div @click="showRequests = !showRequests" class="flex items-center justify-between bg-white px-4 cursor-pointer">
             <div class="flex items-center">
                 <div class="my-4 text-lg font-bold">
@@ -10,7 +14,7 @@
                     <div class="text-sm text-gray-400 italic">(Click here to show/hide student requests)</div>
                 </div>
                 
-                <CircSpinner :isLoading="isUpdating"/>
+                <CircSpinner :isLoading="isDataUpdating"/>
             </div>
             <div>
                 <svg
@@ -115,13 +119,17 @@
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import CircSpinner from './CircSpinner.vue';
 import Loader from "./Loader.vue";
+import ToggleButton from "./ToggleButton.vue";
 import VTailwindModal from "./VTailwindModal.vue";
 
 export default {
-    data: () => ({
-        showModal: false,
-        showRequests: false
-    }),
+    data() {
+        return {
+            showModal: false,
+            showRequests: false,
+            classPrgOpen: this.classDetails.prg_open
+        };
+    },
     props: {
         classDetails: {
             type: Object
@@ -133,7 +141,8 @@ export default {
     components: {
         Loader,
         CircSpinner,
-        VTailwindModal
+        VTailwindModal,
+        ToggleButton
     },
     computed: {
         ...mapState({
@@ -144,6 +153,7 @@ export default {
             getApplicationById: "faculty/prerogativeEnrollment/prerogAction/getApplicationById",
             getLoadingById: "faculty/prerogativeEnrollment/prerogAction/getLoadingById",
             getUpdateDataLoadingById: "faculty/prerogativeEnrollment/prerogAction/getUpdateDataLoadingById",
+            getUpdateCourseLoadingById: "faculty/prerogativeEnrollment/prerogAction/getUpdateCourseLoadingById",
             getJustification: "faculty/prerogativeEnrollment/prerogAction/getJustification",
             getPendingActionCount: "faculty/prerogativeEnrollment/prerogAction/getPendingActionCount"
         }),
@@ -153,8 +163,11 @@ export default {
         isLoading() {
             return this.getLoadingById(this.index)
         },
-        isUpdating() {
+        isDataUpdating() {
             return this.getUpdateDataLoadingById(this.index)
+        },
+        isCourseUpdating() {
+            return this.getUpdateCourseLoadingById(this.index)
         },
         pendingCount() {
             return this.getPendingActionCount(this.index)
@@ -177,7 +190,9 @@ export default {
     methods: {
         ...mapActions({
             updateApplication: 'faculty/prerogativeEnrollment/prerogAction/updateApplication',
-            setInitialApplications: 'faculty/prerogativeEnrollment/prerogAction/setInitialApplications'
+            setInitialApplications: 'faculty/prerogativeEnrollment/prerogAction/setInitialApplications',
+            toggleClassPrerog: 'faculty/prerogativeEnrollment/prerogAction/toggleClassPrerog'
+            
         }),
         ...mapMutations({
             openModal: 'faculty/prerogativeEnrollment/prerogAction/OPEN_MODAL',
@@ -207,6 +222,13 @@ export default {
                 prg_id: $prg_id
             })
             this.showModal = true;
+        },
+        updateClassPrerog(value, class_id){
+            this.toggleClassPrerog({
+                class_nbr: class_id,
+                prerog: value,
+                index: this.index
+            });
         }
     },
     watch: {
