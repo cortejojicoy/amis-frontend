@@ -27,7 +27,7 @@ export default {
         })
         .catch((e) => {
           this.$auth.logout();
-          return this.$router.push("/login?error=2");
+          return this.$router.push("/api/auth/login?error=2");
         });
     } else {
       this.addError(
