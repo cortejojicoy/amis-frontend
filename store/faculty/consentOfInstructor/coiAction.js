@@ -6,6 +6,7 @@ export const state = () => ({
     data: {},
     for_action: {
         action: '',
+        full_name: '',
         student_number: '',
         email: '',
         student_remarks: '',
@@ -116,6 +117,7 @@ export const mutations = {
     },
     SET_FOR_ACTION (state, data) {
         state.for_action.action = data.action
+        state.for_action.full_name = data.full_name
         state.for_action.student_number = data.student_number
         state.for_action.email = data.email
         state.for_action.student_remarks = data.student_remarks
@@ -126,6 +128,7 @@ export const mutations = {
     },
     UNSET_FOR_ACTION (state) {
         state.for_action.action = ''
+        state.for_action.full_name = ''
         state.for_action.student_number = ''
         state.for_action.email = ''
         state.for_action.student_remarks = ''

@@ -195,7 +195,6 @@ export default {
             
         }),
         ...mapMutations({
-            openModal: 'faculty/prerogativeEnrollment/prerogAction/OPEN_MODAL',
             setForAction: 'faculty/prerogativeEnrollment/prerogAction/SET_FOR_ACTION',
             unsetForAction: 'faculty/prerogativeEnrollment/prerogAction/UNSET_FOR_ACTION',
             updateJustification: 'faculty/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION'

@@ -32,10 +32,10 @@
                             {{app.coitxns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <button @click="openModal('approve', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                            <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
                                 Approve
                             </button>
-                            <button @click="openModal('disapprove', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                            <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
                                 Disapprove
                             </button>
                         </td>
@@ -173,9 +173,10 @@ export default {
             this.unsetForAction()
             this.show = false
         },
-        openModal($action, $student_number, $email, $student_remarks, $coi_id) {
+        openModal($action, $full_name, $student_number, $email, $student_remarks, $coi_id) {
             this.setForAction({
                 action: $action,
+                full_name: $full_name,
                 student_number: $student_number,
                 email: $email,
                 student_remarks: $student_remarks,
