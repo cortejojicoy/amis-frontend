@@ -22,7 +22,7 @@
             </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
-        <ManageStudentPrerog @onUpdateTxn="updateTxn" />
+        <StudentApplicationPrerog @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
         <TransactionHistory :txnType="'prerog_txns'" :userRole="'students'" :update="updateTxnIndicator" :txnFilters="filters"/>
       </div>
@@ -32,12 +32,12 @@
 
 <script>
 import TransactionHistory from "../../components/TransactionHistory.vue";
-import ManageStudentPrerog from "../../components/ManageStudentPrerog.vue";
+import StudentApplicationPrerog from "../../components/StudentApplicationPrerog.vue";
 
 export default {
   components: {
     TransactionHistory,
-    ManageStudentPrerog
+    StudentApplicationPrerog
   },
   data () {
     return {

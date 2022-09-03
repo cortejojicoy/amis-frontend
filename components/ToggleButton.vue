@@ -13,10 +13,10 @@
             <!-- label -->
             <div class="ml-3 text-gray-700 font-medium">
                 <div v-if="this.open">
-                    Class is open. (Students may apply for a prerog in this class.)
+                    Class is open for Teacher's Prerogative Enrollment Application (Students may apply for a prerog in this class)
                 </div>
                 <div v-else>
-                    Class closed.
+                    Class is closed for Teacher's Prerogative Enrollment Application (Students CANNOT apply for a prerog in this class, unless you reopen the class)
                 </div>
             </div>
         </label>

@@ -55,12 +55,31 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
+                    <button @click="openModal()" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
                         Apply
                     </button>
                 </div>
             </div>
         </div>
+
+        <VTailwindModal v-model="show">
+            <template v-slot:title>Conditions for Prerog Application</template>
+            <template v-slot:content>
+                <div>
+                    I hereby pledge to abide by all rules on self-advising issued to me by my College Secretary and the Registrar. I am aware that my violation thereof will subject me to disciplinary action. Furthermore, all courses above are within my curriculum or approved Plan of Coursework or has been recommended by my adviser.
+                </div>
+            </template>
+            <template v-slot:buttons>
+                <div>
+                    <button @click="applyPrerog" class="bg-green-500 text-white p-2 rounded mr-2">
+                        Accept Conditions and Apply
+                    </button>      
+                    <button @click="cancel" class="bg-blue-500 text-white p-2 rounded mr-2">
+                        Cancel
+                    </button>
+                </div>
+            </template>
+        </VTailwindModal>
     </div>
 </template>
 
@@ -68,10 +87,16 @@
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import 'vue-select/dist/vue-select.css';
 import CircSpinner from './CircSpinner.vue';
+import VTailwindModal from "./VTailwindModal.vue";
+
 
 export default {
+    data: () => ({
+        show: false
+    }),
     components: {
-        CircSpinner
+        CircSpinner,
+        VTailwindModal
     },
     computed: {
         ...mapState({
@@ -116,9 +141,15 @@ export default {
                 class_id: value
             })
         },
-        applyCOI() {
+        applyPrerog() {
             this.apply()
         },
+        openModal() {
+            this.show = true
+        },
+        cancel() {
+            this.show = false
+        }
     },
     watch: {
         updateTxnIndicator(newVal, oldVal) {
