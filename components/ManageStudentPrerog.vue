@@ -1,128 +1,148 @@
 <template>
     <div class="my-8">
         <div class="flex items-center mb-4">
-            <div class="text-2xl font-bold">
-                Application
+            <div>
+                <div class="text-2xl font-bold mb-4">
+                    Summary
+                </div>
+                <p class="mb-4">
+                    You may cancel a prerog application if it hasn't been acted on by your respective OCS or the Faculty-in-Charge of the course. Doing so will allow you to apply for another class with the same course code and the same component(LEC/LAB).
+                </p>
             </div>
-            <CircSpinner :isLoading="coursesLoading"/>
+            <CircSpinner :isLoading="prerogLoading"/>
         </div>
-        <div class="bg-white shadow-xl sm:rounded-lg mb-4 flex flex-wrap lg:flex-nowrap flex-col md:flex-row md:justify-around">
-            <div class="">
-                <div class="px-2 py-3 font-bold text-left md:text-center">
-                    Course
+        <div v-if="!prerogLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
+            <table v-show="prerogs" class="table-auto w-full items-center text-center">
+                <thead>
+                    <tr class="font-bold">
+                        <td class="px-2 py-3">Reference ID</td>
+                        <td class="px-2 py-3">Course and Section</td>
+                        <td class="px-2 py-3">Component</td>
+                        <td class="px-2 py-3">Faculty-in-Charge</td>
+                        <td class="px-2 py-3">Action/Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(prg, prgIndex) in prerogs" :key="prgIndex">
+                        <td class="px-2 py-3">
+                            {{prg.prg_id}} 
+                        </td>
+                        <td class="px-2 py-3">
+                            {{prg.course_offering.course}} {{prg.course_offering.section}} 
+                        </td>
+                        <td class="px-2 py-3">
+                            {{prg.course_offering.component}} 
+                        </td>
+                        <td class="px-2 py-3">
+                            {{prg.course_offering.name}}
+                        </td>
+                        <td class="px-2 py-3">
+                            <div v-if="prg.status == 'Requested' || prg.status == 'Pre-Approved'">
+                                <button @click="openModal('cancel', prg.course_offering.course, prg.course_offering.section, prg.prg_id)" class="bg-red-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                                    Cancel
+                                </button>
+                            </div>
+                            <div v-else>
+                                {{prg.status}}
+                            </div>
+                        </td>
+                    </tr>    
+                </tbody>
+            </table>
+        </div>
+        <Loader v-else :loaderType="'table'" :columnNum="4"/>
+
+        <VTailwindModal v-model="show">
+            <template v-slot:title>Confirm Action</template>
+            <template v-slot:content>
+                <div>
+                    Are you sure you want to {{forAction.action}} your prerog application in <b>{{forAction.course}} {{forAction.section}}</b> ?
                 </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center w-full md:w-48">
-                    <v-select class="w-full" :label="'course'" :options="courses" @input="chooseCourse"></v-select>
-                </div>
-            </div>
-            <div>
-                <div class="px-2 py-3 font-bold md:text-center">
-                    Section - Day - Time
-                </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <select class="text-md border border-gray-400 rounded p-1" @change="chooseSection($event.target.value)">
-                        <option value="--" selected>Choose a section</option>
-                        <option v-for="(section, sectionIndex) in sections" :key="sectionIndex" :value="section.class_nbr">{{section.section}} - {{section.days == '' ? 'TBA' : section.days}} -  {{section.times == '-' ? 'TBA' : section.times}}</option>
-                    </select>
-                </div>
-            </div>
-            <div>
-                <div class="px-2 py-3 font-bold md:text-center">
-                    Description
-                </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center">
-                    {{classDetails.descr}}
-                </div>
-            </div>
-            <div>
-                <div class="px-2 py-3 font-bold md:text-center">
-                    Faculty-in-Charge
-                </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center">
-                    {{classDetails.faculty}}
-                </div>
-            </div>
-            <div>
-                <div class="px-2 py-3 font-bold md:text-center">
-                    Remarks/Appeal
-                </div>
-                <div class="px-2 py-3">
-                    <textarea v-model="justification" placeholder="limit to 280 characters" class="w-full border border-gray-400 rounded p-1 md:w-38" type="text" rows="2" maxlength="280"></textarea>
-                </div>
-            </div>
-            <div>
-                <div class="px-2 py-3 font-bold md:text-center">
-                    Action
-                </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
-                        Apply
+            </template>
+            <template v-slot:buttons>
+                <div>
+                    <button @click="withdraw" class="bg-green-500 text-white p-2 px-4 rounded mr-2">
+                        Yes
+                    </button>          
+                    <button @click="cancel" class="bg-red-500 text-white p-2 px-4 rounded mr-2">
+                        No
                     </button>
                 </div>
-            </div>
-        </div>
+            </template>
+        </VTailwindModal>
     </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
-import 'vue-select/dist/vue-select.css';
 import CircSpinner from './CircSpinner.vue';
+import Loader from "./Loader.vue";
+import VTailwindModal from "./VTailwindModal.vue";
 
 export default {
+    data: () => ({
+        show: false
+    }),
+    props: {
+        update: {
+            type: Number
+        },
+    },
     components: {
-        CircSpinner
+        Loader,
+        CircSpinner,
+        VTailwindModal
     },
     computed: {
         ...mapState({
-            updateTxnIndicator: state => state.student.prerogativeEnrollment.prerogApplication.updateTxnIndicator,
-            courses: state => state.student.prerogativeEnrollment.prerogApplication.courses,
-            sections: state => state.student.prerogativeEnrollment.prerogApplication.sections,
-            coursesLoading: state => state.student.prerogativeEnrollment.prerogApplication.loading,
+            updateTxnIndicatorTwo: state => state.student.prerogativeEnrollment.prerogApplication.updateTxnIndicatorTwo,
+            prerogLoading: state => state.student.prerogativeEnrollment.prerogApplication.prerogLoading,
+            prerogs: state => state.student.prerogativeEnrollment.prerogApplication.prerogs,
+            forAction: state => state.student.prerogativeEnrollment.prerogApplication.forAction
         }),
-        ...mapGetters({
-            classDetails: "student/prerogativeEnrollment/prerogApplication/getClassDetails",
-            getJustification: "student/prerogativeEnrollment/prerogApplication/getJustification"
-        }),
-        justification: {
-            get() {
-                return this.getJustification
-            },
-            set(value) {
-                this.updateJustification(value)
-            },
-        }
     },
     async fetch () {
-        this.getCoursesData()
+        this.getPrerogData({
+            sais_id: this.$auth.user.sais_id
+        })
     },
     methods: {
         ...mapActions({
-            getCoursesData: 'student/prerogativeEnrollment/prerogApplication/getCourses',
-            getSectionsData: 'student/prerogativeEnrollment/prerogApplication/getSections',
-            apply: 'student/prerogativeEnrollment/prerogApplication/apply',
-            setDetails: 'student/prerogativeEnrollment/prerogApplication/setDetails'
+            getPrerogData: 'student/prerogativeEnrollment/prerogApplication/getPrerogApplications',
+            cancelPrerog: 'student/prerogativeEnrollment/prerogApplication/cancelPrerog',
         }),
         ...mapMutations({
-            updateJustification: 'student/prerogativeEnrollment/prerogApplication/UPDATE_JUSTIFICATION'
+            setForAction: 'student/prerogativeEnrollment/prerogApplication/SET_FOR_ACTION',
+            unsetForAction: 'student/prerogativeEnrollment/prerogApplication/UNSET_FOR_ACTION',
         }),
-        chooseCourse(value) {
-            this.getSectionsData({
-                course: value
+        openModal($action, $course, $section, $prg_id) {
+            this.setForAction({
+                action: $action,
+                course: $course,
+                section: $section,
+                prg_id: $prg_id
             })
+            this.show = true
         },
-        chooseSection(value) {
-            this.setDetails({
-                class_id: value
+        cancel() {
+            this.unsetForAction()
+            this.show = false
+        },
+        withdraw() {
+            this.cancelPrerog({
+                sais_id: this.$auth.user.sais_id
             })
-        },
-        applyCOI() {
-            this.apply()
-        },
+            this.show = false
+        }
     },
     watch: {
-        updateTxnIndicator(newVal, oldVal) {
+        updateTxnIndicatorTwo(newVal, oldVal) {
             this.$emit('onUpdateTxn')
+        },
+        update(newVal, oldVal) {
+            this.getPrerogData({
+                sais_id: this.$auth.user.sais_id
+            })
         }
     }
 }
