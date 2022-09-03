@@ -9,7 +9,16 @@
 
         <div class="text-md">
             <p class="mb-4">
-              On this page you will see prerog application of students on your handled classes this semester.
+              On this page you will see Teacher's Prerogative Enrollment Applications of students for the classes that you are handling this semester.
+            </p>
+            <p class="mb-4">
+              Please click the appropriate button to exercise your prerogative in these student requests to register in your class. 
+            </p>
+            <p class="mb-4">
+              Note that approved prerog requests are <b>added on top of the maximum class size in SAIS</b>, hence, it is best to check your SAIS Class List regularly to monitor and control the number of students enrolled in your class. You may opt to close/reopen the class for prerog applications whenever you like.
+            </p>
+            <p class="mb-4">
+              Approved requests don't mean that the students are automatically added to your class; the students may still opt not to use the approved prerog request.
             </p>
         </div>
         <div v-if="!isLoading">

@@ -44,10 +44,18 @@
             </div>
             <div>
                 <div class="px-2 py-3 font-bold md:text-center">
+                    Status
+                </div>
+                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center font-bold" :class="{'text-red-500': classDetails.class_status != 'OPEN', 'text-green-600': classDetails.class_status == 'OPEN'}">
+                    {{classDetails.class_status}}
+                </div>
+            </div>
+            <div>
+                <div class="px-2 py-3 font-bold md:text-center">
                     Remarks/Appeal
                 </div>
                 <div class="px-2 py-3">
-                    <textarea v-model="justification" placeholder="limit to 280 characters" class="w-full border border-gray-400 rounded p-1 md:w-38" type="text" rows="2" maxlength="280"></textarea>
+                    <textarea v-model="justification" placeholder="limit to 500 characters" class="w-full border border-gray-400 rounded p-1 md:w-38" type="text" rows="2" maxlength="500"></textarea>
                 </div>
             </div>
             <div>
@@ -55,9 +63,12 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button @click="openModal()" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
+                    <button v-if="classDetails.class_status != 'CLOSED BY FIC'" @click="openModal()" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
                         Apply
                     </button>
+                    <div v-else class="italic">
+                        Unavailable
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,7 +85,7 @@
                     <button @click="applyPrerog" class="bg-green-500 text-white p-2 rounded mr-2">
                         Accept Conditions and Apply
                     </button>      
-                    <button @click="cancel" class="bg-blue-500 text-white p-2 rounded mr-2">
+                    <button @click="cancel" class="bg-red-500 text-white p-2 rounded mr-2">
                         Cancel
                     </button>
                 </div>
@@ -101,6 +112,7 @@ export default {
     computed: {
         ...mapState({
             updateTxnIndicator: state => state.student.prerogativeEnrollment.prerogApplication.updateTxnIndicator,
+            updateSummaryIndicator: state => state.student.prerogativeEnrollment.prerogApplication.updateSummaryIndicator,
             courses: state => state.student.prerogativeEnrollment.prerogApplication.courses,
             sections: state => state.student.prerogativeEnrollment.prerogApplication.sections,
             coursesLoading: state => state.student.prerogativeEnrollment.prerogApplication.loading,
@@ -143,6 +155,7 @@ export default {
         },
         applyPrerog() {
             this.apply()
+            this.show = false
         },
         openModal() {
             this.show = true
@@ -154,6 +167,9 @@ export default {
     watch: {
         updateTxnIndicator(newVal, oldVal) {
             this.$emit('onUpdateTxn')
+        },
+        updateSummaryIndicator(newVal, oldVal) {
+            this.$emit('onUpdateSummary')
         }
     }
 }
