@@ -24,7 +24,7 @@ export const actions = {
         try {
             const data = await this.$axios.$get(`/faculties/prerogative-enrollments`, {params: {
                 class_nbr: payload.class_nbr,
-                status: ['Pre-Approved', 'Approved by FIC', 'Approved by OCS'],
+                status: ['Logged by OCS', 'Approved by FIC', 'Approved by OCS'],
                 with_students: 'true',
                 prg_term: 1221,
                 prg_txn_status: 'Requested'
@@ -198,7 +198,7 @@ export const getters = {
             let count = 0
 
             state.data[id].forEach(prerog => {
-                if(prerog.status == 'Approved by OCS' || prerog.status == 'Pre-Approved') {
+                if(prerog.status == 'Approved by OCS' || prerog.status == 'Logged by OCS') {
                     count += 1
                 }
             });

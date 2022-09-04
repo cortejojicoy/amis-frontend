@@ -22,7 +22,7 @@ export const actions = {
                     order_field: 'class_nbr',
                     with_prg: 'true',
                     prg_term: 1221,
-                    prg_status: ['Pre-Approved', 'Approved by FIC', 'Approved by OCS'],
+                    prg_status: ['Logged by OCS', 'Approved by FIC', 'Approved by OCS'],
                     prg_txn_status: 'Requested'
                 }})
             await commit('GET_DATA_SUCCESS', data)
