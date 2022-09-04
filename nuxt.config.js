@@ -73,6 +73,10 @@ export default {
     apiBaseUrl: process.env.API_BASE_URL
   },
 
+  publicRuntimeConfig: {
+    APP_MAINTENANCE: process.env.APP_MAINTENANCE,
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
     extractCSS: true,

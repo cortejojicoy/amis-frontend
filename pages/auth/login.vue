@@ -11,9 +11,9 @@
             Welcome to the UPLB Academic Management Information System
           </h2>
           <p class="mt-5 text-gray-600 text-center">
-            This app is currently in alpha phase. {{this.error}}
+            This app is currently in alpha phase.
           </p>
-          <p v-if="$config.appMaintenance" class="mt-4 text-xl text-orange-600 font-bold text-center">Maintenance Ongoing.</p>
+          <p v-if="this.$config.APP_MAINTENANCE != ''" class="mt-4 text-xl text-orange-600 font-bold text-center">Maintenance Ongoing.</p>
         </div>
         <div class="flex justify-center mt-4">
           <button class="bg-red-700 text-white py-2 px-4" @click="login">
