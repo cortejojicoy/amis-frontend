@@ -50,7 +50,7 @@
                             <b>{{app.user.full_name}}</b>, <b>{{app.student.campus_id}}</b>, {{app.user.request_details}}
                         </td>
                         <td class="px-2 py-3">
-                            <div v-if="app.status == 'Approved by OCS' || app.status == 'Pre-Approved'">
+                            <div v-if="app.status == 'Approved by OCS' || app.status == 'Logged by OCS'">
                                 <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
                                     Approve
                                 </button>

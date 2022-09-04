@@ -37,7 +37,7 @@
                             {{prg.course_offering.name}}
                         </td>
                         <td class="px-2 py-3">
-                            <div v-if="prg.status == 'Requested' || prg.status == 'Pre-Approved'">
+                            <div v-if="prg.status == 'Requested' || prg.status == 'Logged by OCS'">
                                 <button @click="openModal('cancel', prg.course_offering.course, prg.course_offering.section, prg.prg_id)" class="bg-red-500 text-white p-2 rounded mb-2 disabled:opacity-60">
                                     Cancel
                                 </button>
