@@ -19,7 +19,7 @@ export const actions = {
     async getPrerogs ({ commit }, payload) {
         commit('GET_DATA_REQUEST')
         let parameter = {
-            prg_status: ['Requested', 'Pre-Approved', 'Approved by OCS'], 
+            prg_status: ['Requested', 'Pre-Approved', 'Approved by OCS', 'Approved by FIC'], 
             with_students: 'true',
             prg_term: 1221,
             prg_txn_status: 'Requested'
