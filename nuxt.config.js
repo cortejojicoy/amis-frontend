@@ -75,6 +75,7 @@ export default {
 
   publicRuntimeConfig: {
     APP_MAINTENANCE: process.env.APP_MAINTENANCE,
+    loginAdvisory: process.env.LOGIN_ADVISORY
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

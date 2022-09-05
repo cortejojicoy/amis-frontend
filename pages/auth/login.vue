@@ -14,7 +14,7 @@
               This app is currently in alpha phase.
             </p>
             <p v-if="this.$config.APP_MAINTENANCE != ''" class="mt-4 text-xl text-yellow-600 font-bold text-center">Maintenance Ongoing.</p>
-            <p class="mt-4 text-lg text-yellow-600 font-bold text-center">Advisory: Due to unstable performance the system will be shut down Sept 5, 9pm - Sept 6, 9am for maintenance and tweaking. Please rest and try again tomorrow.</p>
+            <p class="mt-4 text-lg text-yellow-600 font-bold text-center">{{ $config.loginAdvisory }}</p>
           </div>
           <div class="flex justify-center mt-4">
             <button class="bg-red-700 text-white py-2 px-4" @click="login">
