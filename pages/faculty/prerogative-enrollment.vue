@@ -20,6 +20,12 @@
             <p class="mb-4">
               Approved requests don't mean that the students are automatically added to your class; the students may still opt not to use the approved prerog request.
             </p>
+            <p class="mb-4">
+              AMIS only <b>allows 15 students in the queue</b> to protect you from overwhelming student requests. To allow more students in the queue, you have to approve or disapprove requests.  
+            </p>
+            <p class="mb-4">
+              For classes with components, <b>both components (lect and lab) must be approved</b> for the student to enroll in the course because AMIS and SAIS integration is automated.
+            </p>
         </div>
         <div v-if="!isLoading">
           <ManageFacultyPrerog v-show="classDetails" v-for="(classInstance, classKey) in classDetails" :key="classKey" :index="classKey" :classDetails="classInstance" @onUpdateTxn="updateTxn"/>
