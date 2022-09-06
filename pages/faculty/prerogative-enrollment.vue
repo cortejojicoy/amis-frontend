@@ -4,27 +4,25 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="text-2xl font-bold mb-8">
-            Prerogative Enrollment
+            Prerogative Applications
         </div>
 
         <div class="text-md">
+            <b>Helpful Reminders:</b>
             <p class="mb-4">
-              On this page you will see Teacher's Prerogative Enrollment Applications of students for the classes that you are handling this semester.
+              You may toggle each of your classes to open or close them for prerog applications.
             </p>
             <p class="mb-4">
-              Please click the appropriate button to exercise your prerogative in these student requests to register in your class. 
+              Approved prerog requests are <b>added on top of the maximum class size in SAIS</b> so it is best to check your SAIS Class List regularly to monitor and control the number of students enrolled in your class. You may opt to open or close your classes for prerog applications whenever you like.
             </p>
             <p class="mb-4">
-              Note that approved prerog requests are <b>added on top of the maximum class size in SAIS</b>, hence, it is best to check your SAIS Class List regularly to monitor and control the number of students enrolled in your class. You may opt to close/reopen the class for prerog applications whenever you like.
+              Approved requests don't mean that the students are automatically added to your class in SAIS; the students may still opt not to use the approved prerog request.
             </p>
             <p class="mb-4">
-              Approved requests don't mean that the students are automatically added to your class; the students may still opt not to use the approved prerog request.
+              AMIS only <b>allows 15 students to have pending prerog requests for a particular section</b> to protect you from overwhelming student requests. To allow more students to apply for prerog in your section, you must approve or disapprove some of these pending requests.  
             </p>
             <p class="mb-4">
-              AMIS only <b>allows 15 students in the queue</b> to protect you from overwhelming student requests. To allow more students in the queue, you have to approve or disapprove requests.  
-            </p>
-            <p class="mb-4">
-              For classes with components, <b>both components (lect and lab) must be approved</b> for the student to enroll in the course because AMIS and SAIS integration is automated.
+              For classes with lecture and lab components, <b>a prerog request for both components must be approved</b> for the student to be able to enroll in the course.
             </p>
         </div>
         <div v-if="!isLoading">
