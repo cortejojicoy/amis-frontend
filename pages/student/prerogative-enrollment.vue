@@ -27,7 +27,7 @@
             <b>Please check first in SAIS if the class is closed.</b> If the class you are applying for a prerog is open, you may enlist that class direcly in SAIS and save yourself some time from the prerog application process.
           </p>
           <p class="mb-4">
-            Please be advised that <b>only classes tagged by the FIC are open</b> for prerog applications. A queueing system will also be implemented such that, if there are <b>15 pending applications</b> on a class, applications on the said class will be <b>temporarily closed</b> to prevent an overwhelming number of student requests. 
+            Please be advised that <b>only classes tagged by the FIC are open</b> for prerog applications. A queueing system will also be implemented such that, if there are <b>15 pending applications</b> on a class, applications on the said class will be <b>temporarily closed</b> to prevent an overwhelming number of student requests. This will display a prompt <b>"There are already too many requests on queue. Please try again later"</b>. 
           </p>
           <p class="mb-4">
             For classes with lecture and laboratory classes, you are required to apply for a prerog to both of them in order to be tagged correctly in SAIS.
@@ -37,6 +37,9 @@
           </p>
           <p class="mb-4">
             You may use the Class Search function of SAIS to know more details about courses and classes.
+          </p>
+          <p class="mb-4">
+            Once your prerog application is approved you may enroll the class in SAIS <b>after 24 hours</b>.
           </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
