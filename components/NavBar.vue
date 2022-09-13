@@ -318,7 +318,7 @@
         </ul>
       <!-- END ADMIN PORTAL -->
       <!-- SUPER ADMIN PORTAL -->
-      <!-- <span
+      <span
         @click="isSuperAdminOpen = !isSuperAdminOpen"
         v-show="isSuperAdmin"
         class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700 cursor-pointer"
@@ -361,7 +361,7 @@
             to='/super_admin/download-data'
             >Export Module Data</NuxtLink>
         </li>
-      </ul> -->
+      </ul>
       <!-- END SUPER ADMIN PORTAL -->
       <!-- LOGOUT -->
       <!-- <span
