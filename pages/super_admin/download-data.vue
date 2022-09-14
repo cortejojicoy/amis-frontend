@@ -9,6 +9,9 @@
             </div>
             <CircSpinner :isLoading="coursesLoading"/>
         </div>
+        <div class="mb-4">
+            Please note that this will only generate the file in the backend. It will have to be downloaded first by the server admin for you to have a copy. The downloading of generated file feature is still in progress.
+        </div>
         <div>
             <div class="mb-8">
                 <div class="text-xl font-bold mb-8">

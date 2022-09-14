@@ -50,6 +50,14 @@
             </div>
             <div>
                 <div class="px-2 py-3 font-bold md:text-center">
+                    Consent
+                </div>
+                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center font-bold" :class="{'text-red-500': classDetails.class_status != 'OPEN', 'text-green-600': classDetails.class_status == 'OPEN'}">
+                    {{classDetails.class_consent}}
+                </div>
+            </div>
+            <div>
+                <div class="px-2 py-3 font-bold md:text-center">
                     Remarks/Appeal
                 </div>
                 <div class="px-2 py-3">
@@ -61,9 +69,12 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
+                    <button v-if="classDetails.class_consent == 'Instructor'" @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
                         Apply
                     </button>
+                    <div v-else class="italic">
+                        Unavailable
+                    </div>
                 </div>
             </div>
         </div>
