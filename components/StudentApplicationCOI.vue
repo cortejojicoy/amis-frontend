@@ -52,7 +52,7 @@
                 <div class="px-2 py-3 font-bold md:text-center">
                     Consent
                 </div>
-                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center font-bold" :class="{'text-red-500': classDetails.class_status != 'OPEN', 'text-green-600': classDetails.class_status == 'OPEN'}">
+                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center font-bold" :class="{'text-red-500': classDetails.class_consent != 'Instructor', 'text-green-600': classDetails.class_consent == 'Instructor'}">
                     {{classDetails.class_consent}}
                 </div>
             </div>
