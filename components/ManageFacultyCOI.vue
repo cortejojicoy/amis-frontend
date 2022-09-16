@@ -32,10 +32,10 @@
                             {{app.coitxns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                            <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 opacity-60 cursor-not-allowed">
                                 Approve
                             </button>
-                            <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                            <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded opacity-60 cursor-not-allowed">
                                 Disapprove
                             </button>
                         </td>
@@ -162,11 +162,11 @@ export default {
             updateJustification: 'faculty/consentOfInstructor/coiAction/UPDATE_JUSTIFICATION'
         }),
         confirm() {
-            this.updateApplication({
-                class_nbr: this.classDetails.id,
-                sais_id: this.$auth.user.sais_id, 
-                index: this.index
-            });
+            // this.updateApplication({
+            //     class_nbr: this.classDetails.id,
+            //     sais_id: this.$auth.user.sais_id, 
+            //     index: this.index
+            // });
             this.show = false
         },
         cancel() {

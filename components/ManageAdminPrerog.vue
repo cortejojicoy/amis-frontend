@@ -187,13 +187,13 @@ export default {
             this.getPrerogs(page)
         },
         confirm() {
-            this.updateApplication({
-                data: {
-                    page: 1,
-                    items: this.numOfItems,
-                    sais_id: this.$auth.user.sais_id,
-                } 
-            });
+            // this.updateApplication({
+            //     data: {
+            //         page: 1,
+            //         items: this.numOfItems,
+            //         sais_id: this.$auth.user.sais_id,
+            //     } 
+            // });
             this.show = false
         },
         cancel() {

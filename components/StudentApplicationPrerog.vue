@@ -63,7 +63,7 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button v-if="classDetails.class_status != 'CLOSED BY FIC'" @click="openModal()" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
+                    <button disabled v-if="classDetails.class_status != 'CLOSED BY FIC'" @click="openModal()" class="bg-green-500 text-white p-2 rounded w-full opacity-60 cursor-not-allowed">
                         Apply
                     </button>
                     <div v-else class="italic">
@@ -154,7 +154,7 @@ export default {
             })
         },
         applyPrerog() {
-            this.apply()
+            // this.apply()
             this.show = false
         },
         openModal() {
