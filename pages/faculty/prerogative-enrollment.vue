@@ -3,10 +3,12 @@
     class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-red-500 text-white text-center w-full py-8 mb-4">
+            PREROG APPROVAL/DISAPPROVAL IS NOW CLOSED.
+        </div>
         <div class="text-2xl font-bold mb-8">
             Prerogative Applications
         </div>
-
         <div class="text-md">
             <b>Helpful Reminders:</b>
             <p class="mb-4">
