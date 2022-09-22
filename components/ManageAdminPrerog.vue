@@ -54,10 +54,10 @@
                         </td>
                         <td class="px-2 py-3">
                             <div v-if="prg.status == 'Requested'">
-                                <button @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                                <button @click="openModal('approve', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2" :class="{'opacity-60 cursor-not-allowed': !$config.PREROG_ENABLED}" :disabled="!$config.PREROG_ENABLED">
                                     Approve
                                 </button>
-                                <button @click="openModal('disapprove', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                                <button @click="openModal('disapprove', prg.user.full_name, prg.student.campus_id, prg.course_offering.course, prg.user.email, prg.prerog_txns[0].note, prg.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded" :class="{'opacity-60 cursor-not-allowed': !$config.PREROG_ENABLED}" :disabled="!$config.PREROG_ENABLED">
                                     Disapprove
                                 </button>
                             </div>
@@ -187,13 +187,15 @@ export default {
             this.getPrerogs(page)
         },
         confirm() {
-            // this.updateApplication({
-            //     data: {
-            //         page: 1,
-            //         items: this.numOfItems,
-            //         sais_id: this.$auth.user.sais_id,
-            //     } 
-            // });
+            if(this.$config.PREROG_ENABLED) {
+                this.updateApplication({
+                    data: {
+                        page: 1,
+                        items: this.numOfItems,
+                        sais_id: this.$auth.user.sais_id,
+                    } 
+                });
+            }
             this.show = false
         },
         cancel() {

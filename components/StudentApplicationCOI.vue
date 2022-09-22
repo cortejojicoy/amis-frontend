@@ -69,7 +69,7 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button disabled v-if="classDetails.class_consent == 'Instructor'" @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full opacity-60 cursor-not-allowed">
+                    <button v-if="classDetails.class_consent == 'Instructor'" @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full" :class="{'opacity-60 cursor-not-allowed': !$config.COI_ENABLED}" :disabled="!$config.COI_ENABLED">
                         Apply
                     </button>
                     <div v-else class="italic">
@@ -134,7 +134,9 @@ export default {
             })
         },
         applyCOI() {
-            // this.apply()
+            if(this.$config.COI_ENABLED) {
+                this.apply()
+            }
         },
     },
     watch: {

@@ -51,10 +51,10 @@
                         </td>
                         <td class="px-2 py-3">
                             <div v-if="app.status == 'Approved by OCS' || app.status == 'Logged by OCS'">
-                                <button disabled @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2 opacity-60 cursor-not-allowed">
+                                <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-green-500 text-white p-2 rounded mb-2" :class="{'opacity-60 cursor-not-allowed': !$config.PREROG_ENABLED}" :disabled="!$config.PREROG_ENABLED">
                                     Approve
                                 </button>
-                                <button disabled @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded opacity-60 cursor-not-allowed">
+                                <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.prerog_txns[0].note, app.prerog_txns[0].prg_id)" class="bg-red-500 text-white p-2 rounded" :class="{'opacity-60 cursor-not-allowed': !$config.PREROG_ENABLED}" :disabled="!$config.PREROG_ENABLED">
                                     Disapprove
                                 </button>
                             </div>
@@ -200,11 +200,13 @@ export default {
             updateJustification: 'faculty/prerogativeEnrollment/prerogAction/UPDATE_JUSTIFICATION'
         }),
         confirm() {
-            // this.updateApplication({
-            //     class_nbr: this.classDetails.id,
-            //     sais_id: this.$auth.user.sais_id, 
-            //     index: this.index
-            // });
+            if(this.$config.PREROG_ENABLED) {
+                this.updateApplication({
+                    class_nbr: this.classDetails.id,
+                    sais_id: this.$auth.user.sais_id, 
+                    index: this.index
+                });
+            }
             this.showModal = false
         },
         cancel() {

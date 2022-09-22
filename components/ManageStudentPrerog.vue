@@ -38,7 +38,7 @@
                         </td>
                         <td class="px-2 py-3">
                             <div v-if="prg.status == 'Requested' || prg.status == 'Logged by OCS'">
-                                <button disabled @click="openModal('cancel', prg.course_offering.course, prg.course_offering.section, prg.prg_id)" class="bg-red-500 text-white p-2 rounded mb-2 opacity-60 cursor-not-allowed">
+                                <button @click="openModal('cancel', prg.course_offering.course, prg.course_offering.section, prg.prg_id)" class="bg-red-500 text-white p-2 rounded mb-2" :class="{'opacity-60 cursor-not-allowed': !$config.PREROG_ENABLED}" :disabled="!$config.PREROG_ENABLED">
                                     Cancel
                                 </button>
                             </div>
@@ -129,9 +129,11 @@ export default {
             this.show = false
         },
         withdraw() {
-            // this.cancelPrerog({
-            //     sais_id: this.$auth.user.sais_id
-            // })
+            if(this.$config.PREROG_ENABLED) {
+                this.cancelPrerog({
+                    sais_id: this.$auth.user.sais_id
+                })
+            }
             this.show = false
         }
     },
