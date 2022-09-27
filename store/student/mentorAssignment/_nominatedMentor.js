@@ -4,10 +4,10 @@ export const state = () => ({
   })
   
   export const actions = {
-    async getData ({ commit }, saisid) {
+    async getData ({ commit }, sais_id) {
       commit('GET_DATA_REQUEST')
       try {
-        const data = await this.$axios.$get(`/students/${saisid}/nominated-mentors`)
+        const data = await this.$axios.$get(`/students/${sais_id}/nominated-mentors`)
         await commit('GET_DATA_SUCCESS', data)
         
       } catch (error) {
@@ -17,7 +17,8 @@ export const state = () => ({
     async updateData ({ commit }, payload) {
       commit('UPDATE_DATA_REQUEST')
       try {
-        const data = await this.$axios.$post(`/students/${payload.saisid}/nominated-mentors/collection`, payload.data)
+        // console.log(payload)
+        const data = await this.$axios.$post(`/students/${payload.sais_id}/nominated-mentors/collection`, payload.data)
         await commit('alert/SUCCESS', 'Successfully created', { root: true })
         await commit('UPDATE_DATA_SUCCESS', data)
       } catch (error) {
@@ -66,7 +67,8 @@ export const state = () => ({
       let mentor = state.data.save_mentors.find(x => x.id === payload.id)
       mentor[payload.field] = payload.newValue
     },
-    ADD_ROW (state,saisid) {
+
+    ADD_ROW (state,sais_id) {
       state.data.save_mentors.push({
         actions:'', 
         actions_status: 'saved',
@@ -75,19 +77,20 @@ export const state = () => ({
         field_represented:'', 
         effectivity_start:'',
         effectivity_end:'',
-        saisid: saisid,
+        sais_id: sais_id,
         id: '_'+Date.now() + Math.random()
       })
     },
     DELETE_ROW (state,id) {
-    state.data.save_mentors = state.data.save_mentors.filter(function(el){
-      return el.id!==id;
-    })
+      state.data.save_mentors = state.data.save_mentors.filter(function(el){
+        return el.id!==id;
+      })
     },
   }
 
   export const getters = {
     withoutTempID(state) {
+      // console.log(state);
       if(state.data.save_mentors){
         return state.data.save_mentors.map((item)=>{
           var temp = Object.assign({}, item);
@@ -95,6 +98,5 @@ export const state = () => ({
           return temp
         })
       }
-
     }
   }

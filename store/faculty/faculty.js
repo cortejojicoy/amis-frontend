@@ -4,7 +4,7 @@ export const state = () => ({
 })
   
   export const actions = {
-    async getData ({ commit }, saisid) {
+    async getData ({ commit }, sais_id) {
       commit('GET_DATA_REQUEST')
       try {
         const data = await this.$axios.$get(`/faculties`)
@@ -62,8 +62,8 @@ export const state = () => ({
     getNameId(state) {
       return state.data.faculties.map((item)=>{
         return{
-            saisid: item.saisid,
-            mentor_name: item.first_name+' '+item.last_name
+            sais_id: item.sais_id,
+            mentor_name: item.last_name+' '+item.first_name
         }
 
       })

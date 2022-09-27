@@ -4,10 +4,10 @@ export const state = () => ({
   })
   
   export const actions = {
-    async getData ({ commit }, saisid) {
+    async getData ({ commit }, sais_id) {
       commit('GET_DATA_REQUEST')
       try {
-        const data = await this.$axios.$get(`/students/programs/${saisid}`)
+        const data = await this.$axios.$get(`/students/programs/${sais_id}`)
         await commit('GET_DATA_SUCCESS', data)
       } catch (error) {
         commit('GET_DATA_FAILED', error)
