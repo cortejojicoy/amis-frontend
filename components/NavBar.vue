@@ -305,6 +305,20 @@
         </svg>
       </span>
        <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isAdminOpen">
+        <div v-if="adminTags[0] != null">
+          <li v-if="adminTags[0].unit != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/admin/mentor-assignment-unit'
+              >Mentor Assignments </NuxtLink>
+          </li>
+
+          <li v-else-if="adminTags[0].college != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <NuxtLink
+              to='/admin/mentor-assignment-college'
+              >Mentor Assignments </NuxtLink>
+          </li>
+        </div>
+
           <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/admin/prerogative-enrollment'
@@ -315,6 +329,7 @@
               to='/admin/consent-of-instructor'
               >Consent of Instructor</NuxtLink>
           </li>
+          
         </ul>
       <!-- END ADMIN PORTAL -->
       <!-- LOGOUT -->
@@ -335,6 +350,7 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Alert from './Alert.vue';
 export default {
     data() {
@@ -346,7 +362,13 @@ export default {
             isAdminOpen: false,
         };
     },
+    async fetch() {
+        this.getAdminTag()
+    },
     methods: {
+        ...mapActions({
+            getAdminTag: "maTable/checkTags"
+        }),
         drawer() {
             this.isOpen = !this.isOpen;
         },
@@ -369,6 +391,9 @@ export default {
         },
     },
     computed: {
+        ...mapState({
+            adminTags: state => state.maTable.adminTags
+        }),
         isFaculty() {
           if(this.$auth.user.roles) {
             const roles = this.$auth.user.roles;
@@ -392,7 +417,7 @@ export default {
           } else {
             return false
           }
-        },
+        }
     },
     mounted() {
         document.addEventListener("keydown", (e) => {

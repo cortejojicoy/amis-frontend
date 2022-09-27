@@ -1,16 +1,24 @@
 <template>
-  <div
-    class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
+  <div class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div>
-          <StudentInfo />
+          <StudentInfo 
+            :studentEmail="studentEmail"
+            :studentName="studentName"
+            :studProgram="studentProgram"
+            :studentStatus="studentStatus"
+          />
           <hr class="border-2 border-solid border-black mb-6" />
-          <ActiveMentorSection />
+          <StudentActiveMentor />
           <hr class="border-2 border-solid border-black mb-6" />
-          <AddRemoveMentor />
+          <div v-if="!isLoading">
+          <StudentAddMentor @onUpdateTxn="updateTxn"/>
+          <!-- <AddRemoveMentor @onUpdateTxn="updateTxn"/> -->
+          </div>
+          <Loader v-else :loaderType="'table'" :columnNum="3"/>
           <hr class="border-2 border-solid border-black mb-6" />
-          <TransactionHistory />
+          <TransactionHistory :txnType="'mastxn-student'" :userRole="'students'"  :update="updateTxnIndicator"/>
         </div>
       </div>
     </div>
@@ -18,20 +26,53 @@
 </template>
 
 <script>
-import ActiveMentorSection from "../../components/ActiveMentorSection.vue";
 import StudentInfo from "../../components/StudentInfo.vue";
 import TransactionHistory from "../../components/TransactionHistory.vue";
-import AddRemoveMentor from "../../components/AddRemoveMentor.vue";
+import StudentActiveMentor from "../../components/mentor-assignment/StudentActiveMentor.vue";
+import StudentAddMentor from "../../components/mentor-assignment/StudentAddMentor.vue";
+import AddRemoveMentor from "../../components/mentor-assignment/AddRemoveMentor.vue";
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 
 export default {
-  components: {
-    StudentInfo,
-    ActiveMentorSection,
-    TransactionHistory,
-    AddRemoveMentor,
+  components: { StudentInfo, TransactionHistory, StudentActiveMentor, StudentAddMentor, AddRemoveMentor },
+  data() {
+    return {
+      updateTxnIndicator: 0,
+      studentEmail: "",
+      studentName: "",
+      studentProgram: "",
+      studentStatus: "",
+    }
+  }, 
+  async fetch() {
+      this.getInfo(this.$auth.user.sais_id)
   },
+  computed: {
+    ...mapState({
+        isLoading: state => state.student.studentDetails.loading
+    }),
+    ...mapGetters({
+        getStudent: "student/studentDetails/getStudentDetails"
+    }),
+  },
+  methods: {
+    ...mapActions({
+        getInfo: "student/studentDetails/getData"
+    }),
+    updateTxn(){
+        this.updateTxnIndicator++
+    },
 
+  },
+  watch: {
+    getStudent(value) {
+      value.map((item) => {
+        this.studentName = item.name
+        this.studentProgram = item.program
+        this.studentStatus = item.status
+        this.studentEmail = item.email
+      })
+    }
+  }
 };
 </script>
-
-<style></style>
