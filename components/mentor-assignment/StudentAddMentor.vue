@@ -23,7 +23,6 @@
           <tbody v-show="savedMentor">
             <tr v-for="(record, recordIndex) in savedMentor" :key="recordIndex">
               <td>
-                <!-- {{record.actions}} -->
                 <select :value="record.actions" @change="update('actions', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
                   <option v-for="(action, actionIndex) in actionList" :key="actionIndex">
                     {{ action }}
@@ -31,12 +30,14 @@
                 </select>
               </td>
               <td v-if="record.actions === 'Add'">
-                <select :value="record.mentor_id" @change="update('mentor_id', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
-                  <option></option>
-                  <option v-for="(mentor, mentorIndex) in facultyName" :value="mentor.sais_id" :key="mentorIndex">
-                    {{ mentor.mentor_name }}
-                  </option>
-                </select>
+                 <div v-if="facultyName[recordIndex] != null">
+                   <select :value="record.mentor_id" @change="update('mentor_id', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
+                     <option></option>
+                     <option v-for="(mentor, mentorIndex) in facultyName" :value="mentor.sais_id" :key="mentorIndex">
+                       {{ mentor.last_name+' '+mentor.first_name }}
+                     </option>
+                   </select>
+                </div>
               </td>
               
               <td v-else>
@@ -46,12 +47,15 @@
                   </option>
                 </select>
               </td>
-              <td>
+              <td v-if="record.mentor_role == null">
+                {{ record.mentor_role }}
+              </td>
+              <td v-else>
                 <select :value="record.mentor_role" @change="update('mentor_role', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
-                    <option v-for="(mentorRole, mentorRoleIndex) in roleList" :key="mentorRoleIndex">
-                      {{ mentorRole }}
-                    </option>
-                  </select>
+                  <option v-for="(mentorRole, mentorRoleIndex) in roleList" :key="mentorRoleIndex">
+                    {{ mentorRole }}
+                  </option>
+                </select>
               </td>
               <!-- <td>{{ record.field_represented }}</td>
               <td>{{ record.effectivity_start }}</td>
@@ -141,11 +145,16 @@ export default {
       actionList: ["Add", "Remove"],
       roleList: ["Adviser", "Member"],
       actionStatus: "submitted",
-      show: false,
-
+      show: false
   }),
+  props: {
+    link: String,
+    roles: String
+  },
   computed: {
     ...mapState({
+        facultyName: state => state.student.mentorAssignment.studentAddMentor.facultyName,
+        savedMentor: state => state.student.mentorAssignment.studentAddMentor.data.save_mentors,
         updateTxnIndicator: state => state.student.mentorAssignment.studentAddMentor.updateTxnIndicator,
         isNominatedMentorsLoading: state => state.student.mentorAssignment.studentAddMentor.loading,
         isModalOpen: state => state.student.mentorAssignment.studentAddMentor.show,
@@ -154,9 +163,7 @@ export default {
     ...mapGetters({
         faculties: "student/mentorAssignment/studentAddMentor/getWithoutId",
         activeMentor: "student/mentorAssignment/studentActiveMentor/getActiveMentor",
-        savedMentor: "student/mentorAssignment/studentAddMentor/getSavedMentor",
         getConfirmText: "student/mentorAssignment/studentAddMentor/getConfirmText",
-        facultyName: "faculty/getFacultyName"
     }),
     confirmText: {
           get() {
@@ -170,7 +177,11 @@ export default {
   async fetch() {
     this.getFaculties();
     this.getActive(this.$auth.user.sais_id);
-    this.getNominated(this.$auth.user.sais_id);
+    this.getNominated({
+      sais_id: this.$auth.user.sais_id,
+      link: this.link,
+      roles: this.roles
+    });
   },
   methods: {
     ...mapActions({
@@ -232,6 +243,10 @@ export default {
           data: this.faculties,
           sais_id: this.$auth.user.sais_id
       })
+      // this.forConfirm({
+      //     data: this.faculties,
+      //     sais_id: this.$auth.user.sais_id
+      // })
       this.show = false;
     }
   },
@@ -240,7 +255,7 @@ export default {
           this.$emit('onUpdateTxn')
       },
       isModalOpen() {
-        this.show = false
+          this.show = false
       }
   },
 }

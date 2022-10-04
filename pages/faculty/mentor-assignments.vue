@@ -7,22 +7,11 @@
           <div class="text-2xl font-bold">Mentor Assignment (Faculty)</div>
         </div>
       </div>
-      <div class="relative mb-4">
-        <input type="text" id="filter-search" class="bg-gray-50 border text-gray-900 text-small p-1" placeholder="Search keyword..." />
-        <button type="submit" class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">
-          Search
-        </button>
-        <button type="submit" @click="viewAll" class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">
-          View All
-        </button>
-      </div>
       
       <MentorAssignmentTable 
-          :mLink="'ma'"
           :faculty="'nominated'"
           :maLink="'faculty-ma'" 
           :userRole="'faculties'" 
-          :updateTable="updateMaTable" 
           :maFilters="filters" 
           @onUpdateMATXNs="updateTxn"
         /> 
@@ -41,7 +30,7 @@ export default {
   components: { MentorAssignmentTable, TransactionHistory },
   data() {
       return {
-          updateMaTable:0,
+          q: '',
           filters: [
             {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
             {field: 'program', name: 'program', type: 'select', label: 'filter by program'},
@@ -50,12 +39,7 @@ export default {
             {field: 'mentor_role', name: 'mentor_role', type: 'select', label: 'filter by role'},
             {field: 'mentor_status', name: 'mentor_status', type: 'select', label: 'filter by status'}
           ]
-      };
-  },
-  methods: {
-      viewAll() {
-          this.updateMaTable++
-      },
+      }
   }
 }
 </script>

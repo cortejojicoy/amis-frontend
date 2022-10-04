@@ -81,10 +81,6 @@ export default {
         applyFilter() {
             this.$emit('applyFilter', this.filterValues)
         }
-    },
-
-    watch() {
-        console.log(this.maFilterCss)
     }
 }
 </script>

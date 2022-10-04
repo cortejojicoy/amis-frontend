@@ -10,18 +10,17 @@ export const state = () => ({
     filters: {},
     filterValues: {},
     approvalStatus: {},
-    adminTags: {}
+    adminTags: {},
+    searchData: {},
+    searchKeywords: {},
 })
 
 export const actions = {
     async getData ({state, commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            // console.log(payload)
-            let maParams = Object.assign(payload.data, state.filterValues)
-            // console.log(maParams)
+            let maParams = Object.assign(payload.data, state.filterValues, state.searchKeywords)
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: maParams})
-            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -49,6 +48,31 @@ export const actions = {
             // console.log(payload.data)
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: payload.data})
             await commit('GET_FILTER_SUCCESS', {key: payload.data.column_name, filter:data.ma})
+        } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
+    async getSearch({commit}, payload) {
+        commit('GET_DATA_REQUEST')
+        try {
+            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: {keywords: payload.keywords}})
+            await commit('GET_SEARCH_SUCCESS', {searchResults: data})
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -113,6 +137,21 @@ export const mutations = {
     },
     UPDATE_FILTER_VALUES(state, data) {
         state.filterValues = data
+        // console.log(state.filterValues)
+    },
+
+    UPDATE_SEARCH_VALUES(state, data) {
+        // state.searchKeywords = data
+        console.log(data)
+        // state.search = data.updateResults
+        // console.log(data.updateResults)
+    },
+
+    GET_SEARCH_SUCCESS(state, data) {
+        // state.data = data
+        // Vue.set(state.searchData, data.key, data.searchResults)
+        state.searchData = data.searchResults
+        state.loading = false
     },
     GET_DATA_FAILED (state, error) {
         state.data = error
@@ -138,11 +177,15 @@ export const mutations = {
 
 export const getters = {
     getTableHeaders(state) {
-        if(state.data.keys) {
-            return state.data.keys.map((th)=>{
-                return th.toUpperCase().replaceAll('_', ' ')
-            })
-        }
+        return state.data.keys.map((th)=>{
+            return th.toUpperCase().replaceAll('_', ' ')
+        })
+        // console.log(state.data.keys)
+        // if(state.data.keys) {
+        //     return state.data.keys.map((th)=>{
+        //         return th.toUpperCase().replaceAll('_', ' ')
+        //     })
+        // }
     },
 
     getNumOfItems(state) {

@@ -7,18 +7,8 @@
             <div class="text-2xl font-bold">Mentor Assignment (College)</div>
           </div>
         </div>
-        <div class="relative mb-4">
-          <input type="text" class="bg-gray-50 border text-gray-900 text-small p-1" placeholder="Search keyword..." />
-          <button type="submit" class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">
-              Search
-          </button>
-          <button type="submit" @click="viewAll" class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">
-            View All
-          </button>
-        </div>
         
         <MentorAssignmentTable 
-            :mLink="'ma'"
             :admin="'college'"
             :maLink="'admin-ma'" 
             :userRole="'admins'" 
@@ -26,7 +16,7 @@
             :maFilters="filters" 
             @onUpdateMATXNs="updateTxn"
           />
-        <TransactionHistory :txnType="'mastxn-admin'" :userRole="'admins'" :txnFilters="txnFilters" :update="updateTxnIndicator"/>
+        <TransactionHistory :txnType="'matxns'" :userRole="'admins'" :txnFilters="txnFilters" :update="updateTxnIndicator"/>
       </div>
     </div>
     
@@ -44,7 +34,6 @@ export default {
     data() {
         return {
           updateTxnIndicator: 0,
-          updateMaTable:0,
           filters: [
             {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
             {field: 'program', name: 'program', type: 'select', label: 'filter by program'},
@@ -54,20 +43,16 @@ export default {
             {field: 'mentor_status', name: 'mentor_status', type: 'select', label: 'filter by status'}
           ],
           txnFilters: [
-              {field: 'ma.mas_id', name: 'transaction_id', type: 'combobox', label: 'transaction id'},
-              {field: 'action', name: 'status', type: 'select', label: 'status'},
-              {field: 'ma.mentor_name', name: 'mentor', type: 'combobox', label: 'mentor'}
+              {field: 'ma.mas_id', name: 'mas_id', type: 'combobox', label: 'transaction id'},
+              {field: 'action', name: 'action', type: 'select', label: 'status'},
+              {field: 'ma.mentor_name', name: 'mentor_name', type: 'combobox', label: 'mentor'}
             ]
         }
     },
     methods: {
-        viewAll() {
-            this.updateMaTable++
-        },
         updateTxn(){
             this.updateTxnIndicator++
         }
-    },
-    
+    }
 }
 </script>

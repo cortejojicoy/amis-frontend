@@ -2,20 +2,38 @@ import Vue from "vue";
 export const state = () => ({
     loading: {},
     show: {},
-    data: [],
+    data: {},
     students: [],
     updateTxnIndicator: 0,
     updateData: [],
-    confirmText: ''
+    confirmText: '',
+    facultyName: [],
+    forConfirmation: {}
 })
 
 export const actions = {
-    async getData ({commit}, sais_id) {
+    async getData ({commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/students/${sais_id}/saved-mentors`)
+            const data = await this.$axios.$get(`/${payload.roles}/${payload.sais_id}/${payload.link}`)
             await commit('GET_DATA_SUCCESS', data)
-        } catch (error) {
+            await commit('GET_KEY_DATA', {results:data.faculty_name})
+        } catch(error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                  let errorArr = error.response.data.errors[field]
+                  errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+              })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+              }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+              }
             commit('GET_DATA_FAILED', error)
         }
     },
@@ -87,8 +105,6 @@ export const actions = {
         if(state.confirmText == "CONFIRM") {
             commit('GET_DATA_REQUEST')
             try {
-                // update mentor status into submitted
-                // console.log(payload)
                 let mentors = payload.data.map((item) => {
                     return {
                         actions: item.actions,
@@ -98,8 +114,9 @@ export const actions = {
                         mentor_name: item.mentor_name
                     }
                 })
-                // console.log(payload.data)
+                // let mentors = Object.assign(payload.data, payload.sais_id)
                 const data = await this.$axios.$post(`/students/student-confirm`, mentors)
+                // console.log(data)
                 await dispatch('checkStatus', data)
             } catch(error) {
                 if(error.response.status===422){  
@@ -153,6 +170,11 @@ export const mutations = {
     GET_DATA_FAILED (state, error) {
         state.data = error
     },
+
+    GET_KEY_DATA(state, data) {
+        state.facultyName = data.results
+    },
+
     UPDATE_SAVED_SUCCESS(state, data) {
         state.loading = false
     },
@@ -179,22 +201,28 @@ export const mutations = {
         state.students = error
     },
 
+    CONFIRM_REQUEST_MENTOR(state, data) {
+        // console.log(data)
+    },
+
     CLOSE_MODAL (state) {
         Vue.set(state.show)
     },
 
     ADD_ROW(state, sais_id) {
-        state.data.save_mentors.push({
-            actions:'', 
-            actions_status: 'saved',
-            mentor_name:'', 
-            mentor_role:'', 
-            field_represented:'', 
-            effectivity_start:'',
-            effectivity_end:'',
-            sais_id: sais_id,
-            id: '_'+Date.now() + Math.random()
-        })
+        if(state.data.save_mentors) {
+            state.data.save_mentors.push({
+                actions:'', 
+                actions_status: 'saved',
+                mentor_name:'', 
+                mentor_role:'', 
+                field_represented:'', 
+                effectivity_start:'',
+                effectivity_end:'',
+                sais_id: sais_id,
+                id: '_'+Date.now() + Math.random()
+            })
+        }
     },
 
     DELETE_ROW (state, id) {
@@ -217,14 +245,6 @@ export const getters = {
             delete  temp.id
             return temp
           })
-        }
-    },
-
-    getSavedMentor(state) {
-        if(state.data.save_mentors) {
-            return state.data.save_mentors.map((item) => {
-                return Object.assign({}, item)
-            })
         }
     },
 

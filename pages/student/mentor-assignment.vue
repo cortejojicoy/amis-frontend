@@ -13,12 +13,12 @@
           <StudentActiveMentor />
           <hr class="border-2 border-solid border-black mb-6" />
           <div v-if="!isLoading">
-          <StudentAddMentor @onUpdateTxn="updateTxn"/>
-          <!-- <AddRemoveMentor @onUpdateTxn="updateTxn"/> -->
+          <StudentAddMentor :facultyName="faculty" :link="'saved-mentors'" :roles="'students'" @onUpdateTxn="updateTxn"/>
+          <!-- <AddRemoveMentor :link="'saved-mentors'" :roles="'students'" @onUpdateTxn="updateTxn"/> -->
           </div>
           <Loader v-else :loaderType="'table'" :columnNum="3"/>
           <hr class="border-2 border-solid border-black mb-6" />
-          <TransactionHistory :txnType="'mastxn-student'" :userRole="'students'"  :update="updateTxnIndicator"/>
+          <TransactionHistory :txnType="'matxns'" :userRole="'students'"  :update="updateTxnIndicator" :txnFilters="txnFilters"/>
         </div>
       </div>
     </div>
@@ -42,6 +42,12 @@ export default {
       studentName: "",
       studentProgram: "",
       studentStatus: "",
+      faculty: {},
+      txnFilters: [
+        {field: 'ma.mas_id', name: 'mas_id', type: 'combobox', label: 'transaction id'},
+        {field: 'action', name: 'action', type: 'select', label: 'status'},
+        {field: 'ma.mentor_name', name: 'mentor_name', type: 'combobox', label: 'mentor'}
+      ]
     }
   }, 
   async fetch() {
@@ -52,7 +58,8 @@ export default {
         isLoading: state => state.student.studentDetails.loading
     }),
     ...mapGetters({
-        getStudent: "student/studentDetails/getStudentDetails"
+      getStudent: "student/studentDetails/getStudentDetails",
+      facultyName: "faculty/getFacultyName"
     }),
   },
   methods: {
@@ -72,6 +79,9 @@ export default {
         this.studentStatus = item.status
         this.studentEmail = item.email
       })
+    },
+    facultyName(data) {
+      this.faculty = data
     }
   }
 };

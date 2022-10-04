@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="relative mb-4">
+            <input type="text" v-model="q" class="bg-gray-50 border text-gray-900 text-small p-1" placeholder="Search keyword..." />
+            <button type="submit" @click="search" class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">
+                Search
+            </button>
+            <button type="submit" @click="viewAll" class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">
+                View All
+              </button>
+        </div>
         <div class="flex lg:nowrap flex-wrap justify-between">
             <Filters :isLoading="initialLoad" :filter_headers="maFilters" :maFilterCss="maCss" :filters="filters" @applyFilter="applyFilter"/>
         </div>
@@ -12,9 +21,9 @@
                         </tr>
                     </thead>
                     <tbody v-show="mentorAssignment">
+                        <!-- {{ searchData }} -->
                         <tr v-for="(ma, maIndex) in mentorAssignment" :key="maIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-4 py-3"  @click="openDrawer(); getStudentId(ma.id, ma.sais_id, ma.name, ma.program, ma.status);">{{ ma.name }}</td>
-                            <!-- <td class="px-4 py-3"  @click="openDrawer(); getStudentId(ma.id);">{{ ma.name }}</td> -->
+                            <td class="px-4 py-3"  @click="openDrawer(); getStudentId(ma.id, ma.sais_id, ma.name, ma.email, ma.program, ma.status);">{{ ma.name }}</td>
                             <td class="px-4 py-3">{{ ma.program }}</td>
                             <td class="px-4 py-3">{{ ma.status }}</td>
                             <td class="px-4 py-3">{{ ma.mentor_name ? ma.mentor_name : "UNASSIGNED" }}</td>
@@ -31,7 +40,7 @@
         </div>
         <Loader v-if="maLoading" :loaderType="'table'" :columnNum="6"/>
         
-        <Drawer @onUpdateMATxn="updateMATxn" :admin="admin" :userRoles="userRole" :mLink="mLink" :faculty="faculty"/>
+        <Drawer @onUpdateMATxn="updateMATxn" :admin="admin" :userRoles="userRole" :faculty="faculty"/>
     </div>
 </template>
 
@@ -43,8 +52,6 @@ import Drawer from "../../components/mentor-assignment/Drawer.vue";
 export default {
     components: { Loader, Drawer, Filters },
     data: () => ({
-        // adminUnit: '',
-        // adminCollege: '',
         openStudentView: true,
         maCss: true,
         q: '',
@@ -53,8 +60,6 @@ export default {
         faculty: String,
         admin: String,
         maLink: String,
-        mLink: String,
-        updateTable: Number,
         userRole: String,
         maFilters: {
             type: Array,
@@ -66,6 +71,7 @@ export default {
     computed: {
         ...mapState({
             filters: state => state.maTable.filters,
+            searchData: state => state.maTable.searchData,
             currentPage: state => state.maTable.data.ma.current_page,
             totalPages: state => state.maTable.data.ma.last_page,
             mentorAssignment: state => state.maTable.data.ma.data,
@@ -107,24 +113,32 @@ export default {
     methods: {
         ...mapActions({
             getData: 'maTable/getData',
-            getFilters: 'maTable/getFilters'
-            
+            getFilters: 'maTable/getFilters',
+            getSearch: 'maTable/getSearch'
         }),
         ...mapMutations({
             updateNumOfItems: 'maTable/UPDATE_NUM_OF_ITEMS',
             updateFilterValues: 'maTable/UPDATE_FILTER_VALUES',
+            updateSearchValues: 'maTable/UPDATE_SEARCH_VALUES',
             updateStudentInfo: "maTable/UPDATE_STUDENT_INFO",
             searchKeywords: "maTable/SEARCH_KEYWORDS",
             drawer: 'maTable/OPEN_DRAWER'
         }),
         applyFilter(data) {
+            // console.log(data)
             this.updateFilterValues(data)
             this.getMaTable(1)
         },
         search() {
-            this.searchKeywords({
-                keywords: this.q
+            this.getSearch({
+                keywords: this.q.toUpperCase(),
+                link: this.maLink,
+                role: this.userRole,
             })
+            
+            // console.log(this.searchData)
+            console.log(this.searchData)
+            // this.updateSearchValues(this.searchData[0])
         },
         changePage(page) {
             this.getMaTable(page)
@@ -142,15 +156,15 @@ export default {
                 }
             })
         },
-        getStudentId(index, id, name, program, status) {
+        getStudentId(index, id, name, email, program, status) {
             this.updateStudentInfo({
                 index: index,
-                studId: this.studentId = id,
-                studName: this.studentName = name,
-                studProgram: this.studProgram = program,
-                studStatus: this.studentStatus = status
+                studId: id,
+                studName: name,
+                studEmail: email,
+                studProgram: program,
+                studStatus: status
             })
-            // console.log(index)
         },
         openDrawer() {
             this.drawer({
@@ -159,11 +173,8 @@ export default {
         },
         updateMATxn() {
             this.$emit("onUpdateMATXNs")
-        }
-    },
-
-    watch: {
-        updateTable(newVal, oldVal) {
+        },
+        viewAll() {
             this.changePage(1)
         }
     }

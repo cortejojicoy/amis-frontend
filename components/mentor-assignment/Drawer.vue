@@ -33,7 +33,7 @@
             v-if="studentId != 0 && studentIndex != 0"
             :studentId="studentId"
             :studentIndex="studentIndex"
-            :mLink="mLink" 
+            :mLink="'ma'" 
             :maLink="maLink"
             :roles="userRoles"
             :adminType="admin"
@@ -97,6 +97,7 @@ export default {
           this.studentId = data.studId 
           this.studentIndex = data.index 
           this.studentName = data.studName 
+          this.studentEmail = data.studEmail 
           this.studentProgram = data.studProgram 
           this.studentStatus = data.studStatus 
       },

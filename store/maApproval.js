@@ -59,10 +59,9 @@ export const actions = {
                 sais_id: payload.sais_id,
                 remarks: payload.text
             })
-            console.log(data)
             await commit('UPDATE_DATA_SUCCESS', data)
             await commit('alert/SUCCESS', 'Successfully Endorsed', { root: true })
-            commit('UPDATE_TXN_INDICATOR')
+            await commit('UPDATE_TXN_INDICATOR')
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
