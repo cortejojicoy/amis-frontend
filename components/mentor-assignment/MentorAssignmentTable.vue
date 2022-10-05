@@ -21,7 +21,7 @@
                         </tr>
                     </thead>
                     <tbody v-show="mentorAssignment">
-                        {{ searchData }}
+                        <!-- {{ searchData }} -->
                         <tr v-for="(ma, maIndex) in mentorAssignment" :key="maIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="px-4 py-3"  @click="openDrawer(); getStudentId(ma.id, ma.sais_id, ma.name, ma.email, ma.program, ma.status);">{{ ma.name }}</td>
                             <td class="px-4 py-3">{{ ma.program }}</td>
@@ -32,10 +32,10 @@
                         </tr>
                     </tbody>
                 </table>
-                <!-- <div v-show="mentorAssignment.length < 1" class="w-full text-center">
+                <div v-show="mentorAssignment.length < 1" class="w-full text-center">
                     <p>No records found.</p>
                 </div>
-                <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination> -->
+                <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
             </div>
         </div>
         <Loader v-if="maLoading" :loaderType="'table'" :columnNum="6"/>
@@ -131,13 +131,14 @@ export default {
         },
         search() {
             this.getSearch({
-                keywords: this.q.toUpperCase(),
                 link: this.maLink,
                 role: this.userRole,
+                data: {
+                    keywords: this.q.toUpperCase(),
+                    items: this.numOfItems
+                }
             })
             
-            // console.log(this.searchData)
-            // this.updateSearchValues(this.searchData)
         },
         changePage(page) {
             this.getMaTable(page)
@@ -180,8 +181,7 @@ export default {
 
     watch: {
         searchData(data) {
-            console.log(data)
-            // this.updateSearchValues(data)
+            this.updateSearchValues(data)
         }
     }
 }

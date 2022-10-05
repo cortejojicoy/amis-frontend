@@ -73,9 +73,8 @@ export const actions = {
     async getSearch({commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: {keywords: payload.keywords}})
+            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: payload.data})
             await commit('GET_SEARCH_SUCCESS', data)
-            // await commit('GET_SEARCH_SUCCESS', {searchResults: data})
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -140,21 +139,13 @@ export const mutations = {
     },
     UPDATE_FILTER_VALUES(state, data) {
         state.filterValues = data
-        // console.log(state.filterValues)
     },
 
     UPDATE_SEARCH_VALUES(state, data) {
-        // state.searchKeywords = data
-        console.log(data)
-        // state.data = data
-
-        // state.search = data.updateResults
-        // console.log(data.updateResults)
+        state.data = data
     },
 
     GET_SEARCH_SUCCESS(state, data) {
-        // state.data = data
-        // Vue.set(state.searchData, data.key, data.searchResults)
         state.searchData = data
         state.loading = false
     },
