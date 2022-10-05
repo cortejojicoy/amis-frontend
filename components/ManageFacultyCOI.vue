@@ -32,10 +32,10 @@
                             {{app.coitxns[0].note}}
                         </td>
                         <td class="px-2 py-3">
-                            <button @click="openModal('approve', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2 disabled:opacity-60">
+                            <button @click="openModal('approve', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-green-500 text-white p-2 rounded mb-2" :class="{'opacity-60 cursor-not-allowed': !$config.COI_ENABLED}" :disabled="!$config.COI_ENABLED">
                                 Approve
                             </button>
-                            <button @click="openModal('disapprove', app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded disabled:opacity-60">
+                            <button @click="openModal('disapprove', app.user.full_name, app.student.campus_id, app.user.email, app.coitxns[0].note, app.coitxns[0].coi_id)" class="bg-red-500 text-white p-2 rounded" :class="{'opacity-60 cursor-not-allowed': !$config.COI_ENABLED}" :disabled="!$config.COI_ENABLED">
                                 Disapprove
                             </button>
                         </td>
@@ -162,20 +162,23 @@ export default {
             updateJustification: 'faculty/consentOfInstructor/coiAction/UPDATE_JUSTIFICATION'
         }),
         confirm() {
-            this.updateApplication({
-                class_nbr: this.classDetails.id,
-                sais_id: this.$auth.user.sais_id, 
-                index: this.index
-            });
+            if(this.$config.COI_ENABLED) {
+                this.updateApplication({
+                    class_nbr: this.classDetails.id,
+                    sais_id: this.$auth.user.sais_id, 
+                    index: this.index
+                });
+            }
             this.show = false
         },
         cancel() {
             this.unsetForAction()
             this.show = false
         },
-        openModal($action, $student_number, $email, $student_remarks, $coi_id) {
+        openModal($action, $full_name, $student_number, $email, $student_remarks, $coi_id) {
             this.setForAction({
                 action: $action,
+                full_name: $full_name,
                 student_number: $student_number,
                 email: $email,
                 student_remarks: $student_remarks,

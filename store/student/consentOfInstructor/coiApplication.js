@@ -45,12 +45,14 @@ export const actions = {
                     'times', 
                     'id', 
                     'name', 
-                    'descr'
+                    'descr',
+                    'consent'
                 ], course: payload.course.course}})
                 await commit('GET_SECTIONS_SUCCESS', data)
 
             } else {
                 let data = []
+                await commit('SET_CLASS_ID', '')
                 await commit('GET_SECTIONS_SUCCESS', data)
             }
         } catch (error) {
@@ -150,16 +152,26 @@ export const getters = {
     getClassDetails(state) {
         let faculty = '';
         let descr = '';
+        let class_consent = '';
 
-        if(state.toStore.class_id != '') {
+        if(state.toStore.class_id != '' && state.toStore.class_id != '--') {
             state.sections.forEach(section => {
                 if(section.class_nbr == state.toStore.class_id) {
                     faculty = section.name.toUpperCase()
                     descr = section.descr
+                    if(section.consent == 'I') {
+                        class_consent = 'Instructor'
+                    } else if (section.consent == 'D') {
+                        class_consent = 'Departmental'
+                    } else if (section.consent == 'N') {
+                        class_consent = 'No Restriction'
+                    } else {
+                        class_consent = '--'
+                    }
                 }
             });
         }
-        return {faculty: faculty, descr: descr}
+        return {faculty: faculty, descr: descr, class_consent: class_consent}
     },
     getJustification(state) {
         return state.toStore.justification

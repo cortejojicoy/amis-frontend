@@ -3,13 +3,25 @@
     class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="text-2xl font-bold mb-8">
-            Prerogative Enrollment
+        <div class="bg-red-500 text-white text-center w-full py-8 mb-4">
+            PREROG APPROVAL/DISAPPROVAL IS NOW CLOSED.
         </div>
-
+        <div class="text-2xl font-bold mb-8">
+            Prerogative Applications
+        </div>
         <div class="text-md">
+            <b>Helpful Reminders:</b>
             <p class="mb-4">
-              On this page you will see prerog application of students on your handled classes this semester.
+              You may toggle each of your classes to open or close them for prerog applications.
+            </p>
+            <p class="mb-4">
+              Approved prerog requests are <b>added on top of the maximum class size in SAIS</b> so it is best to check your SAIS Class List regularly to monitor and control the number of students enrolled in your class. You may opt to open or close your classes for prerog applications whenever you like.
+            </p>
+            <p class="mb-4">
+              Approved requests don't mean that the students are automatically added to your class in SAIS; the students may still opt not to use the approved prerog request.
+            </p>
+            <p class="mb-4">
+              For classes with lecture and lab components, <b>a prerog request for both components must be approved</b> for the student to be able to enroll in the course.
             </p>
         </div>
         <div v-if="!isLoading">

@@ -15,12 +15,14 @@ export const actions = {
                         'section', 
                         'course', 
                         'days', 
-                        'times'
+                        'times',
+                        'prerog'
                     ], 
                     order_type:'asc', 
                     order_field: 'class_nbr',
                     with_prg: 'true',
-                    prg_status: ['Requested', 'Accepted', 'Approved'],
+                    prg_term: 1221,
+                    prg_status: ['Logged by OCS', 'Approved by FIC', 'Approved by OCS'],
                     prg_txn_status: 'Requested'
                 }})
             await commit('GET_DATA_SUCCESS', data)
@@ -66,6 +68,7 @@ export const getters = {
             var temp = {
                 name: name, 
                 id: item.class_nbr,
+                prg_open: item.prerog,
                 prerogs: item.prerogs
             };
             return temp

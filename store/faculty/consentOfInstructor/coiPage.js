@@ -21,7 +21,8 @@ export const actions = {
                     order_field: 'class_nbr',
                     with_cois: 'true',
                     coi_status: 'Requested',
-                    coi_txn_status: 'Requested'
+                    coi_txn_status: 'Requested',
+                    consent: 'I'
                 }})
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {

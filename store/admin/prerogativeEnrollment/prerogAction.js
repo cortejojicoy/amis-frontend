@@ -12,19 +12,20 @@ export const state = () => ({
         prg_id: ''
     },
     updateTxnIndicator: 0,
+    numOfItems: 5,
 })
   
 export const actions = {
     async getPrerogs ({ commit }, payload) {
         commit('GET_DATA_REQUEST')
+        let parameter = {
+            prg_status: ['Requested', 'Logged by OCS', 'Approved by OCS', 'Approved by FIC'], 
+            with_students: 'true',
+            prg_term: 1221,
+            prg_txn_status: 'Requested'
+        }
         try {
-            const data = await this.$axios.$get(`admins/prerogative-enrollments`, {params: 
-                {
-                    sais_id: payload.admin_sais_id, 
-                    prg_status: ['Accepted', 'Approved'],
-                    with_students: 'true',
-                    prg_txn_status: 'Requested'
-                }})
+            const data = await this.$axios.$get(`admins/prerogative-enrollments`, {params: Object.assign(parameter, payload.data)})
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -50,7 +51,7 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             const data = await this.$axios.$put(`/admins/prerogative-enrollments/${state.for_action.prg_id}`, {
-                sais_id: payload.admin_sais_id,
+                sais_id: payload.data.sais_id,
                 status: state.for_action.action,
                 justification: state.for_action.justification
             })
@@ -85,7 +86,7 @@ export const mutations = {
         state.loading = true
     },
     GET_DATA_SUCCESS (state, data) {
-        state.data = data.prgs
+        state.data = data
         state.loading = false
         state.initialLoading = false
     },
@@ -119,20 +120,28 @@ export const mutations = {
     },
     UPDATE_TXN_INDICATOR (state) {
         state.updateTxnIndicator++
-    }
+    },
+    UPDATE_NUM_OF_ITEMS(state, data) {
+        state.numOfItems = data
+    },
 }
 
 export const getters = {
     getPrerogApplications(state) {
-        if(state.data) {
-            state.data.forEach(prerog => {
+        if(state.data.prgs.data) {
+            state.data.prgs.data.forEach(prerog => {
                 prerog.user.full_name = prerog.user.first_name + ' '  + prerog.user.middle_name + ' ' + prerog.user.last_name
             });
         }
-        return state.data
+
+        return state.data.prgs.data
     },
 
     getJustification(state) {
         return state.for_action.justification
+    },
+
+    getNumOfItems(state) {
+        return state.numOfItems
     }
 }

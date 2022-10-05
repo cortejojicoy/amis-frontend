@@ -11,29 +11,36 @@
         </div>
 
         <div class="text-md">
+          <p class="mb-4 font-bold">
+                NOTICE (PLEASE READ): 
+            </p>
             <p class="mb-4">
                 Use the Remarks/Appeal field to give the faculty in charge the correct and complete information that may be necessary for her/his decision in granting your COI. The usual information needed by the FIC are your degree program, standing, units earned or remaining units and background information related to the course you are applying for. Your Remarks/Appeals are recorded which may be reviewed later. Kindly limit your remarks/appeal to <b>230 characters</b>. 
             </p>
             <p class="mb-4">
-                You may use the Class Search function of SAIS to know more details about courses and classes.
-            </p>
-            <p class="mb-4 font-bold">
-                For CEAT Students:
+                <span class="text-red-600 font-bold">For courses with laboratory/recit classes, apply COI for both the lecture and lab/recit section.</span> You may use the Class Search function of SAIS to know more details about courses and classes.
             </p>
             <p class="mb-4">
-                The faculty-in-charge (FIC) shall require students applying for COI the following supporting documents listed in the link below before approving the COI:
-                <a class="text-blue-400" target="_blank" href="https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2022/06/CEAT-Courses-Requiring-COI-as-of-2022.pdf">https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2022/06/CEAT-Courses-Requiring-COI-as-of-2022.pdf</a>.
-                The FIC may email you for supporting documents before approving your COI.
+                Kindly wait at least 24 hours before your COI approval is reflected in SAIS.
             </p>
             <p class="mb-4 font-bold">
                 For CAFS Students:
             </p>
             <p class="mb-4">
-                For those students who are intending to enroll 190, 198, 200, and 200a courses without approved COI yet, kindly fill-out the this form: <a class="text-blue-400" target="_blank" href="https://docs.google.com/forms/d/15U43WNG-KuodnKRO9IttQqV822ry6VD32Y_F7UxuvUI">https://docs.google.com/forms/d/15U43WNG-KuodnKRO9IttQqV822ry6VD32Y_F7UxuvUI</a> first for checking of your eligibility. For further inquiries, you may contact us at <span class="font-bold">cafs_ocs.registration.uplb@up.edu.ph</span>.
+                Approved COI of 190, 191, 198, 199, 200, and 200a courses will be forwarded to the OCS for verification and encoding in SAIS. For further inquiries, you may contact us at <span class="font-bold">cafs_ocs.registration.uplb@up.edu.ph</span>.
+            </p>
+            <p class="mb-4 font-bold">
+                For CFNR Students:
+            </p>
+            <p class="mb-4">
+                Approved COI of 200 and 200a courses will be forwarded to the OCS for verification and encoding in SAIS. For further inquiries, you may contact us at <span class="font-bold">cfnr_ocs.uplb@up.edu.ph</span>. Please name the email Subject description to “1221 Enrollment 200/200a/190” for easier message filtering.
+            </p>
+            <p class="mb-4">
+                For FOR 200/200a courses, kindly follow the correct coding of sections and units to this link: <a class="text-blue-400" target="_blank" href="https://docs.google.com/document/d/1d-qcHwLU8QS1RG__OfCgLqGpZP1BhqtE/edit?usp=sharing&ouid=117123832471773687557&rtpof=true&sd=true">Thesis/Practicum/Special Problem Consent</a>
             </p>
         </div>
         <hr class="border-2 border-solid border-black mb-6" />
-        <ManageStudentCOI @onUpdateTxn="updateTxn" />
+        <StudentApplicationCOI @onUpdateTxn="updateTxn" />
         <hr class="border-2 border-solid border-black mb-6" />
         <TransactionHistory :txnType="'coitxns'" :userRole="'students'" :update="updateTxnIndicator" :txnFilters="filters"/>
       </div>
@@ -43,12 +50,12 @@
 
 <script>
 import TransactionHistory from "../../components/TransactionHistory.vue";
-import ManageStudentCOI from "../../components/ManageStudentCOI.vue";
+import StudentApplicationCOI from "../../components/StudentApplicationCOI.vue";
 
 export default {
   components: {
     TransactionHistory,
-    ManageStudentCOI,
+    StudentApplicationCOI,
   },
   data () {
     return {

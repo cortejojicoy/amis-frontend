@@ -9,6 +9,9 @@
         <div class="text-red-500 mb-2">
             Only courses/classes with COI restriction are available in this module. Courses with no restriction, unit/department consent, courses with course pre-requisite only, and other restrictions excluding COI will not appear here. You may enroll courses with no restriction in SAIS directly.
         </div>
+        <div class="text-red-500 mb-2">
+            Contact the Registration Committee of the Unit Offering the course to obtain Unit/Department Consent and other special cases such as enrolling in a course from a different college or level such as undergraduate courses to be enrolled by graduate students.
+        </div>
         <div class="bg-white shadow-xl sm:rounded-lg mb-4 flex flex-wrap lg:flex-nowrap flex-col md:flex-row md:justify-around">
             <div class="">
                 <div class="px-2 py-3 font-bold text-left md:text-center">
@@ -47,6 +50,14 @@
             </div>
             <div>
                 <div class="px-2 py-3 font-bold md:text-center">
+                    Consent
+                </div>
+                <div class="px-2 py-3 md:h-24 md:flex md:items-center text-center font-bold" :class="{'text-red-500': classDetails.class_consent != 'Instructor', 'text-green-600': classDetails.class_consent == 'Instructor'}">
+                    {{classDetails.class_consent}}
+                </div>
+            </div>
+            <div>
+                <div class="px-2 py-3 font-bold md:text-center">
                     Remarks/Appeal
                 </div>
                 <div class="px-2 py-3">
@@ -58,9 +69,12 @@
                     Action
                 </div>
                 <div class="px-2 py-3 md:h-24 md:flex md:items-center">
-                    <button @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">
+                    <button v-if="classDetails.class_consent == 'Instructor'" @click="applyCOI" class="bg-green-500 text-white p-2 rounded w-full" :class="{'opacity-60 cursor-not-allowed': !$config.COI_ENABLED}" :disabled="!$config.COI_ENABLED">
                         Apply
                     </button>
+                    <div v-else class="italic">
+                        Unavailable
+                    </div>
                 </div>
             </div>
         </div>
@@ -120,7 +134,9 @@ export default {
             })
         },
         applyCOI() {
-            this.apply()
+            if(this.$config.COI_ENABLED) {
+                this.apply()
+            }
         },
     },
     watch: {

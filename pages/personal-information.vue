@@ -59,6 +59,22 @@
                                 {{userData.user.student.program_records[0].academic_program_id}}
                             </div>
                         </div>
+                        <div class="flex flex-wrap mb-3 md:w-1/2 w-full">
+                            <div class="text-gray-500 block w-full">
+                                GWA:
+                            </div>
+                            <div class="block w-full">
+                                {{userData.user.gwa}}
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap mb-3 md:w-1/2 w-full">
+                            <div class="text-gray-500 block w-full">
+                                Total Units:
+                            </div>
+                            <div class="block w-full">
+                                {{userData.user.totalUnits}}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

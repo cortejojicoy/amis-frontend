@@ -61,6 +61,11 @@ export default ({ app, store, redirect }) => {
           permissionType: 'role',
           permission: 'admin'
         },
+        {
+          name: 'super_admin-download-data',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
     ]
 
     const URLwithoutPermission = [

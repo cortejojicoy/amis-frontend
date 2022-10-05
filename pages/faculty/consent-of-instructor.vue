@@ -11,14 +11,7 @@
         </div>
 
         <div class="text-md">
-            <p class="mb-4">
-                For CEAT Faculty:
-            </p>
-            <p class="mb-4">
-                The faculty-in-charge shall require students applying for COI the following supporting documents listed in the link below before approving the COI:
-                <a class="text-blue-400" target="_blank" href="https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2022/06/CEAT-Courses-Requiring-COI-as-of-2022.pdf">https://ocs.ceat.uplb.edu.ph/wp-content/uploads/2022/06/CEAT-Courses-Requiring-COI-as-of-2022.pdf</a>.
-                Email address of student is shown in the COI request email. You may ask for these supporting documents via email.
-            </p>
+            
         </div>
         <div v-if="!isLoading">
           <ManageFacultyCOI v-show="classDetails" v-for="(classInstance, classKey) in classDetails" :key="classKey" :index="classKey" :classDetails="classInstance" @onUpdateTxn="updateTxn"/>

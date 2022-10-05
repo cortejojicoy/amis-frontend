@@ -40,7 +40,7 @@ export default {
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
-  css: [{ src: "~assets/drawer.css", lang: "css" }],
+  css: [{ src: "~assets/drawer.css", lang: "css" }, { src: "~assets/toggleButton.css", lang: "css" }],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
@@ -66,10 +66,18 @@ export default {
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {
     baseURL: process.env.API_BASE_URL,
+    credentials: true
   },
 
   env: {
     apiBaseUrl: process.env.API_BASE_URL
+  },
+
+  publicRuntimeConfig: {
+    APP_MAINTENANCE: process.env.APP_MAINTENANCE,
+    loginAdvisory: process.env.LOGIN_ADVISORY,
+    COI_ENABLED: process.env.COI_ENABLED,
+    PREROG_ENABLED: process.env.PREROG_ENABLED
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

@@ -1,7 +1,7 @@
 <template>
   <div class="grid place-items-center h-screen">
       <div class="">
-              	<div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
+        <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4"></div>
       </div>
 
   </div>
@@ -15,6 +15,7 @@ export default {
   data() {
     return {
       token: this.$route.query.token ? this.$route.query.token : null,
+      error: this.$route.query.error ? this.$route.query.error : null,
     };
   },
   mounted() {
@@ -27,13 +28,10 @@ export default {
         })
         .catch((e) => {
           this.$auth.logout();
-          return this.$router.push("/login?error=2");
+          return this.$router.push("/auth/login");
         });
     } else {
-      this.addError(
-        "Your UP Mail is not in the system. The current iteration is intended for UPLB Faculty Promotions, Email Mr. Li Bolanos at: lgbolanos@up.edu.ph if you are a UPLB Faculty applying for promotion. State  the following information in your email: Your First Name, Middle Name, Last Name, Civil Status, Sex, Date of Birth,  Home Unit and College, Designation and Rank (ex. Assitant Professor 1), Salary Grade and Step.  Kinldy attach an image of your UPLB ID for verification purposes.If you cannot open your UPmail please contact ITC.uplb.edu.ph."
-      );
-      return this.$router.push("/login?error=1");
+      return this.$router.push({ path: "/auth/login", query: { error: this.error } });
     }
   },
   methods: {
