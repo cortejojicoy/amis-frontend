@@ -14,7 +14,6 @@
           <hr class="border-2 border-solid border-black mb-6" />
           <div v-if="!isLoading">
           <StudentAddMentor :facultyName="faculty" :link="'saved-mentors'" :roles="'students'" @onUpdateTxn="updateTxn"/>
-          <!-- <AddRemoveMentor :link="'saved-mentors'" :roles="'students'" @onUpdateTxn="updateTxn"/> -->
           </div>
           <Loader v-else :loaderType="'table'" :columnNum="3"/>
           <hr class="border-2 border-solid border-black mb-6" />
@@ -30,11 +29,10 @@ import StudentInfo from "../../components/StudentInfo.vue";
 import TransactionHistory from "../../components/TransactionHistory.vue";
 import StudentActiveMentor from "../../components/mentor-assignment/StudentActiveMentor.vue";
 import StudentAddMentor from "../../components/mentor-assignment/StudentAddMentor.vue";
-import AddRemoveMentor from "../../components/mentor-assignment/AddRemoveMentor.vue";
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 
 export default {
-  components: { StudentInfo, TransactionHistory, StudentActiveMentor, StudentAddMentor, AddRemoveMentor },
+  components: { StudentInfo, TransactionHistory, StudentActiveMentor, StudentAddMentor },
   data() {
     return {
       updateTxnIndicator: 0,
