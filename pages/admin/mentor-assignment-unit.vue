@@ -8,12 +8,6 @@
           </div>
         </div>
 
-        <!-- <div class="relative mb-4">
-          <input type="text" v-model="q" class="bg-gray-50 border text-gray-900 text-small p-1" placeholder="Search keyword..." />
-          <button type="submit" @click="search" class="p-1 ml-2 text-small font-small text-white bg-blue-700 border border-blue-700">Search</button>
-          <button type="submit" @click="viewAll" class="p-1 ml-2 text-small font-small text-white bg-green-500 border border-green-500">View All</button>
-        </div> -->
-
         <MentorAssignmentTable 
             :admin="'unit'"
             :maLink="'admin-ma'" 
@@ -39,9 +33,6 @@ export default {
     components: { MentorAssignmentTable, TransactionHistory },
     data() {
         return {
-            q: '',
-            maLink: 'admin-ma',
-            userRole: 'admins',
             updateTxnIndicator: 0,
             filters: [
               {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
@@ -58,22 +49,8 @@ export default {
             ]
           }
     },
-    computed: {
-        ...mapState({
-            searchData: state => state.maTable.searchData
-        })
-    },
+    
     methods: {
-        ...mapActions({
-            getSearch: 'maTable/getSearch' 
-        }),
-        search() {
-            this.getSearch({
-                keywords: this.q.toUpperCase(),
-                link: this.maLink,
-                role: this.userRole,
-            })
-        },
         updateTxn(){
             this.updateTxnIndicator++
         }

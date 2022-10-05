@@ -11,7 +11,7 @@ export const state = () => ({
     filterValues: {},
     approvalStatus: {},
     adminTags: {},
-    searchData: {},
+    searchData: [],
     searchKeywords: {},
 })
 
@@ -19,8 +19,10 @@ export const actions = {
     async getData ({state, commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            let maParams = Object.assign(payload.data, state.filterValues, state.searchKeywords)
+            let maParams = Object.assign(payload.data, state.filterValues)
+            // console.log(maParams)
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: maParams})
+            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -72,7 +74,8 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: {keywords: payload.keywords}})
-            await commit('GET_SEARCH_SUCCESS', {searchResults: data})
+            await commit('GET_SEARCH_SUCCESS', data)
+            // await commit('GET_SEARCH_SUCCESS', {searchResults: data})
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -143,6 +146,8 @@ export const mutations = {
     UPDATE_SEARCH_VALUES(state, data) {
         // state.searchKeywords = data
         console.log(data)
+        // state.data = data
+
         // state.search = data.updateResults
         // console.log(data.updateResults)
     },
@@ -150,7 +155,7 @@ export const mutations = {
     GET_SEARCH_SUCCESS(state, data) {
         // state.data = data
         // Vue.set(state.searchData, data.key, data.searchResults)
-        state.searchData = data.searchResults
+        state.searchData = data
         state.loading = false
     },
     GET_DATA_FAILED (state, error) {
