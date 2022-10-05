@@ -243,10 +243,7 @@ export default {
           data: this.faculties,
           sais_id: this.$auth.user.sais_id
       })
-      // this.forConfirm({
-      //     data: this.faculties,
-      //     sais_id: this.$auth.user.sais_id
-      // })
+      
       this.show = false;
     }
   },

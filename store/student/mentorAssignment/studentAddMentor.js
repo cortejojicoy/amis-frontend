@@ -16,8 +16,9 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             const data = await this.$axios.$get(`/${payload.roles}/${payload.sais_id}/${payload.link}`)
+            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
-            await commit('GET_KEY_DATA', {results:data.faculty_name})
+            await commit('GET_FACULTY_NAME', {results:data.faculty_name})
         } catch(error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -171,7 +172,13 @@ export const mutations = {
         state.data = error
     },
 
-    GET_KEY_DATA(state, data) {
+    DELETE_ROW (state, id) {
+        state.data.save_mentors = state.data.save_mentors.filter(function(el){
+            return el.id!==id;
+        })
+    },
+
+    GET_FACULTY_NAME(state, data) {
         state.facultyName = data.results
     },
 
@@ -223,12 +230,6 @@ export const mutations = {
                 id: '_'+Date.now() + Math.random()
             })
         }
-    },
-
-    DELETE_ROW (state, id) {
-        state.data.save_mentors = state.data.save_mentors.filter(function(el){
-            return el.id!==id;
-        })
     },
 
     CHANGE_FIELD_STATE (state, payload) {
