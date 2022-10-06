@@ -2,7 +2,7 @@ import Vue from "vue";
 export const state = () => ({
     loading: {},
     show: {},
-    data: {},
+    data: [],
     students: [],
     updateTxnIndicator: 0,
     updateData: [],
