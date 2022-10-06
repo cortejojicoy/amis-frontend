@@ -312,7 +312,7 @@
               >Mentor Assignments </NuxtLink>
           </li>
 
-          <li v-else-if="adminTags[0].college != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <li v-if="adminTags[0].college != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/admin/mentor-assignment-college'
               >Mentor Assignments </NuxtLink>

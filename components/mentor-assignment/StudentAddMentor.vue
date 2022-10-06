@@ -124,10 +124,10 @@
     </VTailwindModal>
     <div class="flex justify-end">
       <div>
-        <button class="p-2 bg-gray-200 mr-2" @click="save" :disabled="isNominatedMentorsLoading">Save</button>
+        <button @click="save" :disabled="tableLength > 0 ? isNominatedMentorsLoading : ''" :class="tableLength > 0 ? 'p-2 bg-blue-500 text-white mr-2 ' : 'mr-2 p-2 bg-blue-500 text-white opacity-60 cursor-not-allowed'">Save</button>
       </div>
       <div>
-        <button class="p-2 bg-gray-200" :disabled="isNominatedMentorsLoading" @click="show = true">Submit</button>
+        <button :disabled="tableLength > 0 ? isNominatedMentorsLoading : ''" @click="show = true" :class="tableLength > 0 ? 'p-2 bg-green-500 text-white mr-2 ' : 'mr-2 p-2 bg-green-500 text-white opacity-60 cursor-not-allowed'">Submit</button>
       </div>
     </div>
   </div>
@@ -145,6 +145,7 @@ export default {
       actionList: ["Add", "Remove"],
       roleList: ["Adviser", "Member"],
       actionStatus: "submitted",
+      tableLength: 0,
       show: false
   }),
   props: {
@@ -204,7 +205,8 @@ export default {
     },
     
     add() {
-      this.addRow(this.$auth.user.sais_id);
+      this.addRow(this.$auth.user.sais_id)
+      this.clickedAdd++
     },
 
     update(field, id, event) {
@@ -253,6 +255,9 @@ export default {
       },
       isModalOpen() {
           this.show = false
+      },
+      savedMentor(data) {
+        this.tableLength = data.length
       }
   },
 }
