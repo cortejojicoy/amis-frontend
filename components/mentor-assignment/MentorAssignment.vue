@@ -22,15 +22,15 @@
                         <td class="px-4 py-3"></td>
                         <div v-if="adminType == 'unit' || facultyType == 'adviser'">
                             <td class="px-4 py-3">
-                                <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.id, 'endorse');">Endorse</button>
-                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.id, 'reject');">Reject</button>
+                                <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
+                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Reject</button>
                             </td>
                         </div>
                         <div v-if="adminType == 'college'">
                             <td class="px-4 py-3">
-                                <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.id, 'approved')">Approved</button> 
-                                <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.id, 'remove');">Approved</button>
-                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.id, 'reject');">Disapproved</button>
+                                <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
+                                <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
+                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
                             </td>
                         </div>
                         
