@@ -71,6 +71,9 @@ export default {
       faculty: String
   },
   computed: {
+      ...mapState({
+          updateTxnIndicator: state => state.maApproval.updateTxnIndicator
+      }),
       ...mapGetters({
           showDrawer: "maTable/getDrawerStatus",
           getStudentInfo: "maTable/getStudent",
@@ -81,9 +84,6 @@ export default {
       closeDrawer() {
           this.$emit("close");
           this.studentId = 0;
-      },
-      updateTxn(){
-          this.$emit("onUpdateMATxn");
       }
   },
 
@@ -106,6 +106,9 @@ export default {
           this.isOpen = false
           this.studentId = 0
         }
+      }, 
+      updateTxnIndicator(newVal, oldVal) {
+          this.$emit('onUpdateTxn')
       }
     }
   }

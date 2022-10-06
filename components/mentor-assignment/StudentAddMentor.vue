@@ -257,7 +257,9 @@ export default {
           this.show = false
       },
       savedMentor(data) {
-        this.tableLength = data.length
+        if(data) {
+            this.tableLength = data.length
+        }
       }
   },
 }

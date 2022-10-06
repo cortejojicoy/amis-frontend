@@ -40,7 +40,7 @@
         </div>
         <Loader v-if="maLoading" :loaderType="'table'" :columnNum="6"/>
         
-        <Drawer @onUpdateMATxn="updateMATxn" :admin="admin" :userRoles="userRole" :faculty="faculty"/>
+        <Drawer @onUpdateTxn="updateMATxn" :admin="admin" :userRoles="userRole" :faculty="faculty"/>
     </div>
 </template>
 
