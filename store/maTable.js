@@ -4,7 +4,7 @@ export const state = () => ({
     initialLoad: false,
     numOfItems: 5,
     show: false,
-    data: [],
+    data: {},
     studentData: {},
     updateDrawer: 0,
     filters: {},
@@ -20,9 +20,7 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             let maParams = Object.assign(payload.data, state.filterValues)
-            // console.log(maParams)
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: maParams})
-            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -47,7 +45,6 @@ export const actions = {
     async getFilters ({commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            // console.log(payload.data)
             const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: payload.data})
             await commit('GET_FILTER_SUCCESS', {key: payload.data.column_name, filter:data.ma})
         } catch (error) {
@@ -98,7 +95,6 @@ export const actions = {
     async checkTags({commit}) {
         commit('GET_DATA_REQUEST')
         try {
-            // console.log(payload.data)
             const data = await this.$axios.$get(`/check-tags`)
             await commit('GET_TAGS_SUCCESS', {tagResults: data.tags})
         } catch (error) {
@@ -173,15 +169,11 @@ export const mutations = {
 
 export const getters = {
     getTableHeaders(state) {
-        return state.data.keys.map((th)=>{
-            return th.toUpperCase().replaceAll('_', ' ')
-        })
-        // console.log(state.data.keys)
-        // if(state.data.keys) {
-        //     return state.data.keys.map((th)=>{
-        //         return th.toUpperCase().replaceAll('_', ' ')
-        //     })
-        // }
+        if(state.data.keys) {
+            return state.data.keys.map((th)=>{
+                return th.toUpperCase().replaceAll('_', ' ')
+            })
+        }
     },
 
     getNumOfItems(state) {

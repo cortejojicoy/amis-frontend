@@ -70,7 +70,7 @@
         </template>
         <template v-slot:buttons>
             <div class="text-right" v-if="remove == 'remove'">
-                <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60"  @click="submit(forRemove.id, 'approved')">Confirm and Submit</button>
+                <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60"  @click="submit(forRemove.mas_id, 'approved')">Confirm and Submit</button>
             </div>
             <div class="text-right" v-else>
                 <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId" type="number" @click="submit($event, 'approved');">Confirm</button>
@@ -152,7 +152,7 @@ export default {
             this.confirmId = index,
             this.remove = remove,
             this.getRemoveMentor({
-                id: index
+                mas_id: index
             })
             // console.log(this.)
         },

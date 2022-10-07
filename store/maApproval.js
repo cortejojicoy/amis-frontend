@@ -6,7 +6,7 @@ export const state = () => ({
     initialLoad: false,
     updateTxnIndicator: 0,
     forRemove: {
-        id: '',
+        mas_id: '',
         actions: '',
         mentor_id: '',
         mentor_name: '',
@@ -21,14 +21,12 @@ export const actions = {
     async getData({commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            // console.log(payload)
             const data = await this.$axios.$get(`/${payload.roles}/${payload.link}`, {params: {
                 studentId: payload.studentId,
                 mentor_id: payload.sais_id,
                 adminType: payload.adminType,
                 facultyType: payload.facultyType
             }})
-            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -116,24 +114,21 @@ export const mutations = {
         })
     },
     GET_REMOVE_MENTOR(state, payload) {
-        let mentor = state.data.mas.find(x => x.id === payload.id)
+        let mentor = state.data.mas.find(x => x.mas_id === payload.mas_id)
 
-        // console.log(mentor)
-        state.forRemove.id = mentor.id
+        state.forRemove.mas_id = mentor.mas_id
         state.forRemove.actions = mentor.actions
         state.forRemove.mentor_id = mentor.mentor_id
         state.forRemove.mentor_name = mentor.mentor_name
         state.forRemove.mentor_role = mentor.mentor_role
         state.forRemove.status = mentor.status
         state.forRemove.student_sais_id = mentor.student_sais_id
-
-        // console.log(mentor)
     }
 }
 
 export const getters = {
     getTableHeaders(state) {
-        if(state.data.keys) {
+        if(state.data) {
             return state.data.keys.map((th)=>{
                 return th.toUpperCase().replaceAll('_', ' ')
             })
