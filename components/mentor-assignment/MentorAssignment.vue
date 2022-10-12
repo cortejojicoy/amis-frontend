@@ -42,9 +42,9 @@
     <Loader v-if="maLoading" :loaderType="'table'" :columnNum="6"/>
     
     <VTailwindModal v-model="show">
-        <template v-slot:title>{{ remove == 'remove' ? 'Confirm Action' : 'Remarks/Appeal'}}</template>
+        <template v-slot:title>{{ btnAction == 'remove' ? 'Confirm Action' : 'Remarks'}}</template>
         <template v-slot:content>
-            <div v-if="remove == 'remove'">
+            <div v-if="btnAction == 'remove'">
                 Are you sure you want to commit the following change/s? 
 
                 <div class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
@@ -69,11 +69,11 @@
             </div>
         </template>
         <template v-slot:buttons>
-            <div class="text-right" v-if="remove == 'remove'">
+            <div class="text-right" v-if="btnAction == 'remove'">
                 <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60"  @click="submit(forRemove.mas_id, 'approved')">Confirm and Submit</button>
             </div>
             <div class="text-right" v-else>
-                <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId" type="number" @click="submit($event, 'approved');">Confirm</button>
+                <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId" type="number" @click="submit($event.target.value, 'reject');">Confirm</button>
             </div>
         </template>
 
@@ -94,7 +94,7 @@ export default {
         drawer: false,
         remarks: '',
         confirmId: 0,
-        remove: ''
+        btnAction: ''
     }),
     props: {
         adminType: String,
@@ -148,20 +148,19 @@ export default {
             })
         },
 
-        openModal(index, remove) {
+        openModal(index, btnAction) {
             this.confirmId = index,
-            this.remove = remove,
+            this.btnAction = btnAction,
             this.getRemoveMentor({
                 mas_id: index
             })
-            // console.log(this.)
         },
         
         submit(index, type) {
             if(type == 'reject') {
                 this.updateApproval({
                     maType: type,
-                    index: parseInt(index.target.value),
+                    index: index,
                     link: this.mLink,
                     roles: this.roles,
                     sais_id: this.$auth.user.sais_id,
