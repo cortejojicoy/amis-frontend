@@ -1,12 +1,12 @@
 <template>
-    <div class="my-2">
+    <div :class="maFilterCss ? 'my-2 w-full text-center' : 'my-2' ">
         <div v-if="!isLoading">
             <div v-if="filter_headers.length > 0" class="mb-4 flex items-end">
-                <div v-for="(filter, filterKey) in filter_headers" :key="filterKey" class="mr-2">
+                <div v-for="(filter, filterKey) in filter_headers" :key="filterKey" :class="maFilterCss ? 'mr-2 w-full' : 'mr-2'">
                     <div v-if="filter.type == 'select'">
                         <label :for=filterKey class="block text-xs text-gray-500">{{filter.label}}</label>
-                        <select :name=filterKey :id="filter.name + '_' + filterKey" class="p-2 leading-8" @change="chooseFilter($event.target.value, filter.name)">
-                            <option value="--" selected>--</option>
+                        <select :name=filterKey :id="filter.name + '_' + filterKey" :class="maFilterCss ? 'p-2 leading-8 w-28' : 'p-2 leading-8' " @change="chooseFilter($event.target.value, filter.name)">
+                            <option value="--" class="text-center" selected>--</option>
                             <option v-for="(fValue, fKey) in filters[filter.field]" :key="fKey">{{fValue[filter.name]}}</option>
                         </select>
                     </div>
@@ -15,7 +15,7 @@
                         <v-select class="w-full style-chooser" :label="filter.name" :options="filters[filter.field]" @input="(value) => chooseCombobox(filter.name, value)"></v-select>
                     </div>
                 </div>
-                <div>
+                <div :class="maFilterCss ? 'w-full' : ''">
                     <button @click="applyFilter" class="p-2 bg-blue-500 text-white">Apply Filter</button>
                 </div>
             </div>
@@ -30,6 +30,7 @@ import 'vue-select/dist/vue-select.css';
 
 export default {
 	props: {
+        maFilterCss: Boolean,
         filter_headers: {
             type: Array,
         },

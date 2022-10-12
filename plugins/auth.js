@@ -15,6 +15,16 @@ export default ({ app, store, redirect }) => {
             permissionType: 'role',
             permission: 'faculty'
         },
+        {
+            name: 'admin-mentor-assignment-unit',
+            permissionType: 'role',
+            permission: 'admin'
+        },
+        {
+          name: 'admin-mentor-assignment-college',
+          permissionType: 'role',
+          permission: 'admin'
+      },
         ,
         {
             name: 'student-mentor-assignment',

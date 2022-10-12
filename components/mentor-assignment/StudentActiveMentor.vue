@@ -18,9 +18,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td class="px-4 py-3"></td>
-            <td class="px-4 py-3"></td>
+          <tr  v-for="(record, recordIndex) in getActiveMentors" :key="recordIndex">
+            <td class="px-4 py-3">{{ record.last_name+ ' '+record.first_name }}</td>
+            <td class="px-4 py-3">{{ record.mentor_role }}</td>
             <td class="px-4 py-3"></td>
           </tr>
         </tbody>
@@ -30,7 +30,20 @@
 </template>
 
 <script>
-export default {};
+import { mapActions, mapState } from 'vuex'
+export default {
+  computed: {
+      ...mapState({
+          getActiveMentors: state => state.student.mentorAssignment.studentActiveMentor.data.active_mentors,
+      }),
+  },
+  async fetch() {
+    this.getData(this.$auth.user.sais_id)
+  },  
+  methods: {
+    ...mapActions({
+        getData: "student/mentorAssignment/studentActiveMentor/getData"
+    })
+  }
+};
 </script>
-
-<style></style>
