@@ -10,6 +10,7 @@ export const actions = {
         try {
             // get active mentors of users 
             const data = await this.$axios.$get(`/students/${sais_id}/active-mentors`)
+            // console.log(data.active_mentors[0].faculty)
             await commit('GET_DATA_SUCCESS', data)
             
         } catch (error) {
@@ -39,7 +40,7 @@ export const getters = {
                 return {
                     sais_id: item.sais_id,
                     mentor_id: item.sais_id,
-                    mentor_name: item.last_name+' '+item.first_name,
+                    mentor_name: item.faculty.user.last_name+' '+item.faculty.user.first_name,
                     mentor_role: item.mentor_role,
                 }
             })
