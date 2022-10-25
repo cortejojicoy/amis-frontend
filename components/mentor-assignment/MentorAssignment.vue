@@ -21,17 +21,29 @@
                         <td class="px-4 py-3">{{ ma.mentor_role }}</td>
                         <td class="px-4 py-3"></td>
                         <div v-if="adminType == 'unit' || facultyType == 'adviser'">
-                            <td class="px-4 py-3">
-                                <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
-                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Reject</button>
-                            </td>
+                            <div v-if="maAdminType[0].endorser == 1">
+                                <td class="px-4 py-3">
+                                    <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
+                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Reject</button>
+                                </td>
+                            </div>
+                            <div v-if="maAdminType[0].approver == 1">
+                                <td class="px-4 py-3">
+                                    <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
+                                    <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
+                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
+                                </td>
+                            </div>
                         </div>
+                        
                         <div v-if="adminType == 'college'">
-                            <td class="px-4 py-3">
-                                <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
-                                <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
-                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
-                            </td>
+                            <div v-if="maAdminType[0].approver == 1">
+                                <td class="px-4 py-3">
+                                    <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
+                                    <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
+                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
+                                </td>
+                            </div>
                         </div>
                         
                     </tr>
@@ -109,10 +121,12 @@ export default {
 
     async fetch() {
         this.getMa(this.studentId)
+        this.getAdminType()
     },  
 
     computed: {
         ...mapState({
+            maAdminType: state => state.maApproval.maAdminType,
             forRemove: state => state.maApproval.forRemove,
             updateTxnIndicator: state => state.maApproval.updateTxnIndicator,
             mentorAssignment: state => state.maApproval.data.mas,
@@ -129,7 +143,8 @@ export default {
     methods: {
         ...mapActions({
             getData: 'maApproval/getData',
-            updateApproval: 'maApproval/updateApproval'
+            updateApproval: 'maApproval/updateApproval',
+            getAdminType: 'maApproval/getAdminType'
         }),
         ...mapMutations({
             updateRow: 'maApproval/DELETE_ROW',

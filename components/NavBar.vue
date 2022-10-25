@@ -309,13 +309,13 @@
           <li v-if="adminTags[0].unit != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/admin/mentor-assignment-unit'
-              >Mentor Assignments </NuxtLink>
+              >Mentor Assignments (Unit) </NuxtLink>
           </li>
 
           <li v-if="adminTags[0].college != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/admin/mentor-assignment-college'
-              >Mentor Assignments </NuxtLink>
+              >Mentor Assignments (College) </NuxtLink>
           </li>
         </div>
 
@@ -410,7 +410,7 @@ export default {
         };
     },
     async fetch() {
-        this.getAdminTag()
+      if(this.isAdmin) {this.getAdminTag()}
     },
     methods: {
         ...mapActions({
