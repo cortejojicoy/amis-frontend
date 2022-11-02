@@ -1,7 +1,8 @@
 import Vue from "vue"
 export const state = () => ({
-    data: {},
+    data: [],
     maValues: {},
+    maAdminType: {},
     loading: false,
     initialLoad: false,
     updateTxnIndicator: 0,
@@ -78,7 +79,32 @@ export const actions = {
             }
             commit('GET_DATA_FAILED', error)
         }
-    }
+    },
+
+    async getAdminType({commit}) {
+        commit('GET_DATA_REQUEST')
+        try {
+            const data = await this.$axios.$get(`/admins/check-tags`)
+            await commit('GET_ADMIN_TYPE', {maAdminType: data.adminType})
+        } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
 }
 
 export const mutations = {
@@ -97,6 +123,10 @@ export const mutations = {
     },
     GET_DATA_FAILED (state, error) {
         state.data = error
+    },
+
+    GET_ADMIN_TYPE(state, data) {
+        state.maAdminType = data.maAdminType
     },
 
     UPDATE_DATA_REQUEST(state) {
@@ -134,21 +164,4 @@ export const getters = {
             })
         }
     },
-
-    getMaData(state) {
-        // if(state.data.mas) {
-        //     return state.data.mas.map((item) => {
-        //         return Object.assign({}, item)
-        //     })
-        // }
-        // Object.keys(state.data).forEach(key => {
-        //     if(state.data[key] === null) {
-        //         delete state.data[key]
-
-        //         console.log(key)
-        //     }
-        // })
-        // if(state.data)
-        // console.log(state.data.mas)
-    }
 }

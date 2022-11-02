@@ -18,9 +18,9 @@
           </tr>
         </thead>
         <tbody>
-          <tr  v-for="(record, recordIndex) in getActiveMentors" :key="recordIndex">
-            <td class="px-4 py-3">{{ record.last_name+ ' '+record.first_name }}</td>
-            <td class="px-4 py-3">{{ record.mentor_role }}</td>
+          <tr v-for="(active, activeIndex) in getActiveMentors" :key="activeIndex">
+            <td class="px-4 py-3">{{ active.faculty.user.last_name+' '+active.faculty.user.first_name }}</td>
+            <td class="px-4 py-3">{{ active.mentor_role }}</td>
             <td class="px-4 py-3"></td>
           </tr>
         </tbody>

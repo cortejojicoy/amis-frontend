@@ -4,12 +4,11 @@ export const state = () => ({
     initialLoad: false,
     numOfItems: 5,
     show: false,
-    data: {},
+    data: [],
     studentData: {},
     updateDrawer: 0,
     filters: {},
     filterValues: {},
-    approvalStatus: {},
     adminTags: {},
     searchData: [],
     searchKeywords: {},
@@ -95,7 +94,7 @@ export const actions = {
     async checkTags({commit}) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/check-tags`)
+            const data = await this.$axios.$get(`/admins/check-tags`)
             await commit('GET_TAGS_SUCCESS', {tagResults: data.tags})
         } catch (error) {
             if(error.response.status===422){  
@@ -160,6 +159,7 @@ export const mutations = {
     },
     GET_TAGS_SUCCESS(state, data) {
         state.adminTags = data.tagResults
+        state.adminType = data.adminType
     },
 
     SEARCH_KEYWORDS(state, data) {

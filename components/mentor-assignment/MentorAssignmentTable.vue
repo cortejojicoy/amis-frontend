@@ -76,6 +76,7 @@ export default {
             currentPage: state => state.maTable.data.ma.current_page,
             totalPages: state => state.maTable.data.ma.last_page,
             mentorAssignment: state => state.maTable.data.ma.data,
+            mentorAssignment: state => state.maTable.data.ma.data,
             maLoading: state => state.maTable.loading,
             initialLoad: state => state.maTable.initialLoad
         }),

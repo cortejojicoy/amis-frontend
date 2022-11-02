@@ -37,9 +37,9 @@ export const getters = {
         if(state.data.active_mentors) {
             return state.data.active_mentors.map((item) => {
                 return {
-                    sais_id: item.sais_id,
-                    mentor_id: item.sais_id,
-                    mentor_name: item.last_name+' '+item.first_name,
+                    sais_id: item.faculty.user.sais_id,
+                    mentor_id: item.faculty.user.sais_id,
+                    mentor_name: item.faculty.user.last_name+' '+item.faculty.user.first_name,
                     mentor_role: item.mentor_role,
                 }
             })
