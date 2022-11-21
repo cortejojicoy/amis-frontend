@@ -12,7 +12,7 @@
                     </div>
                     <div v-else-if="filter.type == 'combobox'" class="w-52">
                         <label :for=filterKey class="block text-xs text-gray-500">{{filter.label}}</label>
-                        <v-select class="w-full style-chooser" :label="filter.name" :options="filters[filter.field]" @input="(value) => chooseCombobox(filter.name, value)"></v-select>
+                        <v-select class="w-full style-chooser" :dropdown-should-open="dropdownShouldOpen" :label="filter.name" :options="filters[filter.field]" @input="(value) => chooseCombobox(filter.name, value)"></v-select>
                     </div>
                 </div>
                 <div>
@@ -79,7 +79,10 @@ export default {
         },
         applyFilter() {
             this.$emit('applyFilter', this.filterValues)
-        }
+        },
+        dropdownShouldOpen(VueSelect) {
+            return VueSelect.search.length > 2 && VueSelect.open
+        },
     }
 }
 </script>

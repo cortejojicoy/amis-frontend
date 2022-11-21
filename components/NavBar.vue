@@ -1,7 +1,7 @@
 <template>
 <div>
   <nav
-    class="flex fixed w-full items-center justify-between px-6 h-16 bg-white text-gray-700 border-b border-gray-200 z-10">
+    class="flex fixed w-full items-center justify-between px-6 h-16 bg-white text-gray-700 border-b border-gray-200 z-20">
     <!-- START HEADER -->
     <div class="flex items-center justify-between w-full">
       <div class="flex items-center">
@@ -361,18 +361,76 @@
             to='/super_admin/download-data'
             >Export Module Data</NuxtLink>
         </li>
+        <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <NuxtLink
+            to='/super_admin/permissions-module'
+            >Permissions Module</NuxtLink>
+        </li>
+        <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <NuxtLink
+            to='/super_admin/tags-module'
+            >Tags Module</NuxtLink>
+        </li>
+        <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <NuxtLink
+            to='/super_admin/users-module'
+            >Users Module</NuxtLink>
+        </li>
       </ul>
       <!-- END SUPER ADMIN PORTAL -->
-      <!-- LOGOUT -->
-      <!-- <span
-        @click="isOpen = false"
-        class="flex items-center p-4 px-8 py-2 pt-4">
-        <button
-          class="flex justify-center items-center text-white bg-red-700 hover:bg-red-600 w-full rounded-lg py-2"
-          @click="logout">
-          Logout
-        </button>
-      </span> -->
+      <span
+        @click="isAcademicCatalogOpen = !isAcademicCatalogOpen"
+        class="flex items-center p-4 hover:bg-gray-300 hover:text-red-700 cursor-pointer"
+        >
+        <span class="mr-2">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2">
+            <path d="M12 14l9-5-9-5-9 5 9 5z" />
+            <path
+              d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222" />
+          </svg>
+        </span>
+        <span>Academic Catalog</span>
+        <svg
+          aria-hidden="true"
+          focusable="false"
+          data-prefix="fas"
+          class="w-3 h-3 ml-auto transform"
+          :class="isAcademicCatalogOpen ? 'rotate-0' : '-rotate-90'"
+          role="img"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 448 512">
+          <path
+            fill="currentColor"
+            d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
+        </svg>
+      </span>
+      <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isAcademicCatalogOpen">
+        <NuxtLink to='/courses-management'>
+          <li class="flex items-center p-2 pl-11 py-3 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            Courses Management
+          </li>
+        </NuxtLink>
+        <NuxtLink to='/programs-management'>
+          <li class="flex items-center p-2 pl-11 py-3 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            Programs Management
+          </li>
+        </NuxtLink>
+        <NuxtLink to='/curriculums-management'>
+          <li class="flex items-center p-2 pl-11 py-3 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            Curriculums Management
+          </li>
+        </NuxtLink>
+      </ul>
     </aside>
       <Alert/>
   </nav>
@@ -391,6 +449,7 @@ export default {
             isStudentOpen: false,
             isAdminOpen: false,
             isSuperAdminOpen: false,
+            isAcademicCatalogOpen: false
         };
     },
     methods: {
