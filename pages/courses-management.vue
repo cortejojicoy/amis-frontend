@@ -22,7 +22,7 @@
           <GenericDrawer :isOpen="showDrawer" @closeDrawer="updateDrawer">
               <template v-slot:content>
                 <div v-if="index != null" class="w-full mb-4">
-                  <div class="">
+                  <div class="mb-4">
                       <div class="my-4 text-xl font-bold w-full">
                           Course Specifics
                       </div>
@@ -41,7 +41,7 @@
                   <hr class="border-1 border-solid border-black mb-4" />
                   <CourseGeneralDetails :courseDetails="getTableData[index].details" />
                   <hr class="border-1 border-solid border-black mb-4" />
-                  <CoursePrerequisites />
+                  <!-- <CoursePrerequisites /> -->
                 </div>
               </template>
           </GenericDrawer>
@@ -74,7 +74,7 @@ export default {
       headers: [
         "course",
         "title",
-        "prerequisite",
+        "description",
         "sem_offered",
         "units",
         "action"

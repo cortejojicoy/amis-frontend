@@ -15,8 +15,8 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             let tableParams = Object.assign(payload.data, state.filterValues)
-            const data = await this.$axios.$get(`/courses`, {params: tableParams})
-            await commit('GET_DATA_SUCCESS', data.courses)
+            const data = await this.$axios.$get(`/programs`, {params: tableParams})
+            await commit('GET_DATA_SUCCESS', data.programs)
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -39,8 +39,8 @@ export const actions = {
     async getFilters({ commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/courses`, {params: payload.data})
-            await commit('GET_FILTER_SUCCESS', {key: payload.data.column_name, filter:data.courses})
+            const data = await this.$axios.$get(`/programs`, {params: payload.data})
+            await commit('GET_FILTER_SUCCESS', {key: payload.data.column_name, filter:data.programs})
         } catch (error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -92,14 +92,13 @@ export const getters = {
     },
     getTableData(state) {
         if(state.data.data){
-            var coursesData = state.data.data.map((item) => {
+            var programsData = state.data.data.map((item) => {
                 var temp = {
-                    course: item.course_code, 
+                    acronym: item.acronym,
                     title: item.title,
+                    career: item.career,
+                    college: item.college,
                     description: item.description,
-                    sem_offered: item.sem_offered,
-                    units: item.units,
-                    action: '',
                     details: item
                 };
                 return temp
@@ -110,9 +109,9 @@ export const getters = {
                 current_page: state.data.current_page,
             }
 
-            coursesData = Object.assign(coursesData, paginationData)
+            programsData = Object.assign(programsData, paginationData)
 
-            return coursesData
+            return programsData
         }
     }
 }

@@ -32,7 +32,17 @@
                     <tbody>
                         <tr v-for="(row, rowIndex) in tableData" :key="rowIndex">
                             <td v-for="(header, headerIndex) in tableHeaders" :key="headerIndex" class="px-2 py-3">
-                                <div v-if="header != 'action'">
+                                <div v-if="header == 'roles' || header == 'permissions'">
+                                    <div v-if="row[header].length > 0" class="flex justify-center flex-wrap">
+                                        <div v-for="(item, itemIndex) in row[header]" :key="itemIndex" class="m-1 p-1 bg-blue-200 rounded shadow hover:bg-blue-400 hover:text-white">
+                                            {{item}}
+                                        </div>
+                                    </div>
+                                    <div v-else>
+                                        -- Empty --
+                                    </div>
+                                </div>
+                                <div v-else-if="header != 'action'">
                                     {{row[header]}}
                                 </div>
                                 <div v-else>

@@ -20,7 +20,7 @@
                     Close
                 </button>
             </span>
-            <div class="overflow-x-hidden items-top justify-center h-5/6 mx-20 bg-gray-100">
+            <div class="overflow-x-hidden items-top justify-center h-5/6 bg-gray-100">
                 <div class="bg-white px-4 sm:p-6">
                     <slot name="content">
 

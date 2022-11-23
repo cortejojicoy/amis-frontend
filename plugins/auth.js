@@ -66,6 +66,21 @@ export default ({ app, store, redirect }) => {
           permissionType: 'role',
           permission: 'super_admin'
         },
+        {
+          name: 'super_admin-permissions-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'super_admin-tags-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'super_admin-users-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
     ]
 
     const URLwithoutPermission = [
