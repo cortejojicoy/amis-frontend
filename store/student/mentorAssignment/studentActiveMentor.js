@@ -1,6 +1,6 @@
 export const state = () => ({
     loading: false,
-    data: []
+    activeMentor: []
 })
 
 
@@ -9,8 +9,10 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             // get active mentors of users 
-            const data = await this.$axios.$get(`/students/${sais_id}/active-mentors`)
-            await commit('GET_DATA_SUCCESS', data)
+            const data = await this.$axios.$get(`/student-details`, {params: {sais_id: sais_id}})
+            console.log(data)
+            await commit('GET_DATA_SUCCESS', {results: data.stud_active_mentor})
+            // await commit('GET_DATA_SUCCESS', data)
             
         } catch (error) {
             commit('GET_DATA_FAILED', error)
@@ -23,7 +25,7 @@ export const mutations = {
         state.loading = true
     },
     GET_DATA_SUCCESS (state, data) {
-        state.data = data
+        state.activeMentor = data.results
         state.loading = false
     },
     GET_DATA_FAILED (state, error) {
@@ -33,16 +35,18 @@ export const mutations = {
 
 
 export const getters = {
-    getActiveMentor(state) {
-        if(state.data.active_mentors) {
-            return state.data.active_mentors.map((item) => {
-                return {
-                    sais_id: item.faculty.user.sais_id,
-                    mentor_id: item.faculty.user.sais_id,
-                    mentor_name: item.faculty.user.last_name+' '+item.faculty.user.first_name,
-                    mentor_role: item.mentor_role,
+    getStudActiveMentor(state) {
+        let mentorName = ''
+        let mentorRoles = ''
+        if(state.activeMentor) {
+            state.activeMentor.map((item) => {
+                if(item != '') {
+                    mentorName = item.faculty[0].uuid.last_name+' '+item.faculty[0].uuid.first_name
+                    mentorRoles = item.mentor_role.titles
                 }
             })
         }
-    },
+
+        return {mentorName: mentorName, mentorRoles: mentorRoles}
+    }
 }

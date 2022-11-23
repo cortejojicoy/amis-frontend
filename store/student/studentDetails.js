@@ -1,31 +1,20 @@
 export const state = () => ({
     loading: false,
     data: [],
-    studentInfo: []
+    activeMentor: {},
+    studInfo: {}
 })
 
 export const actions = {
-    async getData ({commit}) {
+    async getData ({commit}, sais_id) {
         commit('GET_DATA_REQUEST')
         try {
-            const students = await this.$axios.$get(`/students/student-details`)
-            await commit('GET_DATA_SUCCESS', students)
+            const data = await this.$axios.$get(`/student-details`,{params: {sais_id: sais_id}})
+            await commit('GET_DATA_SUCCESS', {activeMentor: data.stud_active_mentor, studentInfo: data.stud_info})
         } catch(error) {
             commit('GET_DATA_FAILED')
         }
     },
-
-    async getStudent({commit}, sais_id) {
-        commit('GET_DATA_REQUEST')
-        try {
-            const data = await this.$axios.$get(`/student-info`, {params: {
-                id: sais_id
-            }})
-            await commit('GET_STUDENT_SUCCESS', data)
-        } catch (error) {
-            commit('GET_STUDENT_FAILED', error)
-        }
-    }
 }
 
 export const mutations = {
@@ -33,7 +22,8 @@ export const mutations = {
         state.loading = true
     },
     GET_DATA_SUCCESS (state, data) {
-        state.data = data
+        state.activeMentor = data.activeMentor
+        state.studInfo = data.studentInfo
         state.loading = false
     },
     GET_DATA_FAILED (state, error) {
@@ -42,24 +32,5 @@ export const mutations = {
 }
 
 export const getters = {
-    getStudentDetails(state) {
-        if(state.data.student_data) {
-            return state.data.student_data.map((item) => {
-                return {
-                    name: item.last_name+ ' '+item.first_name,
-                    program: item.academic_program_id,
-                    status: item.status,
-                    email: item.email
-                }
-            })
-        }
-    },
-
-    getStudentById(state) {
-        if(state.studentInfo.student_info) {
-            return state.studentInfo.student_info.map((item) => {
-                return Object.assign({}, item)
-            })
-        }
-    }
+    
 }

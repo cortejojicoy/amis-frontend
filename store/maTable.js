@@ -18,8 +18,12 @@ export const actions = {
     async getData ({state, commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            let maParams = Object.assign(payload.data, state.filterValues)
-            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: maParams})
+            // let maParams = Object.assign(payload.data, state.filterValues)
+            // const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: {maParams}})
+            const data = await this.$axios.$get(`/${payload.role}/${payload.link}`, {params: {
+                data: payload.data
+            }})
+            // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -168,12 +172,51 @@ export const mutations = {
 }
 
 export const getters = {
-    getTableHeaders(state) {
-        if(state.data.keys) {
-            return state.data.keys.map((th)=>{
-                return th.toUpperCase().replaceAll('_', ' ')
-            })
+    getTableDetails(state) {
+        console.log(state.data.ma)
+
+        let totalPages = ''
+        let currentPage = ''
+        let studId = ''
+        let studName = ''
+        let studProgram = ''
+        let studStatus = ''
+        let studEmail = ''
+        let mentorName = ''
+        let mentorRole = ''
+        let mentorStatus = ''
+
+        if(state.data.ma != '') {
+            state.data.ma.map((item) => {
+                console.log(item)
+                if(item.faculty[0].mentor != '') {
+                    studId = item.user[0].sais_id
+                    studName = item.user[0].last_name+' '+item.user[0].first_name
+                    studProgram = item.student[0].program_records[0].academic_program_id
+                    studStatus = item.student[0].program_records[0].status
+                    studEmail = item.user[0].email
+                    mentorName = item.mentor_name
+                    mentorRole = item.mentor_role
+                    mentorStatus = item.faculty[0].mentor[0].status
+                    totalPages = item.total
+                    currentPage = item.current_page
+                }
+            });
         }
+
+        return {
+            totalPages: totalPages,
+            currentPage: currentPage,
+            studId: studId,
+            studName: studName,
+            studProgram: studProgram,
+            studStatus: studStatus,
+            studEmail: studEmail,
+            mentorName: mentorName,
+            mentorRole: mentorRole,
+            mentorStatus: mentorStatus 
+        }
+
     },
 
     getNumOfItems(state) {

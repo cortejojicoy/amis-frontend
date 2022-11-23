@@ -1,8 +1,11 @@
 <template>
     <div class="my-6">
+
+    <StudentActiveMentor :activeMentor="studActiveMentor" :adminType="adminType"/>
+    
     <div class="flex align-middle items-center mb-6">
         <div class="text-2xl font-bold mr-3"> Mentor Assignment 
-            {{adminType == 'unit' ? 'Request' : '' || adminType == 'college' ? 'Endorse' : '' && facultyType == 'adviser' ? 'Request' : 'Request'}} 
+            {{ adminType == 'unit' ? 'Request' : '' || adminType == 'college' ? 'Endorse' : '' && facultyType == 'adviser' ? 'Request' : 'Request' }} 
         </div>
         <div> (acceptance or rejection of nomination to serve as mentor) </div>
     </div>
@@ -15,35 +18,35 @@
                     </tr>
                 </thead>
                 <tbody v-show="mentorAssignment">
+
+                    <!-- {{ mentorAssignment }} -->
                     <tr v-for="(ma, maIndex) in mentorAssignment" :key="maIndex">
                         <td class="px-4 py-3">{{ ma.actions }}</td>
                         <td class="px-4 py-3">{{ ma.mentor_name }}</td>
                         <td class="px-4 py-3">{{ ma.mentor_role }}</td>
                         <td class="px-4 py-3"></td>
-                        <div v-if="adminType == 'unit' || facultyType == 'adviser'">
-                            <div v-if="maAdminType[0].endorser == 1">
-                                <td class="px-4 py-3">
-                                    <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
-                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Reject</button>
-                                </td>
-                            </div>
-                            <div v-if="maAdminType[0].approver == 1">
-                                <td class="px-4 py-3">
-                                    <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
-                                    <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
-                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
-                                </td>
-                            </div>
+                        <div v-if="facultyType == 'adviser'">
+                            <td class="px-4 py-3">
+                                <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
+                                <button class="bg-yellow-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'return');">Return</button>
+                                <!-- <button class="bg-green-500 text-white p-2 rounded" @click="return(ma.mas_id, 'return');">Return</button> -->
+                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
+                            </td>
                         </div>
                         
+                        <div v-if="adminType == 'unit'">
+                            <td class="px-4 py-3">
+                                <button class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'endorse');">Endorse</button>
+                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
+                            </td>
+                        </div>
+
                         <div v-if="adminType == 'college'">
-                            <div v-if="maAdminType[0].approver == 1">
-                                <td class="px-4 py-3">
-                                    <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
-                                    <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
-                                    <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
-                                </td>
-                            </div>
+                            <td class="px-4 py-3">
+                                <button v-if="ma.actions == 'Add'" class="bg-green-500 text-white p-2 rounded" @click="submit(ma.mas_id, 'approved')">Approved</button> 
+                                <button v-else-if="ma.actions == 'Remove'" class="bg-green-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'remove');">Approved</button>
+                                <button class="bg-red-500 text-white p-2 rounded" @click="show = true; openModal(ma.mas_id, 'reject');">Disapproved</button>
+                            </td>
                         </div>
                         
                     </tr>
@@ -98,9 +101,10 @@
 import "vue-select/dist/vue-select.css";
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import VTailwindModal from "../VTailwindModal.vue";
+import StudentActiveMentor from "./StudentActiveMentor.vue";
 import Loader from "../Loader.vue";
 export default {
-    components: { VTailwindModal, Loader },
+    components: { VTailwindModal, Loader, StudentActiveMentor },
     data: () => ({
         show: false,
         drawer: false,
@@ -121,11 +125,13 @@ export default {
 
     async fetch() {
         this.getMa(this.studentId)
-        this.getAdminType()
+        this.getStudenDetails(this.studentId)
+        if(this.isAdmin()) { this.getAdminType() }
     },  
 
     computed: {
         ...mapState({
+            studActiveMentor: state => state.maApproval.activeMentor,
             maAdminType: state => state.maApproval.maAdminType,
             forRemove: state => state.maApproval.forRemove,
             updateTxnIndicator: state => state.maApproval.updateTxnIndicator,
@@ -143,6 +149,7 @@ export default {
     methods: {
         ...mapActions({
             getData: 'maApproval/getData',
+            getStudenDetails: 'maApproval/getStudenDetails',
             updateApproval: 'maApproval/updateApproval',
             getAdminType: 'maApproval/getAdminType'
         }),
@@ -151,6 +158,15 @@ export default {
             updateDrawer: "maTable/CLOSE_DRAWER",
             getRemoveMentor: "maApproval/GET_REMOVE_MENTOR"
         }),
+
+        isAdmin() {
+          if(this.$auth.user.roles) {
+            const roles = this.$auth.user.roles;
+            return roles.find(el => el.name === "admin") ? true : false;
+          } else {
+            return false
+          }
+        },
 
         getMa(studentId) {
             this.getData({
@@ -172,7 +188,7 @@ export default {
         },
         
         submit(index, type) {
-            if(type == 'reject') {
+            if(type == 'reject' || type == 'endorse' || type == 'approved' || type == 'return') {
                 this.updateApproval({
                     maType: type,
                     index: index,
@@ -181,16 +197,6 @@ export default {
                     sais_id: this.$auth.user.sais_id,
                     text: this.remarks,
                 })
-
-            } else if(type == 'endorse' || type == 'approved') {
-                this.updateApproval({
-                    maType: type,
-                    index: index,
-                    link: this.mLink,
-                    roles: this.roles,
-                    sais_id: this.$auth.user.sais_id
-                })
-                // console.log('this was clicked')
             }
             
             this.show = false

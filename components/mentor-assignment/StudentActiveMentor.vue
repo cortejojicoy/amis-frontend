@@ -3,7 +3,7 @@
     <div class="flex justify-between mb-6">
       <div class="text-2xl font-bold">Active Mentor Assignments</div>
       <div class="">
-        <button class="p-2 bg-gray-300" disabled>
+        <button :class="adminType == 'unit' || adminType == 'college' ? 'hidden' : 'p-2 bg-gray-300' " disabled>
           Generate Certificate of Mentor Assignment
         </button>
       </div>
@@ -12,16 +12,16 @@
       <table class="table-auto w-full items-center text-center">
         <thead>
           <tr class="font-bold">
-            <td class="p-4">Mentor</td>
-            <td class="p-4">Roles</td>
-            <td class="p-4">Field Represented</td>
+            <td class="p-4">MENTOR</td>
+            <td class="p-4">ROLES</td>
+            <td class="p-4">FIELD REPRESENTED</td>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(active, activeIndex) in getActiveMentors" :key="activeIndex">
-            <td class="px-4 py-3">{{ active.faculty.user.last_name+' '+active.faculty.user.first_name }}</td>
-            <td class="px-4 py-3">{{ active.mentor_role }}</td>
-            <td class="px-4 py-3"></td>
+          <tr>
+              <td class="px-4 py-3">{{ activeMentor.mentorName }}</td>
+              <td class="px-4 py-3">{{ activeMentor.mentorRoles }}</td>
+              <td class="px-4 py-3"></td>
           </tr>
         </tbody>
       </table>
@@ -32,18 +32,14 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 export default {
-  computed: {
-      ...mapState({
-          getActiveMentors: state => state.student.mentorAssignment.studentActiveMentor.data.active_mentors,
-      }),
-  },
-  async fetch() {
-    this.getData(this.$auth.user.sais_id)
-  },  
-  methods: {
-    ...mapActions({
-        getData: "student/mentorAssignment/studentActiveMentor/getData"
-    })
+
+  props: {
+    activeMentor: {
+        type: Object
+    },
+    adminType: {
+        type: String
+    }
   }
 };
 </script>

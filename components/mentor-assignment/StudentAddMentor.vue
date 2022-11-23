@@ -34,16 +34,17 @@
                    <select :value="record.mentor_id" @change="update('mentor_id', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
                      <option></option>
                      <option v-for="(mentor, mentorIndex) in facultyName" :value="mentor.sais_id" :key="mentorIndex">
-                       {{ mentor.last_name+' '+mentor.first_name }}
+                        {{ mentor.last_name+' '+mentor.first_name }}
                      </option>
                    </select>
                 </div>
               </td>
               
               <td v-else>
+                
                 <select :value="record.mentor_id" @change="update('mentor_id', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
-                  <option v-for="(mentor, mentorIndex) in activeMentor" :key="mentorIndex + 1" :value="mentor.sais_id">
-                    {{ mentor.mentor_name }} 
+                  <option v-for="(mentor, mentorIndex) in studActiveMentor" :key="mentorIndex + 1" :value="mentor.sais_id">
+                    {{ mentor.faculty[mentorIndex].uuid.last_name+' '+mentor.faculty[mentorIndex].uuid.first_name }} 
                   </option>
                 </select>
               </td>
@@ -52,8 +53,8 @@
               </td>
               <td v-else>
                 <select :value="record.mentor_role" @change="update('mentor_role', record.id, $event)" class="text-md border border-gray-400 rounded p-1">
-                  <option v-for="(mentorRole, mentorRoleIndex) in roleList" :key="mentorRoleIndex">
-                    {{ mentorRole }}
+                  <option v-for="(mentorRole, mentorRoleIndex) in mRole" :key="mentorRoleIndex">
+                    {{ mentorRole.titles }}
                   </option>
                 </select>
               </td>
@@ -143,7 +144,6 @@ export default {
   components: { Loader, CircSpinner, VTailwindModal },
   data: () => ({
       actionList: ["Add", "Remove"],
-      roleList: ["Adviser", "Member"],
       actionStatus: "submitted",
       tableLength: 0,
       show: false
@@ -154,7 +154,9 @@ export default {
   },
   computed: {
     ...mapState({
+        mRole: state => state.student.mentorAssignment.studentAddMentor.mRole,
         facultyName: state => state.student.mentorAssignment.studentAddMentor.facultyName,
+        studActiveMentor: state => state.student.mentorAssignment.studentActiveMentor.activeMentor,
         savedMentor: state => state.student.mentorAssignment.studentAddMentor.data.save_mentors,
         updateTxnIndicator: state => state.student.mentorAssignment.studentAddMentor.updateTxnIndicator,
         isNominatedMentorsLoading: state => state.student.mentorAssignment.studentAddMentor.loading,
@@ -163,7 +165,6 @@ export default {
     }),
     ...mapGetters({
         faculties: "student/mentorAssignment/studentAddMentor/getWithoutId",
-        activeMentor: "student/mentorAssignment/studentActiveMentor/getActiveMentor",
         getConfirmText: "student/mentorAssignment/studentAddMentor/getConfirmText",
     }),
     confirmText: {
@@ -190,6 +191,8 @@ export default {
         updateToSaved: "student/mentorAssignment/studentAddMentor/updateToSaved",
         updateToSubmitted: "student/mentorAssignment/studentAddMentor/updateToSubmitted",
         submitRequestedMentors: "student/mentorAssignment/studentAddMentor/confirm",
+
+        // getActive: "student/studentDetails/getData",
         getActive: "student/mentorAssignment/studentActiveMentor/getData",
         getFaculties: "faculty/getData",
     }),

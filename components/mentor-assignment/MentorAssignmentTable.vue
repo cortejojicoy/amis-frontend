@@ -17,25 +17,40 @@
                 <table class="table-auto w-full items-center">
                     <thead>
                         <tr class="font-bold">
-                            <td v-for="(maHeader, maHeaderIndex) in maHeaders" :key="maHeaderIndex" class="p-4">{{maHeader}}</td>
+                            <td class="p-4">NAME</td>
+                            <td class="p-4">PROGRAM</td>
+                            <td class="p-4">STUDENT STATUS</td>
+                            <td class="p-4">MENTOR</td>
+                            <td class="p-4">ROLE</td>
+                            <td class="p-4">MENTOR STATUS</td>
                         </tr>
                     </thead>
-                    <tbody v-show="mentorAssignment">
-                        <!-- {{ searchData }} -->
-                        <tr v-for="(ma, maIndex) in mentorAssignment" :key="maIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td class="px-4 py-3"  @click="openDrawer(); getStudentId(ma.id, ma.sais_id, ma.name, ma.email, ma.program, ma.status);">{{ ma.name }}</td>
-                            <td class="px-4 py-3">{{ ma.program }}</td>
-                            <td class="px-4 py-3">{{ ma.status }}</td>
-                            <td class="px-4 py-3">{{ ma.mentor_name ? ma.mentor_name : "UNASSIGNED" }}</td>
-                            <td class="px-4 py-3">{{ ma.mentor_role ? ma.mentor_role : "UNASSIGNED" }}</td>
-                            <td class="px-4 py-3">{{ ma.mentor_status ? ma.mentor_status : "UNASSIGNED" }}</td>
+                    <tbody v-show="getTableDetails">
+                        <!-- {{ getTableDetails }} -->
+                        <!-- <tr v-for="(ma, maIndex) in getTableDetails" :key="maIndex" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"> -->
+                        <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <!-- {{ getTableDetails }} -->
+                            <td class="px-4 py-3"  @click="openDrawer(); 
+                                getStudentId(
+                                    getTableDetails.studId,
+                                    getTableDetails.studName,
+                                    getTableDetails.studEmail,
+                                    getTableDetails.studProgram,
+                                    getTableDetails.studStatus
+                                );">{{ getTableDetails.studName }}
+                            </td>
+                            <td class="px-4 py-3">{{ getTableDetails.studProgram }}</td>
+                            <td class="px-4 py-3">{{ getTableDetails.studStatus }}</td>
+                            <td class="px-4 py-3">{{ getTableDetails.mentorStatus == 'Approved' ? getTableDetails.mentorName : "UNASSIGNED"  }}</td>
+                            <td class="px-4 py-3">{{ getTableDetails.mentorStatus == 'Approved' ? getTableDetails.mentorRole : "UNASSIGNED"  }}</td>
+                            <td class="px-4 py-3">{{ getTableDetails.mentorStatus == 'Approved' ? getTableDetails.mentorStatus : "UNASSIGNED" }}</td>
                         </tr>
                     </tbody>
                 </table>
-                <div v-show="mentorAssignment.length < 1" class="w-full text-center">
+                <!-- <div v-show="mentorAssignment.length < 1" class="w-full text-center">
                     <p>No records found.</p>
                 </div>
-                <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination>
+                <vs-pagination :total-pages="totalPages" :current-page="currentPage" @change="changePage"></vs-pagination> -->
             </div>
         </div>
         <Loader v-if="maLoading" :loaderType="'table'" :columnNum="6"/>
@@ -54,8 +69,7 @@ export default {
     data: () => ({
         openStudentView: true,
         maCss: true,
-        q: '',
-         
+        q: ''
     }),
     props: {
         faculty: String,
@@ -73,16 +87,15 @@ export default {
         ...mapState({
             filters: state => state.maTable.filters,
             searchData: state => state.maTable.searchData,
-            currentPage: state => state.maTable.data.ma.current_page,
-            totalPages: state => state.maTable.data.ma.last_page,
-            mentorAssignment: state => state.maTable.data.ma.data,
-            mentorAssignment: state => state.maTable.data.ma.data,
+            // currentPage: state => state.maTable.data.ma.current_page,
+            // totalPages: state => state.maTable.data.ma.last_page,
+            // mentorAssignment: state => state.maTable.data.ma.data,
             maLoading: state => state.maTable.loading,
             initialLoad: state => state.maTable.initialLoad
         }),
         ...mapGetters({
-            maHeaders: "maTable/getTableHeaders",
-            getNumOfItems: "maTable/getNumOfItems"
+            getNumOfItems: "maTable/getNumOfItems",
+            getTableDetails: "maTable/getTableDetails"
         }),
         numOfItems: {
             get() {
@@ -157,9 +170,9 @@ export default {
                 }
             })
         },
-        getStudentId(index, id, name, email, program, status) {
+        getStudentId(id, name, email, program, status) {
             this.updateStudentInfo({
-                index: index,
+                // index: index,
                 studId: id,
                 studName: name,
                 studEmail: email,
@@ -184,6 +197,9 @@ export default {
         searchData(data) {
             this.updateSearchValues(data)
         }
+        // mentorAssignment(data) {
+        //     console.log(data.ma)
+        // }
     }
 }
 </script>

@@ -8,6 +8,7 @@ export const state = () => ({
     updateData: [],
     confirmText: '',
     facultyName: [],
+    mRole: [],
     forConfirmation: {}
 })
 
@@ -19,6 +20,7 @@ export const actions = {
             // console.log(data)
             await commit('GET_DATA_SUCCESS', data)
             await commit('GET_FACULTY_NAME', {results:data.faculty_name})
+            await commit('GET_MENTOR_ROLE', {mRole:data.m_role})
         } catch(error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -116,7 +118,8 @@ export const actions = {
                     }
                 })
                 // let mentors = Object.assign(payload.data, payload.sais_id)
-                const data = await this.$axios.$post(`/students/student-confirm`, mentors)
+                const data = await this.$axios.$post(`/students-details`, mentors)
+                // const data = await this.$axios.$post(`/students/student-confirm`, mentors)
                 // console.log(data)
                 await dispatch('checkStatus', data)
             } catch(error) {
@@ -180,6 +183,11 @@ export const mutations = {
 
     GET_FACULTY_NAME(state, data) {
         state.facultyName = data.results
+        // console.log(data.results)
+    },
+
+    GET_MENTOR_ROLE (state, data) {
+        state.mRole = data.mRole
     },
 
     UPDATE_SAVED_SUCCESS(state, data) {
