@@ -207,6 +207,12 @@
           >
             <NuxtLink to='/faculty/prerogative-enrollment'>Prerogative Enrollment</NuxtLink>
           </li>
+          <!-- remove if pcw is ready -->
+          <!-- <li
+            class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+          >
+            <NuxtLink to='/faculty/ge-coursework'>GE Coursework</NuxtLink>
+          </li> -->
         </ul>
       <!-- END FACULTY -->
       <!-- STUDENT PORTAL -->
@@ -246,7 +252,6 @@
             fill="currentColor"
             d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
         </svg>
-       
       </span>
        <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isStudentOpen">
           <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
@@ -264,6 +269,37 @@
               to='/student/prerogative-enrollment'
               >Prerogative Enrollment</NuxtLink>
           </li>
+          <!-- remove if pcw is ready -->
+          <!-- <li class="items-center p-2 pr-4 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+            <span @click="isPlanOfCourseworkOpen = !isPlanOfCourseworkOpen" class="flex items-center cursor-pointer">
+              <span>Plan of Coursework</span>
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                data-prefix="fas"
+                class="w-3 h-3 ml-auto transform"
+                :class="isPlanOfCourseworkOpen ? 'rotate-0' : '-rotate-90'"
+                role="img"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 448 512">
+                <path
+                  fill="currentColor"
+                  d="M207.029 381.476L12.686 187.132c-9.373-9.373-9.373-24.569 0-33.941l22.667-22.667c9.357-9.357 24.522-9.375 33.901-.04L224 284.505l154.745-154.021c9.379-9.335 24.544-9.317 33.901.04l22.667 22.667c9.373 9.373 9.373 24.569 0 33.941L240.971 381.476c-9.373 9.372-24.569 9.372-33.942 0z"></path>
+              </svg>
+            </span>
+          </li>
+          <ul id="dropdown-student" class="py-2 m-0 space-y-2" v-show="isPlanOfCourseworkOpen">
+            <li class="flex items-center p-2 pl-16 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+              <NuxtLink
+                to='/student/ge-coursework'
+                >GE Coursework</NuxtLink>
+            </li>
+            <li class="flex items-center p-2 pl-16 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+              <NuxtLink
+                to='/student/major-coursework'
+                >Major Coursework</NuxtLink>
+            </li>
+          </ul> -->
         </ul>
       <!-- END STUDENT -->
       <!-- ADMIN PORTAL -->
@@ -373,23 +409,28 @@
       <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isSuperAdminOpen">
         <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
           <NuxtLink
-            to='/super_admin/download-data'
+            to='/super-admin/download-data'
             >Export Module Data</NuxtLink>
         </li>
         <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
           <NuxtLink
-            to='/super_admin/permissions-module'
+            to='/super-admin/permissions-module'
             >Permissions Module</NuxtLink>
         </li>
         <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
           <NuxtLink
-            to='/super_admin/tags-module'
+            to='/super-admin/tags-module'
             >Tags Module</NuxtLink>
         </li>
         <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
           <NuxtLink
-            to='/super_admin/users-module'
+            to='/super-admin/users-module'
             >Users Module</NuxtLink>
+        </li>
+        <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <NuxtLink
+            to='/super-admin/course-offerings-module'
+            >Course Offerings Module</NuxtLink>
         </li>
       </ul>
       <!-- END SUPER ADMIN PORTAL -->
@@ -465,7 +506,8 @@ export default {
             isStudentOpen: false,
             isAdminOpen: false,
             isSuperAdminOpen: false,
-            isAcademicCatalogOpen: false
+            isAcademicCatalogOpen: false,
+            isPlanOfCourseworkOpen: false
         };
     },
     async fetch() {

@@ -13,7 +13,12 @@ export const state = () => ({
     toUpdate: {
         role: '',
         permission: '',
-        tags: []
+        tags: [],
+        student_info: {
+            student_number: '',
+            acad_program: '',
+            acad_group: ''
+        }
     },
     headers: [],
     filters: {},
@@ -248,6 +253,15 @@ export const mutations = {
         } else {
             state.toUpdate.tags = []
         }
+    },
+    SET_STUDENT_NUMBER_TO_ADD(state, student_number) {
+        state.toUpdate.student_info.student_number = student_number
+    },
+    SET_ACAD_PROGRAM_TO_ADD(state, acad_program) {
+        state.toUpdate.student_info.acad_program = acad_program
+    },
+    SET_ACAD_GROUP_TO_ADD(state, acad_group) {
+        state.toUpdate.student_info.acad_group = acad_group
     },
     ADD_ROLE_REQUEST(state) {
         state.role_loading = true

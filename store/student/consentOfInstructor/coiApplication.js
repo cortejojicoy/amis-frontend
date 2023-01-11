@@ -13,7 +13,7 @@ export const actions = {
     async getCourses ({ dispatch, commit }) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/course-offerings`, {params: {fields:['course'], distinct: 'true'}})
+            const data = await this.$axios.$get(`/course-offerings`, {params: {column_name: 'course', distinct: 'true'}})
             await commit('GET_COURSES_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
