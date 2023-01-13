@@ -126,7 +126,6 @@ export const actions = {
         }
     },
     async editCourseOffering ({ commit, dispatch, state }, payload) {
-        console.log(state.toStore)
         if(await dispatch('checkToStore')) {
             commit('GET_DATA_REQUEST')
             try {
@@ -276,7 +275,6 @@ export const mutations = {
         state.toStore.course_id = course_id
     },
     UPDATE_ACAD_ORG(state, acad_org) {
-        console.log(state.toStore)
         state.toStore.acad_org = acad_org
     },
     UPDATE_ACAD_GROUP(state, acad_group) {

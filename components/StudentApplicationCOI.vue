@@ -12,6 +12,9 @@
         <div class="text-red-500 mb-2">
             Contact the Registration Committee of the Unit Offering the course to obtain Unit/Department Consent and other special cases such as enrolling in a course from a different college or level such as undergraduate courses to be enrolled by graduate students.
         </div>
+        <div class="text-red-500 font-bold mb-2">
+            {{getNotice}}
+        </div>
         <div class="bg-white shadow-xl sm:rounded-lg mb-4 flex flex-wrap lg:flex-nowrap flex-col md:flex-row md:justify-around">
             <div class="">
                 <div class="px-2 py-3 font-bold text-left md:text-center">
@@ -99,7 +102,8 @@ export default {
         }),
         ...mapGetters({
             classDetails: "student/consentOfInstructor/coiApplication/getClassDetails",
-            getJustification: "student/consentOfInstructor/coiApplication/getJustification"
+            getJustification: "student/consentOfInstructor/coiApplication/getJustification",
+            getNotice: "student/consentOfInstructor/coiApplication/getNotice",
         }),
         justification: {
             get() {
