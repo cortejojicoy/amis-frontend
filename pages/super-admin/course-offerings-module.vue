@@ -459,7 +459,6 @@
         this.show = true
         this.modalMode = mode
         if(index) {
-          console.log(this.getTableData[index.index])
           var initialValues = this.getTableData[index.index]
           this.setInitialValues(initialValues)
         } else {
