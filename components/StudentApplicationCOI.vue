@@ -7,7 +7,7 @@
             <CircSpinner :isLoading="coursesLoading"/>
         </div>
         <div class="text-red-500 mb-2">
-            You may enroll courses with no restriction in SAIS directly.
+            You may enroll in courses with no restriction in SAIS directly if there are no course prerequisites or if you have already passed the prerequisites.
         </div>
         <div class="text-red-500 mb-2">
             Contact the Registration Committee of the Unit Offering the course to obtain Unit/Department Consent and other special cases such as enrolling in a course from a different college or level such as undergraduate courses to be enrolled by graduate students.
