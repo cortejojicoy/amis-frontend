@@ -27,7 +27,7 @@
                 For CAFS Students:
             </p>
             <p class="mb-4">
-              All approved COI of CAFS students will be forwarded to to the CAFS OCS for verification. For futher inquiries you may contact the CAFS OCS at <span class="font-bold">cafs_ocs.registration.uplb@up.edu.ph</span>.
+              All CAFS Students COI applications shall be checked and tagged by CAFS-OCS EXCEPT for MGT 101 and other non-CAFS courses. A google link will be emailed by CAFS-OCS and processing will be First Come-First Served.
             </p>
             <p class="mb-4 font-bold">
                 For CFNR Students:
