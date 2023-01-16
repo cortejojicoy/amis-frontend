@@ -17,9 +17,6 @@
             <p class="mb-4">
                 Use the Remarks/Appeal field to give the faculty in charge the correct and complete information that may be necessary for her/his decision in granting your COI. The usual information needed by the FIC are your degree program, standing, units earned or remaining units and background information related to the course you are applying for. Your Remarks/Appeals are recorded which may be reviewed later. Kindly limit your remarks/appeal to <b>230 characters</b>. 
             </p>
-            <p class="mb-4">
-                <span class="text-red-600 font-bold">For courses with laboratory/recit classes, apply COI for both the lecture and lab/recit section.</span> You may use the Class Search function of SAIS to know more details about courses and classes.
-            </p>
             <p cAllass="mb-4">
               All approved COI request for pre-registration will be reflected in SAIS on or before Jan 22.
             </p>
