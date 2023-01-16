@@ -42,8 +42,7 @@
           <a class="text-blue-500" target="_blank" href="https://youtu.be/xCz9q9pzBrA">Video Tutorial for AMIS Prerog for Faculty</a><br>
         </div>
         <div class="flex justify-center align-middle w-full">
-          <a class="text-blue-500" target="_blank" href="https://amis.uplb.edu.ph/pdf/Online-Preregistration-FS2022-2023.pdf">PRE-REGISTRATION GUIDELINES FOR 1ST SEMESTER 22-23 |&nbsp;</a><br>
-          <a class="text-blue-500" target="_blank" href="https://amis.uplb.edu.ph/pdf/COI-via-DX-AMIS-Instructions-for-the-Faculty.pdf">COI via DX AMIS Instructions for the Faculty</a> 
+
         </div>
       </div>
     </div>
