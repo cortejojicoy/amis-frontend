@@ -3,9 +3,9 @@
     class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-red-500 text-white text-center w-full py-8 mb-4">
+        <!-- <div class="bg-red-500 text-white text-center w-full py-8 mb-4">
             APPLICATION FOR CONSENT OF INSTRUCTOR IS NOW CLOSED.
-        </div>
+        </div> -->
         <div class="text-2xl font-bold mb-8">
             Consent of Instructor
         </div>
@@ -16,9 +16,6 @@
             </p>
             <p class="mb-4">
                 Use the Remarks/Appeal field to give the faculty in charge the correct and complete information that may be necessary for her/his decision in granting your COI. The usual information needed by the FIC are your degree program, standing, units earned or remaining units and background information related to the course you are applying for. Your Remarks/Appeals are recorded which may be reviewed later. Kindly limit your remarks/appeal to <b>230 characters</b>. 
-            </p>
-            <p class="mb-4">
-                <span class="text-red-600 font-bold">For courses with laboratory/recit classes, apply COI for both the lecture and lab/recit section.</span> You may use the Class Search function of SAIS to know more details about courses and classes.
             </p>
             <p cAllass="mb-4">
               All approved COI request for pre-registration will be reflected in SAIS on or before Jan 22.

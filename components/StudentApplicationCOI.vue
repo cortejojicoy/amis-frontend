@@ -7,7 +7,7 @@
             <CircSpinner :isLoading="coursesLoading"/>
         </div>
         <div class="text-red-500 mb-2">
-            Only courses/classes with COI restriction are available in this module. Courses with no restriction, unit/department consent, courses with course pre-requisite only, and other restrictions excluding COI will not appear here. You may enroll courses with no restriction in SAIS directly.
+            You may enroll courses with no restriction in SAIS directly.
         </div>
         <div class="text-red-500 mb-2">
             Contact the Registration Committee of the Unit Offering the course to obtain Unit/Department Consent and other special cases such as enrolling in a course from a different college or level such as undergraduate courses to be enrolled by graduate students.
