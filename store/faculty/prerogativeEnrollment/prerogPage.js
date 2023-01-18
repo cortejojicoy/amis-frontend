@@ -21,7 +21,7 @@ export const actions = {
                     order_type:'asc', 
                     order_field: 'class_nbr',
                     with_prg: 'true',
-                    prg_term: 1221,
+                    prg_term: 1222,
                     prg_status: ['Logged by OCS', 'Approved by FIC', 'Approved by OCS'],
                     prg_txn_status: 'Requested'
                 }})
