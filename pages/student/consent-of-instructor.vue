@@ -4,7 +4,7 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div v-if="!$config.COI_ENABLED" class="bg-red-500 text-white text-center w-full py-8 mb-4">
-            APPLICATION FOR CONSENT OF INSTRUCTOR IS NOW CLOSED.
+          COI requesting for Pre-registration is closed. COI for General Registration will be on Jan 23-25 and COI for Prerog will be on Feb 13-17.
         </div>
         <div class="text-2xl font-bold mb-8">
             Consent of Instructor
