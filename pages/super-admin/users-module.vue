@@ -391,6 +391,8 @@ export default {
     chooseRole(role) {
       if(role == 'student') {
         this.addStudentRole = true
+      } else {
+        this.addStudentRole = false
       }
       this.setRoleToUpdate(role)
     },

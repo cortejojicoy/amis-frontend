@@ -48,6 +48,7 @@ export const state = () => ({
         consent: '',
         offer_nbr: '',
         topic_id: '',
+        class_type: ''
     }
 })
   
@@ -310,6 +311,12 @@ export const mutations = {
     UPDATE_DAYS(state, days) {
         state.toStore.days = days
     },
+    UPDATE_ASSOC(state, assoc) {
+        state.toStore.assoc = assoc
+    },
+    UPDATE_CLASS_TYPE(state, class_type) {
+        state.toStore.class_type = class_type
+    },
     UPDATE_ID(state, id) {
         if(id) {
             state.toStore.id = id.sais_id
@@ -354,13 +361,15 @@ export const getters = {
                     section: item.section,
                     times: item.times,
                     days: item.days,
+                    assoc: item.assoc,
                     class_nbr: item.class_nbr,
                     id: item.id,
                     name: item.name,
                     email: item.email,
                     consent: item.consent,
                     offer_nbr: item.offer_nbr,
-                    topic_id: item.topic_id
+                    topic_id: item.topic_id,
+                    class_type: item.class_type
                 };
                 return temp
             })
