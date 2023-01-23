@@ -117,6 +117,14 @@
                       <input v-model.lazy="days" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="E.g. TTH" :disabled="modalMode == 'delete' ? true : null">
                   </div>
                   <div class="my-2">
+                      <label for="assoc" class="block text-sm text-gray-600">Assoc</label>
+                      <input v-model.lazy="assoc" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="E.g. 1" :disabled="modalMode == 'delete' ? true : null">
+                  </div>
+                  <div class="my-2">
+                      <label for="class_type" class="block text-sm text-gray-600">Class Type</label>
+                      <input v-model.lazy="class_type" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="E.g. E" :disabled="modalMode == 'delete' ? true : null">
+                  </div>
+                  <div class="my-2">
                       <label for="faculty" class="block text-sm text-gray-600">Faculty (SAIS ID)</label>
                       <v-select class="w-full" :dropdown-should-open="dropdownShouldOpen" :options="getFaculties" :label="'sais_id'" v-model.lazy="id" :disabled="modalMode == 'delete' ? true : null"></v-select>
                   </div>
@@ -358,6 +366,22 @@
                 this.updateDays(value)
             }
         },
+        assoc: {
+            get() {
+                return this.getToStore.assoc
+            },
+            set(value) {
+                this.updateAssoc(value)
+            }
+        },
+        class_type: {
+            get() {
+                return this.getToStore.class_type
+            },
+            set(value) {
+                this.updateClassType(value)
+            }
+        },
         id: {
             get() {
                 return this.getToStore.id
@@ -433,6 +457,8 @@
         // updateEndTimes: 'super_admin/courseOfferingsModule/UPDATE_END_TIMES',
         updateTimes: 'super_admin/courseOfferingsModule/UPDATE_TIMES',
         updateDays: 'super_admin/courseOfferingsModule/UPDATE_DAYS',
+        updateAssoc: 'super_admin/courseOfferingsModule/UPDATE_ASSOC',
+        updateClassType: 'super_admin/courseOfferingsModule/UPDATE_CLASS_TYPE',
         updateID: 'super_admin/courseOfferingsModule/UPDATE_ID',
         updateConsent: 'super_admin/courseOfferingsModule/UPDATE_CONSENT',
         updateOfferNbr: 'super_admin/courseOfferingsModule/UPDATE_OFFER_NBR',
@@ -480,10 +506,12 @@
             // end_times: '',
             times: '',
             days: '',
+            assoc: '',
             id: '',
             consent: '',
             offer_nbr: '',
-            topic_id: ''
+            topic_id: '',
+            class_type: ''
           })
 
         }
