@@ -2,14 +2,17 @@
     <div class="my-8">
         <div class="flex items-center mb-4">
             <div>
-                <div class="text-2xl font-bold mb-4">
-                    Summary
+                <div class="flex items-center">
+                    <div class="text-2xl font-bold">
+                        Summary
+                    </div>
+                    <CircSpinner :isLoading="prerogLoading"/>
                 </div>
                 <p class="mb-4">
                     You may cancel a prerog application if it hasn't been acted on by your respective OCS or the Faculty-in-Charge of the course. Doing so will allow you to apply for another class with the same course code and the same component(LEC/LAB).
                 </p>
             </div>
-            <CircSpinner :isLoading="prerogLoading"/>
+            
         </div>
         <div v-if="!prerogLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
             <table v-show="prerogs" class="table-auto w-full items-center text-center">
