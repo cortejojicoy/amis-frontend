@@ -3,7 +3,7 @@
         v-slot="{close}"
         v-bind="$attrs"
         classes="flex justify-center items-center"
-        content-class="relative flex flex-col max-w-screen-lg max-h-full mx-4 rounded-md bg-white dark:bg-gray-900"
+        content-class="relative flex flex-col max-w-screen-lg max-h-screen mx-4 rounded-md bg-white dark:bg-gray-900"
         v-on="$listeners"
     >
     <div class="bg-blue-500 font-bold p-4 sm:px-6 sm:py-4 rounded-t-md text-white">
@@ -12,7 +12,7 @@
       </slot>
     </div>
 
-    <div class="bg-white px-4 sm:p-6">
+    <div class="bg-white px-4 sm:p-6 overflow-auto">
       <slot name="content">
 
       </slot>

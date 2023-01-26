@@ -55,8 +55,8 @@
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Loader from "../components/Loader.vue";
 import GenericTable from "../components/GenericTable.vue";
-import CourseGeneralDetails from "../components/academic_catalog/CourseGeneralDetails.vue";
-import CoursePrerequisites from "../components/academic_catalog/CoursePrerequisites.vue";
+import CourseGeneralDetails from "../components/academic-catalog/CourseGeneralDetails.vue";
+import CoursePrerequisites from "../components/academic-catalog/CoursePrerequisites.vue";
 
 export default {
   components: {

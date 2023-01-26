@@ -76,64 +76,7 @@
                           </div>
                         </div>
                       </div>
-                      <div class="md:w-3/4 w-full text-md md:px-6">
-                          <div class="my-4 text-xl font-bold">
-                              General Information
-                          </div>
-                          <div class="flex flex-wrap">
-                              <div class="w-full flex">
-                                <div class="flex flex-wrap mb-3 md:w-1/3 w-full">
-                                    <div class="text-gray-500 block w-full">
-                                        First name:
-                                    </div>
-                                    <div class="block md:w-10/12 w-full">
-                                        <input class="w-full border border-gray-400 p-1 rounded" type="text" :value="getTableData[index].details.first_name" :disabled="!editEnabled ? true : null">
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap mb-3 md:w-1/3 w-full">
-                                    <div class="text-gray-500 block w-full">
-                                        Middle name:
-                                    </div>
-                                    <div class="block md:w-10/12 w-full">
-                                      <input class="w-full border border-gray-400 p-1 rounded" type="text" :value="getTableData[index].details.middle_name" :disabled="!editEnabled ? true : null">
-                                    </div>
-                                </div>
-                                <div class="flex flex-wrap mb-3 md:w-1/3 w-full">
-                                    <div class="text-gray-500 block w-full">
-                                        Last name:
-                                    </div>
-                                    <div class="block md:w-10/12 w-full">
-                                      <input class="w-full border border-gray-400 p-1 rounded" type="text" :value="getTableData[index].details.last_name" :disabled="!editEnabled ? true : null">
-                                    </div>
-                                </div>
-                              </div>
-                              <div class="flex flex-wrap mb-3 md:w-1/2 w-full">
-                                  <div class="text-gray-500 block w-full">
-                                      SAIS ID:
-                                  </div>
-                                  <div class="block md:w-10/12 w-full">
-                                    <input class="w-full border border-gray-400 p-1 rounded" type="text" :value="getTableData[index].sais_id" :disabled="!editEnabled ? true : null">
-                                  </div>
-                              </div>
-                              <div class="flex flex-wrap mb-3 md:w-1/2 w-full">
-                                  <div class="text-gray-500 block w-full">
-                                      Email:
-                                  </div>
-                                  <div class="block md:w-10/12 w-full">
-                                    <input class="w-full border border-gray-400 p-1 rounded" type="text" :value="getTableData[index].details.email" :disabled="!editEnabled ? true : null">
-                                  </div>
-                              </div>
-                              <div class="flex flex-wrap mb-3 md:w-1/2 w-full">
-                                  <div class="text-gray-500 w-1/2">
-                                      Tester:
-                                  </div>
-                                  <div class="w-1/2">
-                                    <input class="w-full border border-gray-400 p-1 rounded" type="checkbox" :checked="getTableData[index].details.email" :disabled="!editEnabled ? true : null">
-                                  </div>
-                              </div>
-                          </div>
-                        
-                      </div>
+                      <UserInformation :userInfo="getTableData[index]" :editEnabled="editEnabled" />
                     </div>
                   </div>
                 </template>
@@ -169,6 +112,21 @@
                         <option v-for="(role, roleIndex) in rolesData" :key="roleIndex" :value="role.name">{{role.name}}</option>
                       </select>
                     </div>
+                    <div v-if="addStudentRole">
+                      <div class="my-2">
+                        <label for="add_student_role" class="block text-sm text-gray-600">Student Number</label>
+                        <input v-model.lazy="add_student_number" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="2015XXXXX">
+                      </div>
+                      <div class="my-2">
+                        <label for="add_student_role" class="block text-sm text-gray-600">Acad Program</label>
+                        <input v-model.lazy="add_acad_program" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="BSCS">
+                      </div>
+                      <div class="my-2">
+                        <label for="add_student_role" class="block text-sm text-gray-600">Acad Group</label>
+                        <input v-model.lazy="add_acad_group" type="text" class="w-full border border-gray-400 p-1 rounded" placeholder="CAS">
+                      </div>
+                    </div>
+
                   </div>
                   <div v-else-if="modalMode == 'add_permission'">
                     <div>
@@ -256,14 +214,16 @@ import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Loader from "../../components/Loader.vue";
 import CircSpinner from '../../components/CircSpinner.vue';
 import GenericTable from "../../components/GenericTable.vue";
+import UserInformation from "../../components/UserInformation.vue";
 import VTailwindModal from "../../components/VTailwindModal.vue";
 import 'vue-select/dist/vue-select.css';
 
 export default {
   components: {
+    CircSpinner,
     GenericTable,
-    VTailwindModal,
-    CircSpinner
+    UserInformation,
+    VTailwindModal
   },
   data () {
     return {
@@ -277,6 +237,7 @@ export default {
           "permissions",
           "action"
       ],
+      addStudentRole: false,
       showModal: false,
       showDrawer: false,
       editEnabled: false,
@@ -308,6 +269,30 @@ export default {
       toUpdateData: "super_admin/usersModule/getToUpdateData",
       initialTagValue: "super_admin/usersModule/getInitialTagValue",
     }),
+    add_student_number: {
+      get() {
+          return this.toUpdateData.student_info.student_number
+      },
+      set(value) {
+          this.setStudentNumberToAdd(value)
+      },
+    },
+    add_acad_program: {
+      get() {
+          return this.toUpdateData.student_info.acad_program
+      },
+      set(value) {
+          this.setAcadProgramToAdd(value)
+      },
+    },
+    add_acad_group: {
+      get() {
+          return this.toUpdateData.student_info.acad_group
+      },
+      set(value) {
+          this.setAcadGroupToAdd(value)
+      },
+    }
   },
   async fetch () {
     this.updateFilterValues({}) // set the filter values to nothing every time a txn history is rendered
@@ -333,6 +318,9 @@ export default {
       updateFilterValues: 'super_admin/usersModule/UPDATE_FILTER_VALUES',
       setTableModule: 'super_admin/usersModule/SET_MODULE',
       setRoleToUpdate: 'super_admin/usersModule/SET_ROLE_TO_UPDATE',
+      setStudentNumberToAdd: 'super_admin/usersModule/SET_STUDENT_NUMBER_TO_ADD',
+      setAcadProgramToAdd: 'super_admin/usersModule/SET_ACAD_PROGRAM_TO_ADD',
+      setAcadGroupToAdd: 'super_admin/usersModule/SET_ACAD_GROUP_TO_ADD',
       setPermissionToUpdate: 'super_admin/usersModule/SET_PERMISSION_TO_UPDATE',
       setTagsToUpdate: 'super_admin/usersModule/SET_TAGS_TO_UPDATE',
     }),
@@ -393,10 +381,19 @@ export default {
       } else if (mode == 'edit_permission') {
         this.setPermissionToUpdate(role_permission)
         this.setTagsToUpdate(this.initialTagValue(this.index))
+      } else if (mode == 'add_role') {
+        this.setStudentNumberToAdd('')
+        this.setAcadProgramToAdd('')
+        this.setAcadGroupToAdd('')
       }
       this.showModal = true
     },
     chooseRole(role) {
+      if(role == 'student') {
+        this.addStudentRole = true
+      } else {
+        this.addStudentRole = false
+      }
       this.setRoleToUpdate(role)
     },
     choosePermission(permission) {

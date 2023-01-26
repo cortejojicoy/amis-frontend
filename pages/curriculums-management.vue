@@ -65,12 +65,14 @@
 import { mapState, mapActions, mapGetters, mapMutations } from 'vuex'
 import Loader from "../components/Loader.vue";
 import GenericTable from "../components/GenericTable.vue";
-import CurriculumStructure from "../components/academic_catalog/CurriculumStructure.vue";
+import GenericDrawer from "../components/GenericDrawer.vue";
+import CurriculumStructure from "../components/academic-catalog/CurriculumStructure.vue";
 
 export default {
   components: {
     GenericTable,
-    CurriculumStructure
+    CurriculumStructure,
+    GenericDrawer
   },
   data () {
     return {
@@ -106,9 +108,9 @@ export default {
     }),
   },
   async fetch () {
-    this.updateFilterValues({}) // set the filter values to nothing every time a txn history is rendered
+    this.updateFilterValues({}) // set the filter values to nothing every time a generic table is rendered
     this.fetchTableData(this.options.page)
-    this.filters.forEach(filter => { // create the filter values that will be used for this txn history instance
+    this.filters.forEach(filter => { // create the filter values that will be used for this generic table instance
         this.getFilters({ 
           link: this.module,
           data: {
@@ -134,7 +136,7 @@ export default {
       this.showDrawer = true
       this.drawerData = data
     },
-    fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
+    fetchTableData(page) { // reusable function for getting the data to be displayed in generic table
       this.getData({
         link: this.module,
         data: {

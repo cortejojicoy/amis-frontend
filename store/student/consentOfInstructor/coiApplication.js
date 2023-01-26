@@ -13,7 +13,7 @@ export const actions = {
     async getCourses ({ dispatch, commit }) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/course-offerings`, {params: {fields:['course'], distinct: 'true'}})
+            const data = await this.$axios.$get(`/course-offerings`, {params: {column_name: 'course', distinct: 'true'}})
             await commit('GET_COURSES_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  
@@ -46,7 +46,10 @@ export const actions = {
                     'id', 
                     'name', 
                     'descr',
-                    'consent'
+                    'consent',
+                    'assoc',
+                    'class_type',
+                    'component'
                 ], course: payload.course.course}})
                 await commit('GET_SECTIONS_SUCCESS', data)
 
@@ -175,5 +178,35 @@ export const getters = {
     },
     getJustification(state) {
         return state.toStore.justification
+    },
+    getNotice(state) {
+        if(state.toStore.class_id != '' && state.toStore.class_id != '--') {
+            let sameClassType = true
+            let sectionSelected = {}
+            let sectionsWithSameAssoc = []
+            let noticeMessage = ''
+
+            for (let index = 0; index < state.sections.length; index++) {
+                if(state.sections[index].class_nbr == state.toStore.class_id) {
+                    sectionSelected = state.sections[index]
+                    break
+                }
+            }
+            
+            if(sectionSelected.assoc != 1) {
+                for (let index = 0; index < state.sections.length; index++) {
+                    if(sectionSelected.assoc == state.sections[index].assoc) {
+                        if(sectionSelected.component != state.sections[index].component) {
+                            if(sectionSelected.class_type == state.sections[index].class_type && sectionSelected.class_type == 'E') {
+                                noticeMessage = 'By applying COI in this section, you are also required to apply to its lec/lab/recit counterpart.'
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+
+            return noticeMessage
+        }
     }
 }

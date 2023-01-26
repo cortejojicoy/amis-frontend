@@ -67,22 +67,37 @@ export default ({ app, store, redirect }) => {
           permission: 'admin'
         },
         {
-          name: 'super_admin-download-data',
+          name: 'super-admin-download-data',
           permissionType: 'role',
           permission: 'super_admin'
         },
         {
-          name: 'super_admin-permissions-module',
+          name: 'super-admin-permissions-module',
           permissionType: 'role',
           permission: 'super_admin'
         },
         {
-          name: 'super_admin-tags-module',
+          name: 'super-admin-tags-module',
           permissionType: 'role',
           permission: 'super_admin'
         },
         {
-          name: 'super_admin-users-module',
+          name: 'super-admin-users-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'student-ge-coursework',
+          permissionType: 'role',
+          permission: 'student'
+        },
+        {
+          name: 'faculty-ge-coursework',
+          permissionType: 'role',
+          permission: 'faculty'
+        },
+        {
+          name: 'super-admin-course-offerings-module',
           permissionType: 'role',
           permission: 'super_admin'
         },
