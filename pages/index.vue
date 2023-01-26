@@ -4,7 +4,7 @@
     <div class="max-w-4xl mx-auto px-4 md:px-6 lg:px-8">
       <div class="mt-8 bg-white overflow-hidden shadow sm:rounded-lg p-6">
         <h2 class="text-2xl leading-7 font-semibold">
-          Good afternoon, {{ this.$auth.user.first_name }} {{ this.$auth.user.last_name }}!
+          {{ greetings }}, {{ this.$auth.user.first_name }} {{ this.$auth.user.last_name }}!
         </h2>
         <p class="mt-3 text-gray-600">
           Welcome to the new Academic Management Information System of UPLB! To
@@ -38,6 +38,18 @@ export default {
         return roles.find(el => el.name === "faculty") ? true : false;
       } else {
         return false
+      }
+    },
+    greetings() {
+      var today = new Date()
+      var time = today.getHours()
+      
+      if(time < 12) {
+          return "Good morning";
+      } else if (time > 11 && time < 19) {
+          return "Good afternoon";
+      } else {
+          return "Good evening";
       }
     }
   }
