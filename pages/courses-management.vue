@@ -136,6 +136,8 @@ export default {
         data: {
             page: page,
             items: this.options.numOfItems,
+            order_type: 'ASC',
+            order_field: 'course_code'
         }
       })
     },
