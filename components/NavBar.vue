@@ -187,16 +187,16 @@
      
       </span>
          <ul id="dropdown-faculty" class="py-2 space-y-2"  v-show="isFacultyOpen">
-          <!-- <li
+          <li
           class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
           >
             <NuxtLink to='/faculty/mentor-assignments'>Mentor Assignment</NuxtLink>
-          </li> -->
-          <!-- <li
+          </li>
+          <li
           class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
           >
             <NuxtLink to='/faculty/my-advisees'>My Advisees</NuxtLink>
-          </li>  -->
+          </li> 
           <li
             class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
           >
@@ -254,7 +254,7 @@
         </svg>
       </span>
        <ul id="dropdown-student" class=" py-2 space-y-2" v-show="isStudentOpen">
-          <!-- <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/student/specialization'
               >Spezialization</NuxtLink>
@@ -264,7 +264,7 @@
             <NuxtLink
               to='/student/mentor-assignments'
               >Mentor Assignment</NuxtLink>
-          </li> -->
+          </li>
           <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/student/consent-of-instructor'
@@ -351,14 +351,13 @@
             <NuxtLink
               to='/admin/mentor-assignment-unit'
               >Mentor Assignments (Unit) </NuxtLink>
-          </li> -->
+          </li>
 
-          <li v-if="adminTags[0].college != ''" class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
+          <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
               to='/admin/mentor-assignment-college'
               >Mentor Assignments (College) </NuxtLink>
           </li>
-        </div>
 
           <li class="flex items-center p-2 pl-11 w-full text-base font-normal text-gray-900 rounded-lg transition duration-75 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">
             <NuxtLink
