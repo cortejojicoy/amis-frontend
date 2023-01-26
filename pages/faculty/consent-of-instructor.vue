@@ -6,9 +6,6 @@
         <!-- <div v-if="!$config.COI_ENABLED" class="bg-red-500 text-white text-center w-full py-8 mb-4">
           COI requesting for General Registration is now closed. COI for Prerog will be on Feb 13-17.
         </div> -->
-        <div class="bg-red-500 text-white text-center w-full py-8 mb-4">
-          COI requesting for General Registration is now closed. COI for Prerog will be on Feb 13-17.
-        </div>
         <div class="text-2xl font-bold mb-8">
             Consent of Instructor
         </div>
