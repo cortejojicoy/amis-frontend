@@ -41,7 +41,10 @@ export default {
       }
     },
     greetings() {
-      var today = new Date()
+      var today = new Date(new Date().toLocaleString('en-US', {
+        timeZone: 'Asia/Manila',
+      }))
+
       var time = today.getHours()
       
       if(time < 12) {
