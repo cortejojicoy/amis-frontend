@@ -28,7 +28,7 @@
                         <span class="ml-3">Career:</span>
                     </div>
                     <div class="ml-3">
-                        {{courseDetails.career}}
+                        {{courseDetails.career == 'UGRD' ? 'Undergraduate' : 'Graduate'}}
                     </div>
                 </div>
                 <div class="w-full flex mb-3">
