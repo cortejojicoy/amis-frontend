@@ -4,7 +4,7 @@
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div v-if="!$config.PREROG_ENABLED" class="bg-red-500 text-white text-center w-full py-8 mb-4">
-            APPLICATION FOR PREROG IS NOW CLOSED.
+            Prerog Applications for 2nd Semester A.Y. 2022-2023 will be open from February 13 to 17.
         </div>
         <div class="text-2xl font-bold mb-8">
             Prerogative Enrollment
