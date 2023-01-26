@@ -118,7 +118,7 @@ export const actions = {
                     }
                 })
                 // let mentors = Object.assign(payload.data, payload.sais_id)
-                const data = await this.$axios.$post(`/students-details`, mentors)
+                const data = await this.$axios.$post(`/student-details`, mentors)
                 // const data = await this.$axios.$post(`/students/student-confirm`, mentors)
                 // console.log(data)
                 await dispatch('checkStatus', data)
@@ -152,7 +152,7 @@ export const actions = {
         } else {
             commit('alert/SUCCESS', data.message, { root: true })
             commit('CLOSE_MODAL')
-            commit('UPDATE_DATA_SUCCESS', data)
+            commit('UPDATE_DATA_SUCCESS', {data})
             commit('UPDATE_TXN_INDICATOR')
         }
         commit('CLOSE_MODAL')

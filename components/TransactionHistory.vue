@@ -106,6 +106,7 @@ export default {
           column_name: txnFilter.field,
           distinct: 'true',
           sais_id: this.$auth.user.sais_id,
+          uuid: this.$auth.user.uuid,
           txn_history: 'true'
         }
       })
@@ -137,6 +138,7 @@ export default {
           order_type: 'desc',
           order_field: this.txnType + '.created_at',
           sais_id: this.$auth.user.sais_id,
+          uuid: this.$auth.user.uuid,
           txn_history: 'true'
         }
       })

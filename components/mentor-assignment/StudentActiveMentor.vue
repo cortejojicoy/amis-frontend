@@ -3,7 +3,7 @@
     <div class="flex justify-between mb-6">
       <div class="text-2xl font-bold">Active Mentor Assignments</div>
       <div class="">
-        <button :class="adminType == 'unit' || adminType == 'college' ? 'hidden' : 'p-2 bg-gray-300' " disabled>
+        <button :class="is_student ? 'hidden' : 'p-2 bg-gray-300' " disabled>
           Generate Certificate of Mentor Assignment
         </button>
       </div>
@@ -18,10 +18,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr>
-              <td class="px-4 py-3">{{ activeMentor.mentorName }}</td>
-              <td class="px-4 py-3">{{ activeMentor.mentorRoles }}</td>
-              <td class="px-4 py-3"></td>
+          <!-- {{ mentorData }} -->
+          <tr v-for="(row, rowIndex) in mentorData" :key="rowIndex">
+            <!-- {{ row }} -->
+            <td class="px-4 py-3">{{ row.mentor_name }}</td>
+            <td class="px-4 py-3">{{ row.mentor_role }}</td>
+            <td class="px-4 py-3"></td>
           </tr>
         </tbody>
       </table>
@@ -30,15 +32,17 @@
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex'
+import { mapActions, mapState, mapGetters, mapMutations } from 'vuex'
 export default {
-
   props: {
-    activeMentor: {
-        type: Object
+    is_adviser: {
+      type: Boolean
     },
-    adminType: {
-        type: String
+    mentorData: {
+        type: Array
+    },
+    is_student: {
+        type: Boolean
     }
   }
 };

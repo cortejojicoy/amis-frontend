@@ -7,7 +7,7 @@ export const actions = {
     async getUser ({ commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/users/${payload.sais_id}`, {params: {program_record_status:'ACTIVE'}})
+            const data = await this.$axios.$get(`/users/${payload.sais_id}`, {params: {program_record_status:'ACTIVE', personal_information: true}})
             await commit('GET_DATA_SUCCESS', data)
         } catch (error) {
             if(error.response.status===422){  

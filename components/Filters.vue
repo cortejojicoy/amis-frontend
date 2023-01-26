@@ -3,6 +3,7 @@
         <div v-if="!isLoading">
             <div v-if="filter_headers.length > 0" class="mb-4 flex items-end">
                 <div v-for="(filter, filterKey) in filter_headers" :key="filterKey" :class="maFilterCss ? 'mr-2 w-full' : 'mr-2'">
+                    <!-- {{ filter }} -->
                     <div v-if="filter.type == 'select'">
                         <label :for=filterKey class="block text-xs text-gray-500">{{filter.label}}</label>
                         <select :name=filterKey :id="filter.name + '_' + filterKey" :class="maFilterCss ? 'p-2 leading-8 w-28' : 'p-2 leading-8' " @change="chooseFilter($event.target.value, filter.name)">
@@ -12,7 +13,7 @@
                     </div>
                     <div v-else-if="filter.type == 'combobox'" class="w-52">
                         <label :for=filterKey class="block text-xs text-gray-500">{{filter.label}}</label>
-                        <v-select class="w-full style-chooser" :label="filter.name" :options="filters[filter.field]" @input="(value) => chooseCombobox(filter.name, value)"></v-select>
+                        <v-select class="w-full style-chooser" :dropdown-should-open="dropdownShouldOpen" :label="filter.name" :options="filters[filter.field]" @input="(value) => chooseCombobox(filter.name, value)"></v-select>
                     </div>
                 </div>
                 <div :class="maFilterCss ? 'w-full' : ''">
@@ -30,7 +31,9 @@ import 'vue-select/dist/vue-select.css';
 
 export default {
 	props: {
-        maFilterCss: Boolean,
+        maFilterCss: {
+            type: Boolean
+        },
         filter_headers: {
             type: Array,
         },
@@ -80,7 +83,10 @@ export default {
         },
         applyFilter() {
             this.$emit('applyFilter', this.filterValues)
-        }
+        },
+        dropdownShouldOpen(VueSelect) {
+            return VueSelect.search.length > 2 && VueSelect.open
+        },
     }
 }
 </script>

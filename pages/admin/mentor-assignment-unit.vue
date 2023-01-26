@@ -8,7 +8,7 @@
           </div>
         </div>
 
-        <MentorAssignmentTable 
+        <!-- <MentorAssignmentTable 
             :admin="'unit'"
             :maLink="'admin-ma'" 
             :userRole="'admins'" 
@@ -16,7 +16,7 @@
             :maFilters="filters" 
             @onUpdateMATXNs="updateTxn"
           />
-        <TransactionHistory :txnType="'matxns'" :userRole="'admins'" :update="updateTxnIndicator" :txnFilters="txnFilters"/>
+        <TransactionHistory :txnType="'matxns'" :userRole="'admins'" :update="updateTxnIndicator" :txnFilters="txnFilters"/> -->
       </div>
     </div>
     

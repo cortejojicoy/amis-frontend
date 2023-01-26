@@ -21,13 +21,18 @@ export default ({ app, store, redirect }) => {
             permission: 'admin'
         },
         {
-          name: 'admin-mentor-assignment-college',
-          permissionType: 'role',
-          permission: 'admin'
-      },
+            name: 'admin-mentor-assignment-college',
+            permissionType: 'role',
+            permission: 'admin'
+        },
+        {
+            name: 'student-spezialization',
+            permissionType: 'role',
+            permission: 'student'
+        }
         ,
         {
-            name: 'student-mentor-assignment',
+            name: 'student-mentor-assignments',
             permissionType: 'role',
             permission: 'student'
         },
@@ -63,6 +68,21 @@ export default ({ app, store, redirect }) => {
         },
         {
           name: 'super_admin-download-data',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'super_admin-permissions-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'super_admin-tags-module',
+          permissionType: 'role',
+          permission: 'super_admin'
+        },
+        {
+          name: 'super_admin-users-module',
           permissionType: 'role',
           permission: 'super_admin'
         },
