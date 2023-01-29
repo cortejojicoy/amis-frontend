@@ -5,7 +5,7 @@ export const state = () => ({
     loading: false,
     numOfItems: 5,
     data: {},
-    studSaveMentor: [],
+    studSaveMentor: {},
     headers: [],
     filters: {},
     filterValues: [],
@@ -26,7 +26,7 @@ export const actions = {
         try {
             let tableParams = Object.assign(payload.data, state.filterValues)
             const data = await this.$axios.$get(`/students/student-ma`, {params: tableParams})
-            await commit('GET_DATA_SUCCESS', data.ma)
+            // await commit('GET_DATA_SUCCESS', data.ma)
             await commit('GET_SAVE_MENTOR', data.ma)
         } catch (error) {
             if(error.response.status===422){  
@@ -78,6 +78,7 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try{
             let tableParams = Object.assign(payload)
+            // console.log(tableParams)
             const data = await this.$axios.$post(`/students/save-ma`, tableParams)
             await commit('GET_SAVE_SUCCESS', data)
             commit('alert/SUCCESS', data.message, { root: true })
@@ -159,7 +160,7 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try {
             // console.log(tranx)
-            const data = await this.$axios.$put(`/mentor-assignments/${tranx.mas_id}`, {
+            const data = await this.$axios.$put(`/ma/${tranx.mas_id}`, {
                 type: "pending", roles: "students"
             })
             await commit('APPROVAL_SUCCESS', data)
@@ -224,7 +225,9 @@ export const mutations = {
     },
 
     GET_SAVE_MENTOR(state, data) {
+        // console.log(data)
         var save_mentor = data.map((item) => {
+            // console.log(item)
             if(item.actions_status == 'saved') {
                 return {
                     status: item.status,
@@ -249,6 +252,8 @@ export const mutations = {
         })
         // console.log(results)
         state.studSaveMentor = results
+        state.loading = false
+        state.initialLoad = false
     },
 
     GET_SAVE_SUCCESS(state, data) {

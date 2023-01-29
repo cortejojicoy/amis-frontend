@@ -102,7 +102,7 @@ export default {
         getActive: 'mentorAssignment/getData',
         getFaculty: 'mentorAssignment/getFaculty',
         getMentorRole: 'mentorAssignment/getMentorRole',
-        getStudentInfo: 'mentorAssignment/getStudentInfo',
+        getUserInfo: 'mentorAssignment/getUserInfo',
         
         saveRequestedMentors: 'student/mentorAssignment/saveRequestedMentors',
         submitRequestedMentors: 'student/mentorAssignment/submitRequestedMentors'
@@ -129,7 +129,7 @@ export default {
             items: this.options.numOfItems,
         }})
 
-        this.getStudentInfo({data: {
+        this.getUserInfo({data: {
             student_information: true,
             uuid: this.$auth.user.uuid
         }})
