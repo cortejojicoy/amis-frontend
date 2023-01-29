@@ -8,7 +8,7 @@
         </div>
       </div>
 
-      <!-- {{ getTableDataByPage }} -->
+      <!-- {{ tableData }} -->
       <div>
         <GenericTable 
             :isLoading="dataLoading" 

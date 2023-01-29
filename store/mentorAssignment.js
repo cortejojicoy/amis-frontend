@@ -5,21 +5,17 @@ export const state = () => ({
     loading: false,
     numOfItems: 5,
     data: [],
-    nominee: {},
-    studActiveMentor: {},
-    facultyDetails: [],
     facultyList: [],
     headers: [],
     filters: {},
     adviseeData: [],
     filterValues: [],
     mentorRoles: {},
-
     mentorAssignment: {},
-    
     closeModal: {},
-
     requestData: {},
+    facultyInfo: {},
+    facultyInfoTrigger: 0,
     studInfo: {
         name: '',
         program: '',
@@ -83,12 +79,18 @@ export const actions = {
         }
     },
 
-    async getStudentInfo({commit}, payload) {
+    async getUserInfo({commit}, payload) {
         commit('GET_STUDENT_REQUEST')
         try{
             let userParams = Object.assign(payload.data)
-            const data = await this.$axios.$get(`/users`, {params: userParams})
-            await commit('GET_STUDENT_INFO', data.users)
+            if(userParams.student_information == true) {
+                const data = await this.$axios.$get(`/users`, {params: userParams})
+                await commit('GET_STUDENT_INFO', data.users)
+            } else {
+                const data = await this.$axios.$get(`/users`, {params: userParams})
+                await commit('GET_FACULTY_INFO', data.users)
+            }
+            // console.log(userParams)
         } catch(error) {
             if(error.response.status===422){  
                 let errList = ``;
@@ -107,7 +109,6 @@ export const actions = {
             }
             commit('GET_DATA_FAILED', error)
         }
-
     },
 
     async getFaculty({commit }, payload) {
@@ -172,11 +173,11 @@ export const mutations = {
     },
 
     GET_DATA_SUCCESS(state, data) {
-        // console.log(data)
+        console.log(data)
         state.data = data
         state.loading = false
-        state.initialLoad = false,
-        state.requestData = data
+        state.initialLoad = false
+        // state.requestData = data
     },
     GET_FILTER_SUCCESS (state, data) {
         Vue.set(state.filters, data.key, data.filter)
@@ -221,6 +222,10 @@ export const mutations = {
         // this.facultyList = []
     },
 
+    GET_FACULTY_INFO(state, data) {
+        state.facultyInfo = data
+    },
+
     GET_STUDENT_INFO(state, data) {
         // console.log(data)
         state.studInfo.name = data[0].last_name+' '+data[0].first_name
@@ -254,6 +259,14 @@ export const mutations = {
 }
 
 export const getters = {
+    getNumOfItems(state) {
+        return state.numOfItems
+    },
+
+    getFacultyInfo(state) {
+        return state.facultyInfo
+    },
+
     getNotificationModal:(state) => (notifId) => {
         console.log(notifId)
         // if(payload.homeunit != state.studInfo.program) {
@@ -272,27 +285,25 @@ export const getters = {
         }
     },
 
-    getNumOfItems(state) {
-        return state.numOfItems
-    },
-
     getActiveMentor: (state) => (uuid) => {
         // console.log(state.data.data)
         if(state.data.data) {
             var activeMentor = state.data.data.map((item) => {
                 // console.log(item)
-                if(item.uuid === uuid) { 
-                    var temp = {
-                        mentor_status: item.status,
-                        student_uuid: item.uuid,
-                        mentor_name: item.faculty.uuid.last_name+' '+item.faculty.uuid.first_name,
-                        mentor_role: item.mentor_role.titles,
-                        role_id: item.mentor_role.id,
-                        faculty_id: item.faculty_id
-                    }
-
-                    if(temp.mentor_status == 'ACTIVE') {
-                        return temp
+                if(item.faculty.uuid != null) {
+                    if(item.uuid === uuid) { 
+                        var temp = {
+                            mentor_status: item.status,
+                            student_uuid: item.uuid,
+                            mentor_name: item.faculty.uuid.last_name+' '+item.faculty.uuid.first_name,
+                            mentor_role: item.mentor_role.titles,
+                            role_id: item.mentor_role.id,
+                            faculty_id: item.faculty_id
+                        }
+    
+                        if(temp.mentor_status == 'ACTIVE') {
+                            return temp
+                        }
                     }
                 }
             })
