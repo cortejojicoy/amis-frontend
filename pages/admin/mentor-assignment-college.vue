@@ -7,6 +7,8 @@
               <div class="text-2xl font-bold">Mentor Assignment (College)</div>
             </div>
           </div>
+
+          <!-- {{ tableData }} -->
           
           <GenericTable 
               :isLoading="dataLoading" 
@@ -14,7 +16,7 @@
               :tableFilters="filters" 
               :tableFilterData="filterData"
               :tableHeaders="headers" 
-              :tableData="getTableDataByPage" 
+              :tableData="tableData" 
               :tableOptions="options" 
               :isMa="'ma'"
               :maCss="maCss"
@@ -35,7 +37,7 @@
 
                     <!-- {{ getActitveMentorByUuid }} -->
                     
-                    <MentorAssignmentTable :navbar="menu" :mentorTable="getRequestedMentorByUuid" :uuid="studentUuid">
+                    <MentorAssignmentTable :navbar="menu" :mentorTable="getRequestedMentor" :uuid="studentUuid">
                       <template v-slot:action="id">
                         <button @click="btn('approved', id.id)" class="bg-green-500 text-white p-2 rounded">Approved</button>
                         <button @click="btn('modalDisapprove', id)" class="bg-red-500 text-white p-2 rounded">Disapproved</button>
@@ -112,12 +114,12 @@ export default {
           },
 
           filters: [
-            {field: "uuid", name: 'name', type: 'combobox', label: 'filter by name'},
-            {field: 'student_program_records.academic_program_id', name: 'program', type: 'select', label: 'filter by program'},
-            {field: 'student_program_records.status', name: 'student_status', type: 'select', label: 'filter by status'},
-            {field: 'mentor_name', name: 'mentor_name', type: 'select', label: 'filter by mentor'},
-            {field: 'mentor_role', name: 'mentor_role', type: 'select', label: 'filter by role'},
-            {field: 'mentor_status', name: 'mentor_status', type: 'select', label: 'filter by status'}
+            {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
+            {field: 'program', name: 'program', type: 'select', label: 'filter by program'},
+            {field: 'student_status', name: 'student_status', type: 'select', label: 'filter by status'},
+            {field: 'mentor', name: 'mentor', type: 'select', label: 'filter by mentor'},
+            {field: 'role', name: 'role', type: 'select', label: 'filter by role'},
+            {field: 'status', name: 'status', type: 'select', label: 'filter by status'}
           ],
           txnFilters: [
             {field: 'ma.id', name: 'id', type: 'combobox', label: 'transaction id'},
@@ -129,21 +131,17 @@ export default {
 
     computed: {
       ...mapState({
-          filterData: state => state.mentorAssignment.filters,
-          dataLoading: state => state.mentorAssignment.loading,
-          studInfo: state => state.mentorAssignment.studInfo,
-          initialLoad: state => state.mentorAssignment.initialLoad,
-          tableFilterValues: state => state.mentorAssignment.filterValues
+          filterData: state => state.admin.mentorAssignment.filters,
+          dataLoading: state => state.admin.mentorAssignment.loading,
+          studInfo: state => state.admin.mentorAssignment.studInfo,
+          tableData: state => state.admin.mentorAssignment.tableData,
+          initialLoad: state => state.admin.mentorAssignment.initialLoad
       }),
 
       getActitveMentorByUuid() {
           return this.getActiveMentor(this.studentUuid)
       },  
 
-      getRequestedMentorByUuid() {
-          return this.getRequestedMentor(this.studentUuid)
-      }, 
- 
       getTableDataByPage() {
           return this.getTableData(this.menu)
       },
@@ -163,6 +161,7 @@ export default {
           this.getFilters({ 
             link: this.module,
             data: {
+                table_filters: true,
                 column_name: filter.field,
                 distinct: 'true',
                 order_type: 'ASC',
@@ -175,16 +174,17 @@ export default {
     methods: {
     ...mapMutations({
         deleteRow: "admin/mentorAssignment/DELETE_ROW",
-        updateNumOfItems: 'mentorAssignment/UPDATE_NUM_OF_ITEMS',
-        updateFilterValues: 'mentorAssignment/UPDATE_FILTER_VALUES',
+        updateNumOfItems: 'admin/mentorAssignment/UPDATE_NUM_OF_ITEMS',
+        updateFilterValues: 'admin/mentorAssignment/UPDATE_FILTER_VALUES',
     }),
     
     ...mapActions({
         getMentors: 'admin/mentorAssignment/getData',
-        getData: 'mentorAssignment/getData',
+        // getData: 'mentorAssignment/getData',
+        getData: 'admin/mentorAssignment/getData', //get table data by tags
         getActive: 'admin/mentorAssignment/getActive',
-        getFilters: 'mentorAssignment/getFilters',
-        getStudentInfo: 'mentorAssignment/getStudentInfo',
+        getFilters: 'admin/mentorAssignment/getFilters',
+        getUserInfo: 'admin/mentorAssignment/getUserInfo',
         // PUT REQUEST
         approval: "admin/mentorAssignment/approval"
     }),
@@ -204,10 +204,11 @@ export default {
     },
 
     openDetails(data) { 
-      this.getMentors({data: {
+      this.getData({
+        fetchType: 'request_mentor',
+        data: {
           page: this.options.page,
-          is_admin:true,
-          request_mentor:true,
+          admins:true,
           uuid: data.uuid,
           items: this.options.numOfItems,
       }})
@@ -220,7 +221,7 @@ export default {
           page: this.options.page,
       }})
 
-      this.getStudentInfo({data: {
+      this.getUserInfo({data: {
           student_information: true,
           uuid: data.uuid
       }})
@@ -238,10 +239,11 @@ export default {
     fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
       this.getData({
         link: this.module,
+        fetchType: 'table_data',
         data: {
-            is_admin: true,
-            table_data: true,
             page: page,
+            admins: true,
+            table_filters: true,
             items: this.options.numOfItems,
         }
       })

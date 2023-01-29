@@ -9,22 +9,145 @@ export const state = () => ({
     studSaveMentor: [],
     headers: [],
     filters: {},
-    filterValues: [],
+    filterValues: {},
     confirmText: '',
     closeModal: {},
+    tableData: {},
     updateTxnIndicator: 0,
-    remarks:''
+    remarks:'',
+    studInfo: {
+        name: '',
+        program: '',
+        status: '',
+        email: ''
+    },
 })
 
 export const actions = {
-    async getData ({ state, commit }, payload) {
+    async getData ({ state, dispatch, commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
             let tableParams = Object.assign(payload.data, state.filterValues)
             // console.log(tableParams)
+            if(payload.fetchType === 'table_data') {
+                dispatch('getTableData', tableParams)
+            } else if(payload.fetchType === 'request_mentor') {
+                dispatch('getRequestMentorData', tableParams)
+            } else {
+                // const data = await this.$axios.$get(`/mentor-assignments`, {params: tableParams})
+                // await commit('GET_DATA_SUCCESS', data.ma)
+            }
+        } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
+    async getFilters({ commit }, payload) {
+        commit('GET_DATA_REQUEST')
+        try {
+            // console.log(payload.data)
+            const data = await this.$axios.$get(`/mentor-assignments`, {params: payload.data})
+            // console.log(data)
+            await commit('GET_FILTER_SUCCESS', {key: payload.data.column_name, filter:data.ma})
+        } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
+    async getTableData({commit, state}, payload) {
+        commit('GET_DATA_REQUEST')
+        try {
+            let tableParams = Object.assign(payload, state.filterValues)
             const data = await this.$axios.$get(`/mentor-assignments`, {params: tableParams})
+            // console.log(data)
+            await commit('GET_TABLE_DATA', data.ma)
+        } catch(error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
+    async getRequestMentorData({commit}, payload) {
+        commit('GET_DATA_REQUEST')
+        try {
+            // console.log(payload)
+            let tableParams = Object.assign(payload)
+            const data = await this.$axios.$get(`/ma`, {params: tableParams})
             await commit('GET_DATA_SUCCESS', data.ma)
         } catch (error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
+    async getUserInfo({commit}, payload) {
+        commit('GET_DATA_REQUEST')
+        try{
+            let userParams = Object.assign(payload.data)
+            if(userParams.student_information == true) {
+                const data = await this.$axios.$get(`/users`, {params: userParams})
+                await commit('GET_STUDENT_INFO', data.users)
+            }
+            // console.log(userParams)
+        } catch(error) {
             if(error.response.status===422){  
                 let errList = ``;
                 let fields = Object.keys(error.response.data.errors)
@@ -75,8 +198,7 @@ export const actions = {
     async approval({commit}, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            // console.log(payload)
-            const data = await this.$axios.$put(`/mentor-assignments/${payload.transactionId}`, {
+            const data = await this.$axios.$put(`/ma/${payload.transactionId}`, {
                 type: payload.type, roles: 'admins', remarks: payload.remarks
             })
             await commit('APPROVAL_SUCCESS', data)
@@ -115,17 +237,46 @@ export const mutations = {
         state.loading = false
         state.initialLoad = false
     },
+
+    GET_FILTER_SUCCESS (state, data) {
+        Vue.set(state.filters, data.key, data.filter)
+        state.loading = false
+    },
     
     GET_ACTIVE_SUCCESS(state, data) {
-        // console.log(data)
         state.activeData = data
     },
     GET_DATA_FAILED (state, error) {
         state.data = error
     },
 
+    GET_TABLE_DATA(state, data) {
+        // console.log(data.data)
+        var paginationData = {
+            last_page: data.last_page,
+            current_page: data.current_page
+        }
+
+        state.tableData = Object.assign(data.data, paginationData)
+        state.loading = false
+        state.initialLoad = false
+    },
+
+    GET_STUDENT_INFO(state, data) {
+        // console.log(data)
+        state.studInfo.name = data[0].last_name+' '+data[0].first_name
+        state.studInfo.program = data[0].student_uuid.program_records[0].academic_program_id
+        state.studInfo.status = data[0].student_uuid.program_records[0].status
+        state.studInfo.email = data[0].email
+        state.loading = false
+    },
+
     UPDATE_TXN_INDICATOR (state) {
         state.updateTxnIndicator++
+    },
+
+    UPDATE_FILTER_VALUES(state, data) {
+        state.filterValues = data
     },
 
     APPROVAL_SUCCESS(state) {
@@ -174,32 +325,31 @@ export const getters = {
         } 
     },
 
-    getRequestedMentor:(state) => (uuid) => {
+    getRequestedMentor(state) {
+        // console.log(state.data.data)
         if(state.data.data) {
             var requestData = state.data.data.map((item) => {
-                console.log(item)
-                if(item.uuid == uuid) {
+                // console.log(item)
+                if(item.faculty.uuid != null) {
                     var temp = {
                         id: item.id,
                         student_uuid: item.uuid,
                         actions: item.actions,
-                        status: item.status,
-                        mentor_name: item.mentor_name,
+                        mentor_name: item.faculty.uuid.last_name+' '+item.faculty.uuid.first_name,
                         roles: item.mentor_role.titles,
                         role_id: item.mentor_role.id
                     }
-                    
-                    if(temp.status === 'Endorsed') {
-                        return temp
-                    }
-                } 
+                    return temp
+                }
             })
+            
+            // console.log(requestData)
 
-            var filterData = requestData.filter(function(el) {
-                return el != null
-            })
+            // var filterData = requestData.filter(function(el) {
+            //     return el != null
+            // })
 
-            return Object.assign(filterData)
+            return requestData
         }
     }
 }
