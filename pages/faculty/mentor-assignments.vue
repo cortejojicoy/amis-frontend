@@ -16,7 +16,7 @@
             :tableFilters="filters" 
             :tableFilterData="filterData" 
             :tableHeaders="headers" 
-            :tableData="getTableDataByPage" 
+            :tableData="tableData" 
             :tableOptions="options" 
             :isMa="'ma'"
             :maCss="maCss"
@@ -29,13 +29,28 @@
 
       <div>
         <GenericDrawer :isOpen="showDrawer" @closeDrawer="updateDrawer">
-            <template v-slot:content>
-              {{ drawerData }}
-              <div v-if="index != null" class="w-full mb-4">
-                <h1>HELLO</h1>
+          <template v-slot:content>
+            <div class="relative overflow-x-hidden items-top justify-center min-h-screen h-full bg-gray-100 pt-10">
+              <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <StudentInfo :studentData="studInfo"/>
+                <hr class="border-2 border-solid border-black mb-6" />
+                <StudentActiveMentor :mentorData="getActitveMentorByUuid" :is_adviser="is_adviser"/>
+                <!-- {{ getRequestedMentor }} -->
+                
+                <MentorAssignmentTable :navbar="menu" :mentorTable="getRequestedMentor" :uuid="studentUuid">
+                  <template v-slot:action="id">
+                    <div v-if="menu === 'my-advisee'">
+                        <button @click="btn('endorse','', id.id)" class="bg-green-500 text-white p-2 rounded">Endorse</button>
+                        <button @click="btn('modalReturn', 'value', id)" class="bg-yellow-500 text-white p-2 rounded">Return</button>
+                        <button @click="btn('modalDisapprove','', id)" class="bg-red-500 text-white p-2 rounded">Disapproved</button>
+                    </div>
+                  </template>
+                </MentorAssignmentTable>
+                
               </div>
-            </template>
-        </GenericDrawer>
+            </div>
+          </template>
+      </GenericDrawer>
       </div>
     </div>
   </div>
@@ -48,11 +63,13 @@
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import TransactionHistory from '../../components/TransactionHistory.vue';
 import MentorAssignmentTable from '../../components/mentor-assignment/MentorAssignmentTable.vue';
+import StudentActiveMentor from '../../components/mentor-assignment/StudentActiveMentor.vue';
+import StudentInfo from '../../components/StudentInfo.vue';
 import GenericTable from '../../components/GenericTable.vue';
 import GenericDrawer from '../../components/GenericDrawer.vue';
 
 export default {
-  components: { MentorAssignmentTable, TransactionHistory, GenericTable, GenericDrawer },
+  components: { MentorAssignmentTable, TransactionHistory, GenericTable, GenericDrawer, StudentActiveMentor, StudentInfo },
   data() {
     return {
         // menu: 'mentor-assignments',
@@ -69,6 +86,7 @@ export default {
         maCss: true,
         drawerData: {},
         index: null,
+        studentUuid: '',
         options: {
           page: 1,
           filters: {},
@@ -77,12 +95,12 @@ export default {
         q: '',
         updateTxnIndicator: 0,
         filters: [
-          {field: "first_name", name: 'name', type: 'combobox', label: 'filter by name'},
+          {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
           {field: 'program', name: 'program', type: 'select', label: 'filter by program'},
-          {field: 'status', name: 'student_status', type: 'select', label: 'filter by status'},
-          {field: 'mentor_name', name: 'mentor_name', type: 'select', label: 'filter by mentor'},
-          {field: 'mentor_role', name: 'mentor_role', type: 'select', label: 'filter by role'},
-          {field: 'mentor_status', name: 'mentor_status', type: 'select', label: 'filter by status'}
+          {field: 'student_status', name: 'student_status', type: 'select', label: 'filter by status'},
+          {field: 'mentor', name: 'mentor', type: 'select', label: 'filter by mentor'},
+          {field: 'role', name: 'role', type: 'select', label: 'filter by role'},
+          {field: 'status', name: 'status', type: 'select', label: 'filter by status'}
         ],
         txnFilters: [
           {field: 'ma.mas_id', name: 'mas_id', type: 'combobox', label: 'transaction id'},
@@ -93,18 +111,20 @@ export default {
   },
   computed: {
     ...mapState({
-        filterData: state => state.mentorAssignment.filters,
-        dataLoading: state => state.mentorAssignment.loading,
-        initialLoad: state => state.mentorAssignment.initialLoad,
-        tableFilterValues: state => state.mentorAssignment.filterValues
+        studInfo: state => state.faculty.mentorAssignment.studInfo,
+        dataLoading: state => state.faculty.mentorAssignment.loading,
+        initialLoad: state => state.faculty.mentorAssignment.initialLoad,
+        tableData: state => state.faculty.mentorAssignment.tableData,
+        filterData: state => state.faculty.mentorAssignment.filters,
     }),
 
-    getTableDataByPage() {
-        return this.getTableData(this.module)
-    },
+    getActitveMentorByUuid() {
+        return this.getActiveMentor(this.studentUuid)
+    },  
 
     ...mapGetters({
-        getTableData: "mentorAssignment/getTableData"
+        getActiveMentor: "faculty/mentorAssignment/getActiveMentor",
+        getRequestedMentor: "faculty/mentorAssignment/getRequestedMentor"
     })
   },
 
@@ -115,6 +135,7 @@ export default {
         this.getFilters({ 
           link: this.module,
           data: {
+              table_filters: true,
               column_name: filter.field,
               distinct: 'true',
               order_type: 'ASC',
@@ -131,25 +152,54 @@ export default {
       }),
 
       ...mapActions({
-        getData: 'mentorAssignment/getData',
-        getFilters: 'mentorAssignment/getFilters'
+        getActive: 'faculty/mentorAssignment/getActive',
+        getData: 'faculty/mentorAssignment/getData',
+        getFilters: 'faculty/mentorAssignment/getFilters',
+        getUserInfo: 'faculty/mentorAssignment/getUserInfo',
       }),
+
       openDetails(data) {
-        // console.log(data)
+        //fetch requested mentors
+        this.getData({ 
+          // link: 'mentor-assignments',
+          fetchType: 'request_mentor',
+          data: {
+            page: this.options.page,
+            nomimees:true,
+            uuid: data.uuid, //student uuid
+            items: this.options.numOfItems,
+        }})
+
+        this.getUserInfo({data: {
+            student_information: true,
+            uuid: data.uuid //student uuid
+        }})
+
+        this.getActive({data:{
+            uuid: this.$auth.user.uuid, //faculty uuid
+            is_adviser:true,
+            active_mentor:true,
+            items: this.options.numOfItems,
+            page: this.options.page,
+        }})
+
         this.updateDrawer(data)
-        this.drawerData = data
+        this.studentUuid = data.uuid
       },
+
       openDrawer(data) {
         this.showDrawer = true
         this.drawerData = data
       },
+
       fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
         this.getData({
           link: this.module,
+          fetchType: 'table_data',
           data: {
-              nominees: true,
-              uuid: this.$auth.user.uuid,
               page: page,
+              nominees: true,
+              table_filters: true,
               items: this.options.numOfItems,
           }
         })

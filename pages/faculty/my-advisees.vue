@@ -9,9 +9,7 @@
       </div>
 
       <div>
-        <!-- {{ getAdviseeData.last_page }} -->
-        <!-- {{ filterData }} -->
-        <!-- {{ tableData }} -->
+        <!-- {{ getTableDataByFacultyID }} -->
 
         <GenericTable 
             :isLoading="dataLoading" 
@@ -40,7 +38,7 @@
                   <StudentActiveMentor :mentorData="getActitveMentorByUuid" :is_adviser="is_adviser"/>
                   <!-- {{ getRequestedMentor }} -->
                   
-                  <MentorAssignmentTable :navbar="menu" :mentorTable="getRequestedMentorByUuid" :uuid="studentUuid">
+                  <MentorAssignmentTable :navbar="menu" :mentorTable="getRequestedMentor" :uuid="studentUuid">
                     <template v-slot:action="id">
                       <div v-if="menu === 'my-advisee'">
                           <button @click="btn('endorse','', id.id)" class="bg-green-500 text-white p-2 rounded">Endorse</button>
@@ -100,6 +98,8 @@ export default {
         module: 'mentors',
         btnValue: '',
         is_adviser: true,
+        facultyInfo: {},
+        facultyId:0,
         remarks: '',
         maCss: true,
         headers: [
@@ -121,12 +121,12 @@ export default {
         },
         updateTxnIndicator: 0,
         filters: [
-          {field: "uuid", name: 'name', type: 'combobox', label: 'filter by name'},
-          {field: 'student_program_records.academic_program_id', name: 'program', type: 'select', label: 'filter by program'},
-          {field: 'student_program_records.status', name: 'student_status', type: 'select', label: 'filter by status'},
-          {field: 'mentor_name', name: 'mentor_name', type: 'select', label: 'filter by mentor'},
-          {field: 'mentor_role', name: 'mentor_role', type: 'select', label: 'filter by role'},
-          {field: 'mentor_status', name: 'mentor_status', type: 'select', label: 'filter by status'}
+          {field: 'name', name: 'name', type: 'combobox', label: 'filter by name'},
+          {field: 'program', name: 'program', type: 'select', label: 'filter by program'},
+          {field: 'student_status', name: 'student_status', type: 'select', label: 'filter by status'},
+          {field: 'mentor', name: 'mentor', type: 'select', label: 'filter by mentor'},
+          {field: 'role', name: 'role', type: 'select', label: 'filter by role'},
+          {field: 'status', name: 'status', type: 'select', label: 'filter by status'}
         ],
         txnFilters: [
           {field: 'ma.id', name: 'id', type: 'combobox', label: 'transaction id'},
@@ -137,15 +137,12 @@ export default {
   },
   computed: {
     ...mapState({
-        requestData: state => state.mentorAssignment.requestData,
-        studInfo: state => state.mentorAssignment.studInfo,
+        studInfo: state => state.faculty.mentorAssignment.studInfo,
         dataLoading: state => state.faculty.mentorAssignment.loading,
         initialLoad: state => state.faculty.mentorAssignment.initialLoad,
-        tableFilterValues: state => state.mentorAssignment.filterValues,
-        adviseeData: state => state.mentorAssignment.adviseeData,
         tableData: state => state.faculty.mentorAssignment.tableData,
         filterData: state => state.faculty.mentorAssignment.filters,
-        closeModal: state => state.faculty.mentorAssignment.closeModal
+        closeModal: state => state.faculty.mentorAssignment.closeModal,
     }),
 
     remarks: {
@@ -161,40 +158,35 @@ export default {
         return this.getActiveMentor(this.studentUuid, this.menu)
     },  
 
-    getRequestedMentorByUuid() {
-        return this.getRequestedMentor(this.studentUuid)
-    },  
-
     ...mapGetters({
         getActiveMentor: "faculty/mentorAssignment/getActiveMentor",
         getRequestedMentor: "faculty/mentorAssignment/getRequestedMentor"
     })
-
   },
+
   async fetch() {
     this.updateFilterValues({}) // set the filter values to nothing every time a txn history is rendered
     this.fetchTableData(this.options.page)
     this.filters.forEach(filter => { // create the filter values that will be used for this txn history instance
         this.getFilters({ 
           link: this.module,
+          // fetchType: '',
           data: {
-              with_program: true,
-              with_fullname: true,
-              with_mentor_name: true,
-              with_mentor_role: true,
               table_filters: true,
               column_name: filter.field,
               distinct: 'true',
               order_type: 'ASC',
               order_field: filter.field
+              
           }
         })
     });
   },
+
   methods: {
     ...mapMutations({
         deleteRow: "faculty/mentorAssignment/DELETE_ROW",
-        updateNumOfItems: 'mentorAssignment/UPDATE_NUM_OF_ITEMS',
+        updateNumOfItems: 'faculty/mentorAssignment/UPDATE_NUM_OF_ITEMS',
         updateFilterValues: 'faculty/mentorAssignment/UPDATE_FILTER_VALUES',
         setTableModule: 'mentorAssignment/SET_MODULE'
     }),
@@ -202,10 +194,9 @@ export default {
     ...mapActions({
         // GET REQUEST
         getActive: 'faculty/mentorAssignment/getActive',
-        // getData: 'mentorAssignment/getData', //table data of advisee
         getData: 'faculty/mentorAssignment/getData', //table data of advisee
         getFilters: 'faculty/mentorAssignment/getFilters',
-        getStudentInfo: 'mentorAssignment/getStudentInfo',
+        getUserInfo: 'faculty/mentorAssignment/getUserInfo',
         // PUT REQUEST
         approval: "faculty/mentorAssignment/approval"
     }),
@@ -232,13 +223,12 @@ export default {
         fetchType: 'request_mentor',
         data: {
           page: this.options.page,
-          is_adviser:true,
-          request_mentor:true,
+          advisee:true,
           uuid: data.uuid, //student uuid
           items: this.options.numOfItems,
       }})
 
-      this.getStudentInfo({data: {
+      this.getUserInfo({data: {
           student_information: true,
           uuid: data.uuid //student uuid
       }})
@@ -258,22 +248,22 @@ export default {
     openDrawer(data) {
       this.showDrawer = true
     },
+
+    onUpdateFaculty(data){
+      console.log(data)
+    },  
     
     fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
       this.getData({ //fetch students data
-        link: 'mentors',
+        // link: 'mentors',
         fetchType: 'table_data',
         data: {
             page: page,
-            is_adviser: true,
-            requested_mentors: true,
-            mentors_information: true,
-            // uuid: '2d882b20-832f-11ed-9352-af47e026f657',
-            uuid: this.$auth.user.uuid,
+            advisee: true,
+            table_filters: true,
             items: this.options.numOfItems,
         }
       })
-      
     },
     updateDrawer(index){
       this.showDrawer = !this.showDrawer
