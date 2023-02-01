@@ -21,7 +21,7 @@
                 <CircSpinner :isLoading="this.isLoading" :size="'large'"/>
             </div>
             <div v-if="!this.isLoading" class="bg-white overflow-auto shadow-xl sm:rounded-lg mb-4">
-                <table class="table-auto w-full items-center text-center">
+                <table class="table-auto w-full items-center text-center ">
                     <thead>
                         <tr class="font-bold">
                             <td v-for="(header, headerIndex) in tableHeaders" :key="headerIndex" class="px-2 py-3">
@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="(row, rowIndex) in tableData" :key="rowIndex">
+                        <tr v-for="(row, rowIndex) in tableData" :key="rowIndex" :class="maCss ? 'hover:bg-gray-200' : ''">
                             <td v-for="(header, headerIndex) in tableHeaders" :key="headerIndex" class="px-2 py-3">
                                 <div v-if="header == 'roles' || header == 'permissions'">
                                     <div v-if="row[header].length > 0" class="flex justify-center flex-wrap">
@@ -48,7 +48,7 @@
                                     </div>
 
                                     <div v-else>
-                                        <td class="flex justify-center flex-wrap" @click="openDrawer(rowIndex)">{{ row[header] }}</td>
+                                        <td class="flex justify-center flex-wrap cursor-pointer" @click="openDrawer(rowIndex)">{{ row[header] }}</td>
                                     </div>
                                 </div>
                                 <div v-else>
