@@ -92,11 +92,14 @@ export const actions = {
                     errList += `<li>${errMess}</li>`
                 })
             })
+
                 let errMessage = `Validation Error: ${errList}`
                 await commit('alert/ERROR', errMessage, { root: true })
+                commit('UNSET_STATE')
             }else{
                 let errMessage = `Something went wrong while performing your request. Please contact administrator`
                 await commit('alert/ERROR', errMessage, { root: true })
+                commit('UNSET_STATE')
             }
             commit('GET_DATA_FAILED', error)
         }
