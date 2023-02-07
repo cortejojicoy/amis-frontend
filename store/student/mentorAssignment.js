@@ -78,7 +78,6 @@ export const actions = {
         commit('GET_DATA_REQUEST')
         try{
             let tableParams = Object.assign(payload)
-            // console.log(tableParams)
             const data = await this.$axios.$post(`/students/save-ma`, tableParams)
             await commit('GET_SAVE_SUCCESS', data)
             commit('alert/SUCCESS', data.message, { root: true })
@@ -284,10 +283,6 @@ export const mutations = {
 
     APPROVAL_SUCCESS(state) {
         state.loading = false
-    },
-
-    ACTIVE_MENTOR(state, payload) {
-        // console.log(payload)
     },
 
     ADD_ROW(state, uuid) {

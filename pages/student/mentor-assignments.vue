@@ -43,7 +43,6 @@ export default {
         transactionId: '',
         is_student: true,
         is_adviser: true,
-        faculty_list: true,
         module: 'mentors',
         updateTxnIndicator: 0,
         options: {
@@ -92,7 +91,7 @@ export default {
     this.fetchTableData(this.options.page)
     this.getMentorRole()
     this.getFaculty({
-      data: { faculty_list: this.faculty_list }
+      data: { faculty_list: true }
     })
   },
 
@@ -109,16 +108,16 @@ export default {
     }),
 
     ...mapMutations({
-        activeMentor: "student/mentorAssignment/ACTIVE_MENTOR",
         updateField: "student/mentorAssignment/CHANGE_FIELD_STATE",
     }),
 
     fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
-      this.activeMentor(this.mentorAssignment)
       this.getData({data: {
           student_add_mentor: true,
           uuid: this.$auth.user.uuid
       }})
+
+      // this.getData
 
       if(this.is_student) {
         this.getActive({link: this.module, data: {
@@ -155,9 +154,20 @@ export default {
     },
 
     saveData(data) {
+        var draftData = []
+        data.map((item) => {
+          // console.log(item)
+          if(item.actions === "" || item.mentor_name === "" || item.mentor_role === "") {
+              draftData.push(item)
+              this.$store.commit('alert/ERROR', 'Fill all the fields', { root: true })
+          } else {
+              draftData.push(item)
+          }
+        })
+
         this.saveRequestedMentors({
             uuid: this.$auth.user.uuid, 
-            data: data
+            data: draftData
         })
     },
 
