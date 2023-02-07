@@ -52,6 +52,9 @@
           </template>
       </GenericDrawer>
       </div>
+
+      
+      <TransactionHistory :txnType="'matxns'"  :userRole="'faculties'" :txnFilters="txnFilters" :update="updateTxnIndicator"/>
     </div>
   </div>
   
@@ -103,7 +106,7 @@ export default {
           {field: 'status', name: 'status', type: 'select', label: 'filter by status'}
         ],
         txnFilters: [
-          {field: 'ma.mas_id', name: 'mas_id', type: 'combobox', label: 'transaction id'},
+          {field: 'ma.id', name: 'id', type: 'combobox', label: 'transaction id'},
           {field: 'action', name: 'action', type: 'select', label: 'status'},
           {field: 'ma.mentor_name', name: 'mentor_name', type: 'combobox', label: 'mentor'}
         ]

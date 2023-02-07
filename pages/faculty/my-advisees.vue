@@ -42,7 +42,7 @@
                     <template v-slot:action="id">
                       <div v-if="menu === 'my-advisee'">
                           <button @click="btn('endorse','', id.id)" class="bg-green-500 text-white p-2 rounded">Endorse</button>
-                          <button @click="btn('modalReturn', 'value', id)" class="bg-yellow-500 text-white p-2 rounded">Return</button>
+                          <!-- <button @click="btn('modalReturn', 'value', id)" class="bg-yellow-500 text-white p-2 rounded">Return</button> -->
                           <button @click="btn('modalDisapprove','', id)" class="bg-red-500 text-white p-2 rounded">Disapproved</button>
                       </div>
                     </template>
@@ -73,7 +73,7 @@
         </VTailwindModal>
       </div>
       
-      <TransactionHistory :txnType="'matxns'" :userRole="'faculties'" :txnFilters="txnFilters" :update="updateTxnIndicator"/>
+      <TransactionHistory :txnType="'matxns'"  :userRole="'faculties'" :txnFilters="txnFilters" :update="updateTxnIndicator"/>
     </div>
   </div>
 </div>
