@@ -248,10 +248,6 @@ export default {
     openDrawer(data) {
       this.showDrawer = true
     },
-
-    onUpdateFaculty(data){
-      console.log(data)
-    },  
     
     fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
       this.getData({ //fetch students data
