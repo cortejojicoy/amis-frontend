@@ -121,6 +121,7 @@ export default {
             {field: 'role', name: 'role', type: 'select', label: 'filter by role'},
             {field: 'status', name: 'status', type: 'select', label: 'filter by status'}
           ],
+
           txnFilters: [
             {field: 'ma.id', name: 'id', type: 'combobox', label: 'transaction id'},
             {field: 'action', name: 'action', type: 'select', label: 'status'},

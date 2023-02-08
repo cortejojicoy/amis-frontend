@@ -276,6 +276,7 @@ export const mutations = {
     },
 
     UPDATE_FILTER_VALUES(state, data) {
+        console.log(data)
         state.filterValues = data
     },
 
@@ -342,12 +343,6 @@ export const getters = {
                     return temp
                 }
             })
-            
-            // console.log(requestData)
-
-            // var filterData = requestData.filter(function(el) {
-            //     return el != null
-            // })
 
             return requestData
         }
