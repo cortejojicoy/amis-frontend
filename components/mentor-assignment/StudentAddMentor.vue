@@ -13,6 +13,7 @@
                 <td class="px-2 py-3">Action</td>
                 <td class="px-2 py-3">Mentor</td>
                 <td class="px-2 py-3">Role</td>
+                <td class="px-2 py-3">Remarks</td>
                 <!-- <td class="px-2 py-3">Field Represented</td>
                 <td class="px-2 py-3">Effectivity Start</td>
                 <td class="px-2 py-3">Effectivity End</td> -->
@@ -49,30 +50,42 @@
                   </select>
                 </td>
 
-                <!-- {{ record }} -->
-
                 <td>
                   <select :value="record.mentor_role" @change="(value) => update('mentor_role', record.id, value)" class="text-md border border-gray-400 rounded p-1">
                     <option v-for="(mentorRole, mentorRoleIndex) in mentorRoles"  :key="mentorRoleIndex" :value="mentorRole.id">
                         {{ mentorRole.titles }}
+                        <!-- {{ mentorRole }} -->
                     </option>
                   </select>
                 </td>
-                <!-- {{ notifModal }} -->
-                  <!-- 
-                  <td> field_represented </td>
-                  <td> effectivity_start </td>
-                  <td> effectivity_end </td>
-                  -->
-                  <td class="px-2 py-3">
-                    <button @click="btn('delete', record.id)" :disabled="isLoading">
-                      <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                      </svg>
-                    </button>
-                  </td>
+
+                <td>
+                  <!-- <textarea v-model="remarks" placeholder="limit to 280 characters" class="w-full border border-gray-400 rounded p-1 md:w-38" type="text" rows="2" maxlength="280"></textarea> -->
+                  <textarea 
+                      :value="record.remarks"
+                      @input="update('remarks', record.id, $event)" 
+                      placeholder="limit to 280 characters" 
+                      class="w-full border border-gray-400 rounded p-1 md:w-38" 
+                      type="text" 
+                      rows="2" 
+                      maxlength="280">
+                  </textarea>
+                </td>
+                
+                <!-- 
+                <td> field_represented </td>
+                <td> effectivity_start </td>
+                <td> effectivity_end </td>
+                -->
+                <td class="px-2 py-3">
+                  <button @click="btn('delete', record.id)" :disabled="isLoading">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor" stroke-width="2">
+                      <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                  </button>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -92,8 +105,10 @@
                                 <td class="px-2 py-3">Action</td>
                                 <td class="px-2 py-3">Mentor</td>
                                 <td class="px-2 py-3">Role</td>
+                                <td class="px-2 py-3">Remarks</td>
                             </tr>
                         </thead>
+                        <!-- {{ saveMentor }} -->
                         <tr v-for="(mentor, mentorIndex) in saveMentor" :key="mentorIndex">
                           <!-- {{ mentor }} -->
                           <td class="px-2 py-3">{{ mentor.actions }}</td>
@@ -104,6 +119,7 @@
                               {{ role.titles }}
                             </td>
                           </div>
+                          <td class="px-2 py-3">{{ mentor.remarks }}</td>
                         </tr>
                     </table>
                 </div>
@@ -157,13 +173,11 @@
         actionList: ["Add", "Remove"],
         actions: '',
         tableLength: 0,
-        removeMentorClicked: 0,
         notificationModal: '',
         facultyId: 0,
         type: '',
         show: false,
         notif: true,
-        increment: 0,
     }),
     props: {
       link: String,
@@ -195,8 +209,8 @@
       ...mapGetters({
           getWithoutId: "student/mentorAssignment/getWithoutId",
           getConfirmText: "student/mentorAssignment/getConfirmText",
+          getRemarks: "student/mentorAssignment/getRemarks",
           maRoleId: "mentorAssignment/getMentorRoleId",
-          // maRoleId: "mentorAssignment/getMentorRoleId",
       }),
 
       confirmText: {
@@ -215,6 +229,7 @@
           deleteRow: "student/mentorAssignment/DELETE_ROW",
           changeField: "student/mentorAssignment/CHANGE_FIELD_STATE",
           updateConfirmation: "student/mentorAssignment/UPDATE_CONFIRMATION",
+          updateRemarks: "student/mentorAssignment/UPDATE_REMARKS",
           
           // forSubmit: "mentorAssignment/FOR_SUBMIT_DATA",
           unsetRoles: "mentorAssignment/UNSET_MENTOR_ROLE",
@@ -243,7 +258,7 @@
             this.show = true
         } else if(type === 'submit') {
             // SUBMIT BUTTON
-            this.$emit('submitRequest', this.getWithoutId)
+            this.$emit('submitRequest', this.getWithoutId, 'requested')
         }
       },
 
@@ -251,7 +266,15 @@
         // event != null
         let value = event != null ? event : ''
         // console.log(value)
-        
+
+        if(field === 'remarks') {
+            this.changeField({
+              "field": field,
+              "newValue": event.target.value,
+              "id": id
+            })
+        }
+
         if(field === 'actions') {
             this.changeField({
               "field": field,
@@ -259,6 +282,7 @@
               "id": id
             })
         }
+
         if(field === 'mentor_role') {
           this.changeField({ 
             "field": field,

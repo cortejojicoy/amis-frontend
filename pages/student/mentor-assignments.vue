@@ -156,8 +156,7 @@ export default {
     saveData(data) {
         var draftData = []
         data.map((item) => {
-          // console.log(item)
-          if(item.actions === "" || item.mentor_name === "" || item.mentor_role === "") {
+          if(item.actions === "" || item.mentor_name === "" || item.mentor_role === "" || item.remarks === "") {
               draftData.push(item)
               this.$store.commit('alert/ERROR', 'Fill all the fields', { root: true })
           } else {

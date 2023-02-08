@@ -10,6 +10,7 @@ export const state = () => ({
     filters: {},
     filterValues: [],
     confirmText: '',
+    remarkText: '',
     closeModal: {},
     updateTxnIndicator: 0,
     for_submit: {
@@ -227,7 +228,7 @@ export const mutations = {
     },
 
     GET_SAVE_MENTOR(state, data) {
-        // console.log(data)
+        // console.log(state.remarkText)
         var save_mentor = data.map((item) => {
             // console.log(item)
             if(item.actions_status == 'saved') {
@@ -241,6 +242,7 @@ export const mutations = {
                     field_represented : item.field_represented, 
                     effectivity_start : item.effectivity_start,
                     effectivity_end : item.effectivity_end,
+                    // remarks: item.remarks,
                     uuid : item.uuid,
                     mas_id: item.mas_id,
                     id : item.id
@@ -286,7 +288,7 @@ export const mutations = {
     },
 
     ADD_ROW(state, uuid) {
-        // console.log(state)
+        console.log(state.remarkText)
         if(state.studSaveMentor) {
             return state.studSaveMentor.push({
                 actions:'', 
@@ -296,6 +298,7 @@ export const mutations = {
                 field_represented:'', 
                 effectivity_start:'',
                 effectivity_end:'',
+                // remarks: '',
                 faculty_id: '',
                 mas_id: '',
                 uuid: uuid,
@@ -315,7 +318,7 @@ export const mutations = {
     },
 
     CHANGE_FIELD_STATE (state, payload) {
-        // console.log(payload.newValue3)
+        // console.log(payload)
         let mentor = state.studSaveMentor.find(x => x.id === payload.id)
         // console.log(mentor)
         if(payload.field === "mentor_role") {
@@ -341,6 +344,10 @@ export const mutations = {
 
     UPDATE_CONFIRMATION (state, text) {
         state.confirmText = text
+    },
+
+    UPDATE_REMARKS (state, text) {
+        state.remarkText = text
     },
 
     UPDATE_NUM_OF_ITEMS(state, data) {

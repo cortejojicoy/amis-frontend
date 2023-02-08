@@ -173,7 +173,7 @@ export const mutations = {
     },
 
     GET_DATA_SUCCESS(state, data) {
-        console.log(data)
+        // console.log(data)
         state.data = data
         state.loading = false
         state.initialLoad = false
@@ -199,7 +199,7 @@ export const mutations = {
                         faculty_name: item.user.last_name+' '+item.user.first_name+' '+ homeunit
                     }) 
 
-                    if(temp.faculty_status == 'ACTIVE') {
+                    if(temp.faculty_status === 'ACTIVE') {
                         return temp
                     }
                 }
@@ -301,7 +301,7 @@ export const getters = {
                             faculty_id: item.faculty_id
                         }
     
-                        if(temp.mentor_status == 'ACTIVE') {
+                        if(temp.mentor_status === 'ACTIVE') {
                             return temp
                         }
                     }
