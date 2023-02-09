@@ -237,7 +237,9 @@ export const mutations = {
 
     GET_MENTOR_ROLES(state, data) {
         // console.log(data)
-        state.mentorRoles = data
+        let role = data.filter(x => x.id != 1)
+        // console.log(role)
+        state.mentorRoles = role
     }, 
 
     UNSET_MENTOR_ROLE(state, payload) {

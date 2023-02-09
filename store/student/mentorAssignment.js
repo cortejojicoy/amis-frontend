@@ -115,24 +115,18 @@ export const actions = {
             try {
                 let mentorParams = Object.assign(payload.data)
                 // console.log(mentorParams)
-                let tranx = mentorParams.find(x => { return x })
-                // console.log(tranx)
-                if(tranx.status == 'returned') {
-                    dispatch('approval', tranx)
+                // check request if reached maximum limit for mentors
+                let countMajor = mentorParams.filter(x => x.mentor_role == 2).length
+                let countMember = mentorParams.filter(x => x.mentor_role == 3).length
+                if(countMajor == 2) {
+                    commit('alert/ERROR', 'You have reached maximun requirement for requesting a Major Adviser', { root: true })
+                    commit('UNSET_STATE')
+                } else if(countMember == 3) {
+                    commit('alert/ERROR', 'You have reached maximun requirement for requesting a Member', { root: true })
+                    commit('UNSET_STATE')
                 } else {
-                    // check request if reached maximum limit for mentors
-                    let countMajor = mentorParams.filter(x => x.mentor_role == 2).length
-                    let countMember = mentorParams.filter(x => x.mentor_role == 3).length
-                    if(countMajor == 2) {
-                        commit('alert/ERROR', 'You have reached maximun requirement for requesting a Major Adviser', { root: true })
-                        commit('UNSET_STATE')
-                    } else if(countMember == 3) {
-                        commit('alert/ERROR', 'You have reached maximun requirement for requesting a Member', { root: true })
-                        commit('UNSET_STATE')
-                    } else {
-                        const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
-                        await dispatch('checkStatus', data)
-                    }
+                    const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
+                    await dispatch('checkStatus', data)
                 }
             } catch(error) {
                 if(error.response.status===422){  
@@ -288,7 +282,6 @@ export const mutations = {
     },
 
     ADD_ROW(state, uuid) {
-        console.log(state.remarkText)
         if(state.studSaveMentor) {
             return state.studSaveMentor.push({
                 actions:'', 
