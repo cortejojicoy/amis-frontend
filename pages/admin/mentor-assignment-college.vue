@@ -5,6 +5,15 @@
           <div>
             <div class="mb-4 flex items-center">
               <div class="text-2xl font-bold">Mentor Assignment (College)</div>
+
+              <!-- <div class="px-4">
+                <input type="file" accept=".xlsx, .xls" ref="excel-upload-input" @change="handleClicks" hidden/>
+                <button   class="p-2 bg-blue-500 text-white">Import</button>
+              </div>
+              
+              <div>   
+                <button class="p-2 bg-green-500 text-white">Download Template</button>
+              </div> -->
             </div>
           </div>
 
@@ -52,7 +61,7 @@
 
           <div>
             <VTailwindModal v-model="show">
-              <template v-slot:title>Remarks</template>
+                <template v-slot:title>Remarks</template>
                 <template v-slot:content>
                     <div class="px-2 py-3">
                         <textarea v-model="remarks" placeholder="limit to 280 characters" class="w-full border border-gray-400 rounded p-1 md:w-80" type="text" rows="5" maxlength="280" required></textarea>
@@ -60,8 +69,8 @@
                 </template>
                 <template v-slot:buttons>
                     <div class="text-right">
-                      <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId.id" @click="btn('disapproved','', $event.target.value);">Confirm</button>
-                    </div>
+                        <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId.id" @click="btn('disapproved','', $event.target.value);">Confirm</button>
+                      </div>
                 </template>
             </VTailwindModal>
           </div>
@@ -91,6 +100,7 @@ export default {
     data() {
         return {
           menu: 'mentor-assignment-college',
+          modalImport: false,
           confirmId: 0,
           show: false,
           remarks: '',
@@ -190,6 +200,7 @@ export default {
         approval: "admin/mentorAssignment/approval"
     }),
 
+
     btn(type, transactionId) {
       if(type === 'approved' || type === 'disapproved') {
         // console.log(transactionId)
@@ -202,6 +213,15 @@ export default {
           this.confirmId = transactionId
           this.show = true
       }
+
+      if(type === 'import') {
+        this.$refs['excel-upload-input'].click()
+        // this.modalImport = true
+      }
+    },
+
+    handleClicks(e) {
+      console.log(e.target.files)
     },
 
     openDetails(data) { 
