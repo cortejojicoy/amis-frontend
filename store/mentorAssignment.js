@@ -114,8 +114,7 @@ export const actions = {
     async getFaculty({commit }, payload) {
         commit('GET_DATA_REQUEST')
         try {
-            let tableParams = Object.assign(payload.data)
-            const data = await this.$axios.$get(`/faculties`, {params: tableParams})
+            const data = await this.$axios.$get(`/faculties`, {params: {faculty_list: true}})
             // console.log(data)
             await commit('GET_APPOINTMENT_SUCCESS', data.ma)
         } catch (error) {
@@ -125,9 +124,9 @@ export const actions = {
                 fields.forEach((field) => {
                 let errorArr = error.response.data.errors[field]
                 errorArr.forEach((errMess) => {
-                    errList += `<li>${errMess}</li>`
+                        errList += `<li>${errMess}</li>`
+                    })
                 })
-            })
                 let errMessage = `Validation Error: ${errList}`
                 await commit('alert/ERROR', errMessage, { root: true })
             }else{
@@ -141,7 +140,7 @@ export const actions = {
     async getMentorRole({commit}) {
         commit('GET_DATA_REQUEST')
         try {
-            const data = await this.$axios.$get(`/mentor-roles`,)
+            const data = await this.$axios.$get(`/mentor-roles`)
             await commit('GET_MENTOR_ROLES', data.ma)
         } catch (error) {
             if(error.response.status===422){  
@@ -188,7 +187,7 @@ export const mutations = {
         if(data) {
             var facultyListData =  data.map((item) => {
                 // console.log(item)
-                if(item.user != null) {
+                if(item.uuid != null) {
                     // let homeunit = item.appointment != null ? '('+item.appointment.homeunit+')' : ''
                     let homeunit = item.appointment != null ? item.appointment.homeunit : ''
                     let faculty_status = item.appointment != null ? item.appointment.status : ''
@@ -196,7 +195,7 @@ export const mutations = {
                         home_unit: homeunit,
                         faculty_id: item.faculty_id,
                         faculty_status: faculty_status,
-                        faculty_name: item.user.last_name+' '+item.user.first_name+' '+ homeunit
+                        faculty_name: item.uuid.last_name+' '+item.uuid.first_name+' '+ homeunit
                     }) 
 
                     if(temp.faculty_status === 'ACTIVE') {
@@ -236,9 +235,7 @@ export const mutations = {
     },
 
     GET_MENTOR_ROLES(state, data) {
-        // console.log(data)
         let role = data.filter(x => x.id != 1)
-        // console.log(role)
         state.mentorRoles = role
     }, 
 

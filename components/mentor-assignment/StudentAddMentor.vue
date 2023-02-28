@@ -25,7 +25,6 @@
               <tr v-for="(record, recordIndex) in saveMentor" :key="recordIndex"> 
                 <td>
                   <select :value="record.actions" @change="(value) => update('actions', record.id, value)" class="text-md border border-gray-400 rounded p-1">
-                    <!-- {{ actionList }} -->
                     <option v-for="(action, actionIndex) in actionList" :key="actionIndex">
                       {{ action }}
                     </option>
@@ -54,7 +53,6 @@
                   <select :value="record.mentor_role" @change="(value) => update('mentor_role', record.id, value)" class="text-md border border-gray-400 rounded p-1">
                     <option v-for="(mentorRole, mentorRoleIndex) in mentorRoles"  :key="mentorRoleIndex" :value="mentorRole.id">
                         {{ mentorRole.titles }}
-                        <!-- {{ mentorRole }} -->
                     </option>
                   </select>
                 </td>
@@ -189,6 +187,7 @@
         type: Array
       },
     },
+
     computed: {
       ...mapState({
           facultyList: state => state.mentorAssignment.facultyList,
@@ -230,6 +229,7 @@
           changeField: "student/mentorAssignment/CHANGE_FIELD_STATE",
           updateConfirmation: "student/mentorAssignment/UPDATE_CONFIRMATION",
           updateRemarks: "student/mentorAssignment/UPDATE_REMARKS",
+          pushActiveMentor: "student/mentorAssignment/GET_ACTIVE_MENTOR",
           
           // forSubmit: "mentorAssignment/FOR_SUBMIT_DATA",
           unsetRoles: "mentorAssignment/UNSET_MENTOR_ROLE",
@@ -242,6 +242,8 @@
         if(type === 'add') {
             // ADD BUTTON
             this.addRow(this.$auth.user.uuid)
+            this.pushActiveMentor(this.mentorData)
+            
             // this.notification(this.saveMentor)
         } else if(type === 'save') {
             // SAVE BUTTON
@@ -334,6 +336,11 @@
       },
     },
     watch: {
+      // mentorData(data) {
+      //   // console.log(data)
+      //   this.updateRoleId = data
+      // },
+
       updateTxnIndicator(newVal, oldVal) {
           this.$emit('onUpdateTxn')
       },

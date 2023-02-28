@@ -12,6 +12,7 @@ export const state = () => ({
     confirmText: '',
     remarkText: '',
     closeModal: {},
+    activeMentor: [],
     updateTxnIndicator: 0,
     for_submit: {
         actions: '',
@@ -114,30 +115,61 @@ export const actions = {
             commit('GET_DATA_REQUEST')
             try {
                 let mentorParams = Object.assign(payload.data)
-                // console.log(mentorParams)
-                // check request if reached maximum limit for mentors
-                let countMajor = mentorParams.filter(x => x.mentor_role == 2).length
-                let countMember = mentorParams.filter(x => x.mentor_role == 3).length
-                if(countMajor == 2) {
-                    commit('alert/ERROR', 'You have reached maximun requirement for requesting a Major Adviser', { root: true })
-                    commit('UNSET_STATE')
-                } else if(countMember == 3) {
-                    commit('alert/ERROR', 'You have reached maximun requirement for requesting a Member', { root: true })
-                    commit('UNSET_STATE')
-                } else {
-                    const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
-                    await dispatch('checkStatus', data)
-                }
+                const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
+                await dispatch('checkStatus', data)
+                // // count existing mentors
+                // let existMajor = payload.activeMentor.filter(x => x.role_id == 2).length
+                // let existMember = payload.activeMentor.filter(x => x.role_id == 3).length
+                
+                // // count request mentors
+                // let reqMajor = payload.data.filter(x => x.mentor_role == 2).length
+                // let reqMember = payload.data.filter(x => x.mentor_role == 3).length
+
+                // var errMsg = []
+                // if(reqMajor > 0) {
+                //     if(reqMajor == 2) {
+                //          errMsg.push('You have reached maximun requirement for requesting a Major Adviser')
+                //     }else if(existMajor > 0) {
+                //         errMsg.push('You already have existing Major Adviser and exceeded the maximum requirement')
+                //     }
+                // } else if(reqMember > 0) {
+                //     if(reqMember == 3) {
+                //         errMsg.push('You have reached maximun requirement for requesting a Member')
+                //     }else if(existMember > 2 || reqMember + existMember > 2) {
+                //         errMsg.push('You already have exceeded maximum requirement for having an active Member')
+                //     }
+                // } 
+
+                // if(errMsg != '') {
+                //     let errs = ``
+                //     let errList = [];
+                //     let fields = Object.keys(errMsg)
+                //     fields.forEach((field) => {
+                //         let errArr = errMsg[field]
+                //         errList.push(errArr)
+                //     })
+                //     errList.forEach((errMess) => {
+                //         errs += `<li>${errMess}</li>`
+                //     })
+
+                //     let errMessage = `Validation Error: ${errs}`
+                //     commit('alert/ERROR', errMessage, { root: true })
+                //     commit('UNSET_STATE')
+                // } else {
+                //     const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
+                //     await dispatch('checkStatus', data)
+                // }
+
             } catch(error) {
                 if(error.response.status===422){  
                     let errList = ``;
                     let fields = Object.keys(error.response.data.errors)
                     fields.forEach((field) => {
-                    let errorArr = error.response.data.errors[field]
-                    errorArr.forEach((errMess) => {
-                        errList += `<li>${errMess}</li>`
+                        let errorArr = error.response.data.errors[field]
+                        errorArr.forEach((errMess) => {
+                            errList += `<li>${errMess}</li>`
+                        })
                     })
-                })
                     let errMessage = `Validation Error: ${errList}`
                     await commit('alert/ERROR', errMessage, { root: true })
                     commit('UNSET_STATE')
@@ -191,14 +223,13 @@ export const actions = {
         // console.log(data)
         if (data.status != 'Ok') {
             commit('alert/ERROR', data.message, { root: true })
-            commit('UPDATE_DATA_SUCCESS', data)
+            // commit('UPDATE_DATA_SUCCESS', data)
             commit('CLOSE_MODAL')
             commit('UNSET_STATE')
         } else {
             commit('alert/SUCCESS', data.message, { root: true })
             commit('UPDATE_DATA_SUCCESS', data)
             commit('UPDATE_TXN_INDICATOR')
-            commit('UNSET_STATE')
             commit('CLOSE_MODAL')
         }
         
@@ -323,6 +354,11 @@ export const mutations = {
         }
     },
 
+    GET_ACTIVE_MENTOR(state, data) {
+        Vue.set(state.activeMentor, data)
+        // state.activeMentor = data
+    },
+
     UNSET_STATE(state) {
         state.confirmText = ''
         state.closeModal = {}
@@ -333,6 +369,7 @@ export const mutations = {
 
     UPDATE_DATA_SUCCESS(state, data) {
         state.loading = false
+        state.studSaveMentor = []
     },
 
     UPDATE_CONFIRMATION (state, text) {

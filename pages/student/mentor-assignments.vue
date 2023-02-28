@@ -90,9 +90,7 @@ export default {
   async fetch() {
     this.fetchTableData(this.options.page)
     this.getMentorRole()
-    this.getFaculty({
-      data: { faculty_list: true }
-    })
+    this.getFaculty()
   },
 
   methods: {
@@ -135,7 +133,6 @@ export default {
       }
     },
     
-
     changeField(data, id) {
         this.updateField({
             "field3": "mentor_role",
@@ -147,6 +144,7 @@ export default {
     submitData(data, type) {
       // console.log(data)
       this.submitRequestedMentors({
+          activeMentor: this.getActitveMentorByUuid,
           uuid: this.$auth.user.uuid,
           data: data,
           type: type
