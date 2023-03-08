@@ -215,7 +215,7 @@ export const mutations = {
     NOTIFICATION(state, payload) {
         if(payload.homeunit != state.studInfo.program) {
             // Vue.set(state.closeModal)
-            let errMessage = `You have selected a faculty that has no appointment on you'r program`
+            let errMessage = `You have selected a faculty that has no appointment on your program`
             this.commit('alert/ERROR', errMessage, { root: true })
         }
         // this.facultyList = []
