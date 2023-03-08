@@ -130,14 +130,14 @@
                           <input v-model="confirmText" type="text" class="mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1" required>
                       </div>
                   </div>
-                  <div class="grid grid-flow-row-dense grid-cols-3">
+                  <!-- <div class="grid grid-flow-row-dense grid-cols-3">
                       <div class="col-span-2 px-8 py-2">
                           Type Google Autheticator Code to confirm your action:
                       </div>
                       <div>
                           <input type="text" disabled class=" disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none mt-1 px-3 py-2 bg-white border shadow-sm border-slate-300 placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-sky-500 block w-full rounded-md sm:text-sm focus:ring-1">
                       </div>
-                  </div>
+                  </div> -->
               </div>
             </div>
         </template>
