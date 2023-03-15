@@ -6,14 +6,14 @@
             <div class="mb-4 flex items-center">
               <div class="text-2xl font-bold">Mentor Assignment (College)</div>
 
-              <!-- <div class="px-4">
+              <div class="px-4">
                 <input type="file" accept=".xlsx, .xls" ref="excel-upload-input" @change="handleClicks" hidden/>
-                <button   class="p-2 bg-blue-500 text-white">Import</button>
+                <button @click="btn('import')" class="p-2 bg-blue-500 text-white">Import</button>
               </div>
               
               <div>   
                 <button class="p-2 bg-green-500 text-white">Download Template</button>
-              </div> -->
+              </div>
             </div>
           </div>
 
@@ -190,6 +190,7 @@ export default {
     }),
     
     ...mapActions({
+        importData: 'admin/mentorAssignment/importData',
         getMentors: 'admin/mentorAssignment/getData',
         // getData: 'mentorAssignment/getData',
         getData: 'admin/mentorAssignment/getData', //get table data by tags
@@ -221,7 +222,13 @@ export default {
     },
 
     handleClicks(e) {
-      console.log(e.target.files)
+      // console.log(e.target.files)
+      this.importData({
+        data: {
+          file: e.target.files[0],
+          fileExists: true
+        }
+      })
     },
 
     openDetails(data) { 
@@ -259,13 +266,14 @@ export default {
 
     fetchTableData(page) { // reusable function for getting the data to be displayed in txn history
       this.getData({
-        link: this.module,
+        // link: this.module,
         fetchType: 'table_data',
         data: {
             page: page,
-            admins: true,
+            admin: true,
             table_filters: true,
             items: this.options.numOfItems,
+            order_type: 'ASC',
         }
       })
     },

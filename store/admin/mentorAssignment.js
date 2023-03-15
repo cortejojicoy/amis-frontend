@@ -84,12 +84,44 @@ export const actions = {
         }
     },
 
+    async importData({commit, state}, payload) {
+        commit('GET_DATA_REQUEST')
+        try {
+            // console.log(payload.data.file)
+            let importParams = Object.assign(payload.data.file)
+            // console.log(importParams)
+
+            const data = await this.$axios.$get(`/admins/import`, importParams)
+            // console.log(data)
+            await commit('GET_IMPORT_SUCCESS', data.filename)
+        } catch(error) {
+            if(error.response.status===422){  
+                let errList = ``;
+                let fields = Object.keys(error.response.data.errors)
+                fields.forEach((field) => {
+                let errorArr = error.response.data.errors[field]
+                errorArr.forEach((errMess) => {
+                    errList += `<li>${errMess}</li>`
+                })
+            })
+                let errMessage = `Validation Error: ${errList}`
+                await commit('alert/ERROR', errMessage, { root: true })
+            } else if(error.response.status===400) {
+                await commit('alert/ERROR', error.response.data.message, { root: true })
+                commit('CLOSE_MODAL')
+            } else{
+                let errMessage = `Something went wrong while performing your request. Please contact administrator`
+                await commit('alert/ERROR', errMessage, { root: true })
+            }
+            commit('GET_DATA_FAILED', error)
+        }
+    },
+
     async getTableData({commit, state}, payload) {
         commit('GET_DATA_REQUEST')
         try {
             let tableParams = Object.assign(payload, state.filterValues)
-            const data = await this.$axios.$get(`/mentor-assignments`, {params: tableParams})
-            // console.log(data)
+            const data = await this.$axios.$get(`/mentors`, {params: tableParams})
             await commit('GET_TABLE_DATA', data.ma)
         } catch(error) {
             if(error.response.status===422){  
@@ -251,13 +283,25 @@ export const mutations = {
     },
 
     GET_TABLE_DATA(state, data) {
-        // console.log(data.data)
+        // console.log(data)
+        var mentorData = data.data.map((item) => {
+            return {
+                uuid: item.uuid,
+                name : item.student_uuid.student_user.last_name+' '+item.student_uuid.student_user.first_name,
+                program: item.student_uuid.program_records[0].academic_program_id,
+                student_status: item.student_uuid.program_records[0].status,
+                role: item.status == 'Approved' ? item.mentor_role.titles : 'UNASSIGNED', 
+                status: item.status == 'Approved' ? item.status : 'UNASSIGNED', 
+                mentor: item.status == 'Approved' ? item.mentor_name : 'UNASSIGNED'
+            }
+        })
+
         var paginationData = {
             last_page: data.last_page,
             current_page: data.current_page
         }
-
-        state.tableData = Object.assign(data.data, paginationData)
+        
+        state.tableData = Object.assign(mentorData, paginationData)
         state.loading = false
         state.initialLoad = false
     },
