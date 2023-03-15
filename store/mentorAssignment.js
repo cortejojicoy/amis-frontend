@@ -195,7 +195,7 @@ export const mutations = {
                         home_unit: homeunit,
                         faculty_id: item.faculty_id,
                         faculty_status: faculty_status,
-                        faculty_name: item.uuid.last_name+' '+item.uuid.first_name+' '+ homeunit
+                        faculty_name: item.uuid.last_name+' '+item.uuid.first_name+' -- '+ homeunit
                     }) 
 
                     if(temp.faculty_status === 'ACTIVE') {

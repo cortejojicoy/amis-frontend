@@ -106,13 +106,10 @@
                                 <td class="px-2 py-3">Remarks</td>
                             </tr>
                         </thead>
-                        <!-- {{ saveMentor }} -->
                         <tr v-for="(mentor, mentorIndex) in saveMentor" :key="mentorIndex">
-                          <!-- {{ mentor }} -->
                           <td class="px-2 py-3">{{ mentor.actions }}</td>
                           <td class="px-2 py-3">{{ mentor.mentor_name }}</td>
                           <div v-for="(role, roleIndex) in mentorRoles" :key="roleIndex">
-                            <!-- {{ role }} -->
                             <td class="px-2 py-3" v-if="role.id == mentor.mentor_role">
                               {{ role.titles }}
                             </td>
@@ -143,7 +140,7 @@
         </template>
         <template v-slot:buttons>
           <div class="text-right">
-            <button @click="btn('submit')" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">Confirm and Submit</button>
+            <button @click="btn('submit')" class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60">Submit</button>
           </div>
         </template>
       </VTailwindModal>

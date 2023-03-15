@@ -400,7 +400,9 @@ export const getters = {
     getWithoutId(state) {
         if(state.studSaveMentor){
           return state.studSaveMentor.map((item)=>{
-            var temp = Object.assign({}, item)
+            var name = item.mentor_name.replace(' -- DX', '')
+
+            var temp = Object.assign({name}, item)
             delete  temp.id
             return temp
           })
