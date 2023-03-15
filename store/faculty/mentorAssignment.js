@@ -251,7 +251,7 @@ export const mutations = {
     },
 
     GET_TABLE_DATA(state, data) {
-        console.log(data.data)
+        console.log(data)
         var paginationData = {
             last_page: data.last_page,
             current_page: data.current_page

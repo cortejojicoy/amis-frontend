@@ -11,6 +11,8 @@
       <div>
         <!-- {{ getTableDataByFacultyID }} -->
 
+      <!-- {{ tableData }} -->
+
         <GenericTable 
             :isLoading="dataLoading" 
             :isInitialLoad="initialLoad" 
