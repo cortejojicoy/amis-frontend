@@ -69,7 +69,7 @@
                 </template>
                 <template v-slot:buttons>
                     <div class="text-right">
-                        <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId.id" @click="btn('disapproved','', $event.target.value);">Confirm</button>
+                        <button class="bg-green-500 text-white p-2 rounded w-full disabled:opacity-60" :value="confirmId.id" @click="btn('disapproved', $event.target.value);">Confirm</button>
                       </div>
                 </template>
             </VTailwindModal>
