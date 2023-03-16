@@ -6,14 +6,14 @@
             <div class="mb-4 flex items-center">
               <div class="text-2xl font-bold">Mentor Assignment (College)</div>
 
-              <div class="px-4">
+              <!-- <div class="px-4">
                 <input type="file" accept=".xlsx, .xls" ref="excel-upload-input" @change="handleClicks" hidden/>
                 <button @click="btn('import')" class="p-2 bg-blue-500 text-white">Import</button>
               </div>
               
               <div>   
                 <button class="p-2 bg-green-500 text-white">Download Template</button>
-              </div>
+              </div> -->
             </div>
           </div>
 
