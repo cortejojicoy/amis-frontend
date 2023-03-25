@@ -115,6 +115,7 @@ export const actions = {
             commit('GET_DATA_REQUEST')
             try {
                 let mentorParams = Object.assign(payload.data)
+                // console.log(mentorParams)
                 const data = await this.$axios.$post(`/students/student-ma`, mentorParams)
                 await dispatch('checkStatus', data)
                 // // count existing mentors
@@ -362,7 +363,7 @@ export const mutations = {
     UNSET_STATE(state) {
         state.confirmText = ''
         state.closeModal = {}
-        state.studSaveMentor = [],
+        // state.studSaveMentor = [],
         state.data = {},
         state.loading = false
     },
@@ -400,6 +401,7 @@ export const getters = {
     getWithoutId(state) {
         if(state.studSaveMentor){
           return state.studSaveMentor.map((item)=>{
+            console.log(item)
             var name = item.mentor_name.replace(' -- DX', '')
 
             var temp = Object.assign({name}, item)

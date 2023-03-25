@@ -209,6 +209,7 @@ export default {
         // console.log(transactionId)
           this.deleteRow(transactionId)
           this.approval({transactionId, type: type, remarks: this.remarks})
+          this.fetchTableData(1)
           this.updateTxnIndicator++
           this.show = false
       }

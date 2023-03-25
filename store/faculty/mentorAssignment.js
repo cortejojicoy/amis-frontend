@@ -204,8 +204,9 @@ export const actions = {
         try {
             // console.log(payload)
             const data = await this.$axios.$put(`/ma/${payload.transactionId}`, {
-                type: payload.type, roles: 'faculties', remarks: payload.remarks
+                type: payload.type, roles: 'faculties', remarks: payload.remarks, masId: payload.transactionId
             })
+            // console.log(data)
             await commit('APPROVAL_SUCCESS', data)
             await commit('alert/SUCCESS', data.message, { root: true })
             await commit('UPDATE_TXN_INDICATOR')
@@ -251,7 +252,7 @@ export const mutations = {
     },
 
     GET_TABLE_DATA(state, data) {
-        console.log(data)
+        // console.log(data)
         var paginationData = {
             last_page: data.last_page,
             current_page: data.current_page

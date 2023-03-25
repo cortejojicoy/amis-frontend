@@ -285,6 +285,7 @@ export const mutations = {
     GET_TABLE_DATA(state, data) {
         // console.log(data)
         var mentorData = data.data.map((item) => {
+            // console.log(item)
             return {
                 uuid: item.uuid,
                 name : item.student_uuid.student_user.last_name+' '+item.student_uuid.student_user.first_name,
